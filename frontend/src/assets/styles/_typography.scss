@@ -74,7 +74,17 @@
   font-family: "NotoSansLight";
 }
 
+.phoneOnly {
+  display: none;
+}
+
 @media screen and (max-width: $TABLET-VW) {
+  .desktopOnly {
+    display: none;
+  }
+  .phoneOnly {
+    display: none;
+  }
   .fs-10 {
     font-size: vw-t(10px);
   }
@@ -128,6 +138,9 @@
   }
 }
 @media screen and (max-width: $PHONE-VW) {
+  .desktopOnly {
+    display: none;
+  }
   .fs-10 {
     font-size: vw-p(10px);
   }
