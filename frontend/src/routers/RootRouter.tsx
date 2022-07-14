@@ -7,6 +7,7 @@ import TipPage from "@screens/TipPage";
 import DealPage from "@screens/DealPage";
 import Join from "@screens/Join/Join";
 import ChkEmail from "@screens/ChkEmail";
+import JoinDetail from "@screens/Join/JoinDetail";
 
 function RootRouter() {
   return (
@@ -20,6 +21,7 @@ function RootRouter() {
         <Route path="/join/*">
           <Route index element={<Join />} />
           <Route path="chkEmail" element={<ChkEmail />} />
+          <Route path="detail" element={<JoinDetail />} />
         </Route>
       </Routes>
     </>
