@@ -1,9 +1,4 @@
-<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect width="30" height="30" fill="url(#pattern0)"/>
-<defs>
-<pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
-<use xlink:href="#image0_108_242" transform="scale(0.0104167)"/>
-</pattern>
-<image id="image0_108_242" width="96" height="96" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABmJLR0QA/wD/AP+gvaeTAAADGElEQVR4nO2cLW8VQRSGH9qkggCOJpAUhSsJKH5Fq6AGS4LiQ/IDQKAq+BBY/gACx4cHQwUWwUfAoHpbFKWL2Huh3LS7s3Nm9sze+z7JSSq203POOzPv3t25BSGEEEIIIYQQQgghhBBCiP9ZBu4DW8AuUCmoxr14D9wDTkd3t4UNYFRAsaXHNnAlssdHsgHsF1DcUGKfQBGOBVyzDHwEToYMKP4yAs4DP5ouWggY6DZqfgyngJttF4UIsGbPZW5Zb7sgZAvaAU7Yc5lLdqhXwpGErIBrwOck6cwX34HrqQY7DjwA9vC/wyg9fgNPyeSbl4B3BRRZamwBl6O7G8gCcIP6A4d3waXET+AusGjoa2fOAs8SFjHUeAGcM/bSxDrwCf9G9B3fqJ8QFME8mXRWk7Uy6ybdi8lO03WPm0WTjjHZM9QeaSY2gVkxaesENGNdgkM16RiTvQi8nRrHzHRiMSY0JJO21PfrkPHMNM2Qqx3HKt2kY1b4Gs0r3Exb0rNg0haTbRvbTK4CSjHp3BPITO4l7GXSqUy2KAEqyjfpvvMzY5lhpZl0DpMtVoBJlGDSOU22eAFiG5DKpL0ngJlUs7CiX5OONdnUW6CZlMlU5DfB0m4CzKROyDJD20y6xNtgM7kSm0SKPdrTZAcvQEV9jvIO3Rq4Ajwfx0qH31sc/62+Tnqb6SPJSeR+4+TxMNBMn8lW/DPRxiN9HfF8HG6m74QnkerUwTr10UqvOsx4JT6J2HM3pTxtNeNdQEW3u5zS3jeY8S7gYLSZdIlv3Mx4FzAdh5l0ye+cGwn5gkYSFTPwFbg1/vkR3T4L9Eljj4cswFBo7HHIN2RERiSAMxLAGQngjARwRgI4IwGckQDOSABnJIAzEsAZCeCMBHBGAjgjAZwJEWA3exazy6jtghABviRIZF5p7V2IAK8SJDKvvEwxyAXKfNldeuwBqxH9PpQnBRQ0tHgY1ekjWALeFFDUUOL1uGdJWQIeo+2oKfaoZ37y5h9kFdgEPlD/Y1Lvor1jZ9yLTRLu+UIIIYQQQgghhBBCCCGEmB3+AJUCj1SQZSlaAAAAAElFTkSuQmCC"/>
-</defs>
+<svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M17 3.5H3C2.44772 3.5 2 3.94772 2 4.5V15.5C2 16.0523 2.44772 16.5 3 16.5H17C17.5523 16.5 18 16.0523 18 15.5V4.5C18 3.94772 17.5523 3.5 17 3.5ZM4 14.5V5.5H16V14.5H4Z" fill="currentColor"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M17.6484 5.26131L10.6034 11.2613C10.2279 11.5811 9.67524 11.5794 9.30177 11.2572L2.34679 5.25718C1.64501 4.65176 2.07317 3.5 3 3.5H17C17.93 3.5 18.3564 4.65833 17.6484 5.26131ZM5.69006 5.5L9.95917 9.18292L14.2835 5.5H5.69006Z" fill="currentColor"/>
 </svg>

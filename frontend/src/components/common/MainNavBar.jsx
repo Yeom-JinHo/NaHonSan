@@ -16,7 +16,7 @@ function MainNavBar() {
   return (
     <nav id="MainNavBar" className="flex align-center">
       <img className="logo" alt="나혼자잘산다로고" src={HeaderLogoImg} />
-      <p className="title notoBold fs-32 desktopOnly">나혼자잘산다</p>
+      <p className="title notoBold fs-28 desktopOnly">나혼자잘산다</p>
       <div className="nav-container flex justify-space-between align-center">
         <nav className="left-nav notoBold">
           <NavLink
@@ -47,11 +47,11 @@ function MainNavBar() {
         <nav className="right-nav notoReg flex align-center">
           {isLogin ? (
             <>
-              <Link className="right-nav__link fs-16" to="/letters">
-                <img className="msg" src={MsgIcon} alt="쪽지함" />
-              </Link>
               <Link className="right-nav__link fs-16" to="/">
                 <img className="alarm" src={AlarmIcon} alt="알림" />
+              </Link>
+              <Link className="right-nav__link fs-16" to="/letters">
+                <img className="msg" src={MsgIcon} alt="쪽지함" />
               </Link>
               <Link className="right-nav__link fs-16" to="/">
                 <img className="user" src={UserDummyIcon} alt="더미유저" />
