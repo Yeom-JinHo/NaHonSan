@@ -1,3 +1,6 @@
+.fs-8 {
+  font-size: vw(8px);
+}
 .fs-10 {
   font-size: vw(10px);
 }
@@ -85,6 +88,9 @@
   .phoneOnly {
     display: none;
   }
+  .fs-8 {
+    font-size: vw-t(8px);
+  }
   .fs-10 {
     font-size: vw-t(10px);
   }
@@ -140,6 +146,9 @@
 @media screen and (max-width: $PHONE-VW) {
   .desktopOnly {
     display: none;
+  }
+  .fs-8 {
+    font-size: vw-p(8px);
   }
   .fs-10 {
     font-size: vw-p(10px);

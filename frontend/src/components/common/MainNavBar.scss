@@ -45,9 +45,29 @@
       }
 
       .alarm,
-      .msg {
-        width: vw(30px);
-        height: vw(30px);
+      .msg,
+      .profile {
+        position: relative;
+
+        &__icon {
+          width: vw(30px);
+          height: vw(30px);
+        }
+
+        &__cnt {
+          position: absolute;
+          top: vw(-6px);
+          right: vw(-8px);
+
+          padding: vw(2px) vw(4px);
+
+          height: vw(16px);
+
+          background-color: $RED;
+          color: $WHITE;
+
+          border-radius: vw(8px);
+        }
       }
       .user {
         width: vw(40px);
@@ -55,6 +75,18 @@
       }
     }
   }
+}
+
+#alarm-tool-tip {
+  position: absolute;
+  top: vw(50px);
+  left: vw(-160px);
+}
+
+#profile-tool-tip {
+  position: absolute;
+  top: vw(30px);
+  left: vw(-95px);
 }
 
 @media screen and (max-width: $TABLET-VW) {
@@ -82,9 +114,23 @@
         }
 
         .alarm,
-        .msg {
-          width: vw-t(30px);
-          height: vw-t(30px);
+        .msg,
+        .profile {
+          &__icon {
+            width: vw-t(30px);
+            height: vw-t(30px);
+          }
+
+          &__cnt {
+            top: vw-t(-6px);
+            right: vw-t(-8px);
+
+            padding: vw-t(2px) vw-t(4px);
+
+            height: vw-t(16px);
+
+            border-radius: vw-t(8px);
+          }
         }
 
         .user {
@@ -93,6 +139,16 @@
         }
       }
     }
+  }
+
+  #alarm-tool-tip {
+    top: vw-t(50px);
+    left: vw-t(-160px);
+  }
+
+  #profile-tool-tip {
+    top: vw-t(30px);
+    left: vw-t(-100px);
   }
 }
 

@@ -6,10 +6,14 @@ import AlarmIcon from "@images/Alarm.svg";
 import MsgIcon from "@images/Msg.svg";
 import UserDummyIcon from "@images/UserDummy.svg";
 import MenuIcon from "@images/Menu.svg";
+import AlarmToolTip from "./MainNavBar/AlarmToolTip";
+import ProfileToolTip from "./MainNavBar/ProfileToolTip";
 
 function MainNavBar() {
   const [isLogin, setIsLogin] = useState(true);
-  const activeTabClassName = active => {
+  const [alarmVisible, setAlarmVisible] = useState(false);
+  const [profileTooltipVisible, setProfileTooltipVisible] = useState(false);
+  const activeTabClassName = (active: boolean) => {
     const prefix = "left-nav__link fs-20 btn--";
     return active ? `${prefix}active` : `${prefix}unactive`;
   };
@@ -47,15 +51,33 @@ function MainNavBar() {
         <nav className="right-nav notoReg flex align-center">
           {isLogin ? (
             <>
-              <Link className="right-nav__link fs-16" to="/">
-                <img className="alarm" src={AlarmIcon} alt="알림" />
+              <button
+                type="button"
+                className="right-nav__link alarm"
+                onClick={() => setAlarmVisible(!alarmVisible)}
+              >
+                <p className="alarm__cnt fs-8 flex align-center justify-center">
+                  123
+                </p>
+                <img className="alarm__icon" src={AlarmIcon} alt="알림" />
+                {alarmVisible && <AlarmToolTip />}
+              </button>
+              <Link className="right-nav__link alarm" to="/letters">
+                <p className="alarm__cnt fs-8 flex align-center justify-center">
+                  1
+                </p>
+                <img className="alarm__icon" src={MsgIcon} alt="쪽지함" />
               </Link>
-              <Link className="right-nav__link fs-16" to="/letters">
-                <img className="msg" src={MsgIcon} alt="쪽지함" />
-              </Link>
-              <Link className="right-nav__link fs-16" to="/">
+              <button
+                type="button"
+                className="right-nav__link profile fs-16"
+                onClick={() => setProfileTooltipVisible(!profileTooltipVisible)}
+              >
                 <img className="user" src={UserDummyIcon} alt="더미유저" />
-              </Link>
+              </button>
+              <div className="profile">
+                {profileTooltipVisible && <ProfileToolTip />}
+              </div>
             </>
           ) : (
             <>
