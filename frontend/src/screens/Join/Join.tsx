@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 function Join() {
   const navigate = useNavigate();
   const chkValidate = () => {
-    navigate("/chkEmail");
+    navigate("chkEmail");
   };
   return (
     <div id="join">
