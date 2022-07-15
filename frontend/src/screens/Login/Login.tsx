@@ -74,7 +74,7 @@ function Login() {
         </div>
         <div className="footer__container flex align-center justify-center">
           <p className="footer__msg">이미 계정이 있으신가요?</p>
-          <Link className="footer__link" to="/findpw">
+          <Link className="footer__link" to="/find/pw">
             비밀번호찾기
           </Link>
         </div>
