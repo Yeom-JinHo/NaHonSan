@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./JoinDetail.scss";
@@ -7,6 +8,7 @@ function JoinDetail() {
   const navigate = useNavigate();
   const [validPassword, setValidPassword] = useState(true);
   const [samePassword, setSamePassword] = useState(true);
+  const [nickNameDupli, setNickNameDupli] = useState("");
   const passwordRef = useRef<HTMLInputElement>(null);
   const chkPasswordRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
@@ -31,6 +33,16 @@ function JoinDetail() {
       );
   };
 
+  const chkNickNameDupli = () => {
+    if (nickNameDupli === "") {
+      setNickNameDupli("err");
+    } else if (nickNameDupli === "err") {
+      setNickNameDupli("success");
+    } else {
+      setNickNameDupli("");
+    }
+  };
+
   const changeForm = (type: string, value: string) => {
     setForm({ ...form, [type]: value });
   };
@@ -51,9 +63,27 @@ function JoinDetail() {
         <p className="form__type notoBold fs-16">닉네임</p>
         <input
           type="text"
-          className="form__input fs-15 notoReg"
+          className="form__input input-nickName fs-15 notoReg"
           placeholder="닉네임을 입력해주세요."
         />
+        <button
+          type="button"
+          className="form__btn--dupli notoReg fs-12 inline-block"
+          onClick={chkNickNameDupli}
+        >
+          중복확인
+        </button>
+        {nickNameDupli === "" ? (
+          <div className="dummy" />
+        ) : nickNameDupli === "err" ? (
+          <p className="password-msg fs-12 notoMid">
+            이미 사용중인 닉네임입니다.
+          </p>
+        ) : (
+          <p className="password-msg success fs-12 notoMid">
+            사용가능한 닉네임입니다.
+          </p>
+        )}
         <p className="form__type notoBold fs-16">비밀번호</p>
         <input
           type="password"

@@ -1,5 +1,5 @@
 #join-detail {
-  margin: vw(44px) vw(483px) vw(183px) vw(484px);
+  margin: vw(44px) vw(483px) vw(169px) vw(484px);
   padding: vw(64px) vw(72px);
   border: 1px solid $GRAY_DB;
   border-radius: vw(20px);
@@ -25,6 +25,16 @@
         background-color: $GRAY_DB;
       }
     }
+    .input-nickName {
+      width: vw(218px);
+      margin-right: vw(20px);
+    }
+    &__btn--dupli {
+      width: vw(88px);
+      height: vw(48px);
+      background-color: $MAIN_YELLOW;
+      border-radius: vw(16px);
+    }
     .password,
     .password-chk {
       margin-bottom: vw(8px);
@@ -33,6 +43,9 @@
         margin-bottom: vw(16px);
         color: $RED;
       }
+    }
+    .success {
+      color: $NAVER;
     }
     .dummy {
       height: vw(12px);
@@ -50,7 +63,7 @@
 
 @media screen and (max-width: $TABLET-VW) {
   #join-detail {
-    margin: vw-t(72px) vw-t(147px) vw-t(152px) vw-t(148px);
+    margin: vw-t(72px) vw-t(147px) vw-t(138px) vw-t(148px);
     padding: vw-t(64px) vw-t(72px);
     border-radius: vw-t(20px);
     .header {
@@ -69,6 +82,17 @@
         height: vw-t(48px);
         border-radius: vw-t(4px);
       }
+
+      .input-nickName {
+        width: vw-t(218px);
+        margin-right: vw-t(20px);
+      }
+      &__btn--dupli {
+        width: vw-t(88px);
+        height: vw-t(48px);
+        border-radius: vw-t(16px);
+      }
+
       .password,
       .password-chk {
         margin-bottom: vw-t(8px);
@@ -93,7 +117,7 @@
 
 @media screen and (max-width: $PHONE-VW) {
   #join-detail {
-    margin: vw-p(63px) vw-p(23px) vw-p(100px) vw-p(23px);
+    margin: vw-p(63px) vw-p(23px) vw-p(84px) vw-p(23px);
     padding: 0;
     border: none;
     border-radius: vw-p(20px);
@@ -113,6 +137,17 @@
         height: vw-p(48px);
         border-radius: vw-p(4px);
       }
+
+      .input-nickName {
+        width: vw-p(218px);
+        margin-right: vw-p(20px);
+      }
+      &__btn--dupli {
+        width: vw-p(88px);
+        height: vw-p(48px);
+        border-radius: vw-p(16px);
+      }
+
       .password,
       .password-chk {
         margin-bottom: vw-p(8px);
