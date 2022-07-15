@@ -122,7 +122,7 @@ function JoinDetail() {
 
         <button
           type="button"
-          className="form__btn flex align-center justify-center"
+          className="form__btn flex align-center justify-center notoMid fs-16"
           onClick={submitUserInfo}
         >
           다음
