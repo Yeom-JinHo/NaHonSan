@@ -8,3 +8,11 @@ export const chkEmailExist = async (userId: string) => {
 export const sendAuthCode = (userId: string) => {
   API.post(`/email`, { userId });
 };
+
+export const chkAuthCode = async (
+  userId: string,
+  authCode: string | undefined
+) => {
+  const res = await API.get(`/email?userId=${userId}&authKey=${authCode}`);
+  return res.data.message;
+};

@@ -13,6 +13,7 @@
     }
   }
   .form {
+    position: relative;
     &__title {
       margin-bottom: vw(20px);
     }
@@ -25,7 +26,14 @@
       border: 1px solid $GRAY_DB;
       border-radius: vw(4px);
     }
+    &__time {
+      position: absolute;
+      top: vw(53px);
+      left: vw(280px);
+      color: $RED;
+    }
     &__msg {
+      height: vw(12px);
       margin-bottom: vw(16px);
       color: $RED;
     }
@@ -36,6 +44,11 @@
       height: vw(48px);
       background-color: $MAIN_YELLOW;
       border-radius: vw(4px);
+
+      &:disabled {
+        color: $GRAY_F3;
+        background-color: $GRAY_DB;
+      }
     }
   }
   .footer {
@@ -44,6 +57,9 @@
       color: $GRAY_76;
       &__msg {
         margin-right: vw(16px);
+      }
+      &__btn {
+        text-decoration: underline;
       }
     }
     &-bottom {
@@ -95,7 +111,12 @@
         border-radius: vw-t(4px);
       }
       &__msg {
+        height: vw-t(12px);
         margin-bottom: vw-t(16px);
+      }
+      &__time {
+        top: vw-t(53px);
+        left: vw-t(280px);
       }
       &__btn {
         margin-bottom: vw-t(24px);
@@ -159,7 +180,12 @@
         border-radius: vw-p(4px);
       }
       &__msg {
+        height: vw-p(12px);
         margin-bottom: vw-p(16px);
+      }
+      &__time {
+        top: vw-p(53px);
+        left: vw-p(280px);
       }
       &__btn {
         margin-bottom: vw-p(24px);

@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface InitialStateType {
-  userId: string | null;
+  userId: string;
 }
 
 const initialState: InitialStateType = {
-  userId: null
+  userId: ""
 };
 
 export const authSlice = createSlice({
