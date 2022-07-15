@@ -28,7 +28,11 @@ module.exports = {
     ],
     "import/no-unresolved": 0,
     "import/extensions": 0,
-    "@typescript-eslint/no-var-requires": 0
+    "@typescript-eslint/no-var-requires": 0,
+    "no-param-reassign": [
+      "error",
+      { props: true, ignorePropertyModificationsFor: ["state"] }
+    ]
   },
   settings: {
     "import/resolver": {
