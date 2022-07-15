@@ -1,12 +1,12 @@
-@mixin btn {
+@mixin box {
   width: vw(329px);
   height: vw(48px);
   border-radius: vw(4px);
 }
 
-#join {
-  margin: vw(44px) vw(483px) vw(160px) vw(484px);
-  padding: vw(64px) vw(72px) vw(58px) vw(72px);
+#login {
+  margin: vw(44px) vw(483px) vw(41px) vw(484px);
+  padding: vw(64px) vw(72px) vw(48px) vw(72px);
 
   border: 1px solid $GRAY_DB;
   border-radius: vw(20px);
@@ -18,7 +18,7 @@
   }
   .social {
     &__btn {
-      @include btn();
+      @include box();
       & + .social__btn {
         margin-top: vw(12px);
       }
@@ -40,7 +40,7 @@
     }
   }
   .or {
-    margin: vw(32px) 0 vw(20px) 0;
+    margin: vw(32px) 0;
     height: vw(20px);
     &__line {
       width: vw(138px);
@@ -54,28 +54,32 @@
   }
   .form {
     &__title {
-      margin-bottom: vw(20px);
-    }
-    &__input {
       margin-bottom: vw(12px);
-      padding: vw(12px);
-      width: vw(329px);
-      height: vw(48px);
-      border: 1px solid $GRAY_DB;
-      border-radius: vw(4px);
     }
+
+    &__input {
+      @include box();
+      margin-bottom: vw(20px);
+      padding: vw(12px);
+      border: 1px solid $GRAY_DB;
+    }
+
     &__msg {
-      margin-bottom: vw(40px);
+      margin-bottom: vw(28px);
       color: $RED;
     }
+
     &__btn {
+      @include box();
       margin-bottom: vw(24px);
-      @include btn();
       background-color: $MAIN_YELLOW;
     }
   }
   .footer {
     color: $GRAY_76;
+    &__container + .footer__container {
+      margin-top: vw(8px);
+    }
     &__msg {
       margin-right: vw(8px);
     }
@@ -83,33 +87,26 @@
 }
 
 @media screen and (max-width: $TABLET-VW) {
-  @mixin btn {
+  @mixin box {
     width: vw-t(329px);
     height: vw-t(48px);
     border-radius: vw-t(4px);
   }
 
-  #join {
-    margin: vw-t(40px) vw-t(148px) vw-t(164px) vw-t(147px);
-    padding: vw-t(64px) vw-t(72px) vw-t(57px) vw-t(72px);
+  #login {
+    margin: vw-t(44px) vw-t(148px) vw-t(41px) vw-t(147px);
+    padding: vw-t(64px) vw-t(72px) vw-t(48px) vw-t(72px);
 
     border-radius: vw-t(20px);
     .header {
       &__title {
-<<<<<<< HEAD
-        margin-bottom: vw-t(27px);
-      }
-      &__sub-title {
-        margin-bottom: vw-t(47px);
-=======
         margin-bottom: vw-t(40px);
         line-height: vw-t(35px);
->>>>>>> fd404ab32590544be767b3944856cf49594bdcc9
       }
     }
     .social {
       &__btn {
-        @include btn();
+        @include box();
         & + .social__btn {
           margin-top: vw-t(12px);
         }
@@ -121,7 +118,7 @@
       }
     }
     .or {
-      margin: vw-t(32px) 0 vw-t(20px) 0;
+      margin: vw-t(32px) 0;
       height: vw-t(20px);
       &__line {
         width: vw-t(138px);
@@ -133,24 +130,28 @@
     }
     .form {
       &__title {
-        margin-bottom: vw-t(20px);
-      }
-      &__input {
         margin-bottom: vw-t(12px);
+      }
 
-        width: vw-t(329px);
-        height: vw-t(48px);
-        border-radius: vw-t(4px);
+      &__input {
+        @include box();
+        margin-bottom: vw-t(20px);
+        padding: vw-t(12px);
       }
+
       &__msg {
-        margin-bottom: vw-t(40px);
+        margin-bottom: vw-t(28px);
       }
+
       &__btn {
+        @include box();
         margin-bottom: vw-t(24px);
-        @include btn();
       }
     }
     .footer {
+      &__container + .footer__container {
+        margin-top: vw-t(8px);
+      }
       &__msg {
         margin-right: vw-t(8px);
       }
@@ -159,37 +160,25 @@
 }
 
 @media screen and (max-width: $PHONE-VW) {
-  @mixin btn {
+  @mixin box {
     width: vw-p(329px);
     height: vw-p(48px);
     border-radius: vw-p(4px);
   }
 
-  #join {
-<<<<<<< HEAD
-    margin: vw-p(44px) vw-p(23px) vw-p(89px) vw-p(23px);
-=======
-    margin: vw-p(32px) vw-p(23px) vw-p(89px) vw-p(23px);
->>>>>>> fd404ab32590544be767b3944856cf49594bdcc9
+  #login {
+    margin: vw-p(32px) vw-p(23px) vw-p(21px) vw-p(23px);
     padding: 0;
-    border: none;
-    border-radius: vw-p(20px);
+    border: 0;
     .header {
       &__title {
-<<<<<<< HEAD
-        margin-bottom: vw-p(27px);
-      }
-      &__sub-title {
-        margin-bottom: vw-p(47px);
-=======
         margin-bottom: vw-p(24px);
         line-height: vw-p(35px);
->>>>>>> fd404ab32590544be767b3944856cf49594bdcc9
       }
     }
     .social {
       &__btn {
-        @include btn();
+        @include box();
         & + .social__btn {
           margin-top: vw-p(12px);
         }
@@ -201,7 +190,7 @@
       }
     }
     .or {
-      margin: vw-p(32px) 0 vw-p(20px) 0;
+      margin: vw-p(16px) 0;
       height: vw-p(20px);
       &__line {
         width: vw-p(138px);
@@ -213,24 +202,28 @@
     }
     .form {
       &__title {
-        margin-bottom: vw-p(20px);
-      }
-      &__input {
         margin-bottom: vw-p(12px);
+      }
 
-        width: vw-p(329px);
-        height: vw-p(48px);
-        border-radius: vw-p(4px);
+      &__input {
+        @include box();
+        margin-bottom: vw-p(20px);
+        padding: vw-p(12px);
       }
+
       &__msg {
-        margin-bottom: vw-p(40px);
+        margin-bottom: vw-p(28px);
       }
+
       &__btn {
+        @include box();
         margin-bottom: vw-p(24px);
-        @include btn();
       }
     }
     .footer {
+      &__container + .footer__container {
+        margin-top: vw-p(8px);
+      }
       &__msg {
         margin-right: vw-p(8px);
       }
