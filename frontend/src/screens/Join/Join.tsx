@@ -1,15 +1,46 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import "./Join.scss";
 import KakaoIcon from "@images/Kakao.svg";
 import GoogleIcon from "@images/Google.svg";
 import NaverIcon from "@images/Naver.svg";
 import { Link, useNavigate } from "react-router-dom";
+import { emailReg } from "@constants/reg";
+import { chkEmailExist, sendAuthCode } from "@apis/auth";
+import { useDispatch } from "react-redux";
+import { setUserId } from "@store/ducks/auth/authSlice";
 
 function Join() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const chkValidate = () => {
-    navigate("chkEmail");
+  const [errMsg, setErrMsg] = useState<string>("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const chkValidate = async () => {
+    if (errMsg !== "") {
+      inputRef.current?.focus();
+      return;
+    }
+    if (inputRef.current) {
+      const userId = inputRef.current?.value;
+      const res = await chkEmailExist(userId);
+      if (res === "JOINED") {
+        setErrMsg("이미 존재하는 아이디입니다.");
+      } else if (res === "SUCCESS") {
+        dispatch(setUserId({ userId }));
+        sendAuthCode(userId);
+        navigate("chkEmail");
+      }
+    }
   };
+
+  const chkEmailReg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (emailReg.test(e.target.value)) {
+      setErrMsg("");
+    } else {
+      setErrMsg("이메일 형식을 확인해주세요.");
+    }
+  };
+
   return (
     <div id="join">
       <header className="header">
@@ -51,9 +82,16 @@ function Join() {
         <input
           className="form__input notoReg fs-15"
           type="text"
-          placeholder="JinHoJJANG@gamil.com"
+          placeholder="이메일을 입력해주세요."
+          onChange={chkEmailReg}
+          ref={inputRef}
         />
-        <p className="form__msg notoMid fs-12">이미 존재하는 아이디입니다.</p>
+        {errMsg === "" ? (
+          <p className="dummy" />
+        ) : (
+          <p className="form__msg notoMid fs-12">{errMsg}</p>
+        )}
+
         <button
           type="button"
           className="form__btn notoMid fs-15 flex align-center justify-center"

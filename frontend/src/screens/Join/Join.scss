@@ -68,6 +68,10 @@
       margin-bottom: vw(40px);
       color: $RED;
     }
+    .dummy {
+      margin-bottom: vw(40px);
+      height: vw(12px);
+    }
     &__btn {
       margin-bottom: vw(24px);
       @include btn();
@@ -96,15 +100,8 @@
     border-radius: vw-t(20px);
     .header {
       &__title {
-<<<<<<< HEAD
-        margin-bottom: vw-t(27px);
-      }
-      &__sub-title {
-        margin-bottom: vw-t(47px);
-=======
         margin-bottom: vw-t(40px);
         line-height: vw-t(35px);
->>>>>>> fd404ab32590544be767b3944856cf49594bdcc9
       }
     }
     .social {
@@ -145,6 +142,10 @@
       &__msg {
         margin-bottom: vw-t(40px);
       }
+      .dummy {
+        margin-bottom: vw-t(40px);
+        height: vw-t(12px);
+      }
       &__btn {
         margin-bottom: vw-t(24px);
         @include btn();
@@ -166,25 +167,14 @@
   }
 
   #join {
-<<<<<<< HEAD
-    margin: vw-p(44px) vw-p(23px) vw-p(89px) vw-p(23px);
-=======
     margin: vw-p(32px) vw-p(23px) vw-p(89px) vw-p(23px);
->>>>>>> fd404ab32590544be767b3944856cf49594bdcc9
     padding: 0;
     border: none;
     border-radius: vw-p(20px);
     .header {
       &__title {
-<<<<<<< HEAD
-        margin-bottom: vw-p(27px);
-      }
-      &__sub-title {
-        margin-bottom: vw-p(47px);
-=======
         margin-bottom: vw-p(24px);
         line-height: vw-p(35px);
->>>>>>> fd404ab32590544be767b3944856cf49594bdcc9
       }
     }
     .social {
@@ -224,6 +214,10 @@
       }
       &__msg {
         margin-bottom: vw-p(40px);
+      }
+      .dummy {
+        margin-bottom: vw-p(40px);
+        height: vw-p(12px);
       }
       &__btn {
         margin-bottom: vw-p(24px);
