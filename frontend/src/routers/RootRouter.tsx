@@ -10,6 +10,7 @@ import ChkEmail from "@screens/ChkEmail";
 import JoinDetail from "@screens/Join/JoinDetail";
 import JoinMore from "@screens/Join/JoinMore";
 import Welcome from "@screens/Join/Welcome";
+import Login from "@screens/Login/Login";
 
 function RootRouter() {
   return (
@@ -27,6 +28,7 @@ function RootRouter() {
           <Route path="more" element={<JoinMore />} />
           <Route path="welcome" element={<Welcome />} />
         </Route>
+        <Route path="/login" element={<Login />} />
       </Routes>
     </>
   );
