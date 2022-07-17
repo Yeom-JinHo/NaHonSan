@@ -13,6 +13,7 @@ import Welcome from "@screens/Join/Welcome";
 import Login from "@screens/Login/Login";
 import ResetPw from "@screens/Login/ResetPw";
 import FindPw from "@screens/Login/FindPw";
+import UserFeedPage from "@screens/UserFeedPage";
 import "./RootLayout.scss";
 
 function RootRouter() {
@@ -25,6 +26,7 @@ function RootRouter() {
           <Route path="/tip" element={<TipPage />} />
           <Route path="/feed" element={<FeedPage />} />
           <Route path="/deal" element={<DealPage />} />
+          <Route path="/userfeed" element={<UserFeedPage />} />
           <Route path="/join/*">
             <Route index element={<Join />} />
             <Route path="chkEmail" element={<ChkEmail type="login" />} />
