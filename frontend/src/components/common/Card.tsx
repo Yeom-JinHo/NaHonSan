@@ -16,14 +16,15 @@ type CardProps = {
 };
 
 function Card({ type, data }: CardProps) {
-  const [imgSrc, setImgSrc] = useState("");
-  useEffect(() => {
-    (async () => {
-      const url = await getDummyImg(data.download_url);
-      console.log(url);
-      setImgSrc(url);
-    })();
-  }, []);
+  // const [imgSrc, setImgSrc] = useState("");
+  // useEffect(() => {
+  //   let url: string;
+  //   (async () => {
+  //     url = await getDummyImg(data.download_url);
+  //     setImgSrc(url);
+  //   })();
+  //   return () => window.URL.revokeObjectURL(url);
+  // }, []);
   return (
     <div id="card">
       <header className="card-header flex align-center">
@@ -37,7 +38,11 @@ function Card({ type, data }: CardProps) {
       </header>
       <main className="card-main flex column">
         <div className="img-container">
-          <img className="card-main__thumnail" src={imgSrc} alt="썸네일더미" />
+          <img
+            className="card-main__thumnail"
+            src={data.imgSrc}
+            alt="썸네일더미"
+          />
         </div>
 
         <div className="card-label">
