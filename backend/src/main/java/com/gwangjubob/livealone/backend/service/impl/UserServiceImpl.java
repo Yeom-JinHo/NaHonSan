@@ -31,4 +31,10 @@ public class UserServiceImpl implements UserService {
         System.out.println(userRepository.save(user));
         return true;
     }
+
+    @Override
+    public boolean checkNickName(String nickname) {
+        return userRepository.findByNickname(nickname).isPresent();
+    }
+
 }

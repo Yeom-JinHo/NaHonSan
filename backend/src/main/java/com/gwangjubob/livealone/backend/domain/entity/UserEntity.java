@@ -2,6 +2,7 @@ package com.gwangjubob.livealone.backend.domain.entity;
 
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 @Table(name="users")
 @NoArgsConstructor
 @DynamicInsert
+@DynamicUpdate
 public class UserEntity {
 
     @Id

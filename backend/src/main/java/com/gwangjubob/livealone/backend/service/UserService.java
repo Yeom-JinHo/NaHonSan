@@ -7,4 +7,6 @@ public interface UserService {
     boolean loginUser(UserLoginDto userLoginDto);
 
     boolean registUser(UserRegistDto userRegistDto);
+
+    boolean checkNickName(String nickname);
 }

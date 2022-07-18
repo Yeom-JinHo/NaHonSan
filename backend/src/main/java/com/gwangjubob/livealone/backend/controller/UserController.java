@@ -31,6 +31,23 @@ public class UserController {
             return new ResponseEntity<>(fail, status);
         }
     }
+
+    @GetMapping("/user/check/{nickname}")
+    public ResponseEntity<?> checkNickName(@PathVariable String nickname){
+        HttpStatus status;
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            if(userService.checkNickName(nickname) == true){
+                resultMap.put("message", fail);
+            } else{
+                resultMap.put("message", okay);
+            }
+            status = HttpStatus.ACCEPTED;
+        }catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
     @PostMapping("/user/login")
     public ResponseEntity<?> refreshToken(@RequestBody UserLoginDto userLoginDto, HttpServletRequest request) throws Exception{
         Map<String, Object> resultMap = new HashMap<>();
