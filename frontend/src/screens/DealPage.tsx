@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./DealPage.scss";
 import DealImg from "@images/DealImg.svg";
 import CardList from "@components/common/CardList";
+import SelectArrow from "@images/SelectArrow.svg";
 import { v4 } from "uuid";
 
 function DealPage() {
@@ -53,7 +54,7 @@ function DealPage() {
       </div>
       <div className="hotdeal">
         <p className="fs-36 notoBold">광주 지역 인기 꿀딜</p>
-        <CardList />
+        <CardList type="deal" />
       </div>
       <div className="deal">
         <div className="deal-header flex">
@@ -89,13 +90,14 @@ function DealPage() {
           </button>
         </div>
         <div className="deal-sort flex">
-          <select className="deal-sort__list">
+          <select className="deal-sort__list notoMid">
             <option value="1">최신순</option>
             <option value="2">조회순</option>
             <option value="3">인기순</option>
           </select>
+          <img className="select-arrow" src={SelectArrow} alt="arrow" />
         </div>
-        <CardList />
+        <CardList type="deal" />
       </div>
     </div>
   );

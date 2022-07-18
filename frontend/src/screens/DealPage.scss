@@ -42,6 +42,7 @@
         font-size: (24px);
         & > span {
           margin-top: (12px);
+          margin-right: (8px);
           font-size: (36px);
           color: $MAIN_YELLOW;
         }
@@ -98,27 +99,41 @@
       }
     }
     &-sort {
+      position: relative;
       justify-content: flex-end;
       margin-top: (24px);
       & > button {
         width: 45%;
         font-size: (24px);
       }
-      & > select {
-        width: 10%;
-        height: (24px);
-        width: (100px);
-      }
     }
   }
   #card-list {
     margin-top: (48px);
   }
-}
-
-.active {
-  color: $MAIN_YELLOW;
-  border-bottom: solid 2px $MAIN_YELLOW;
+  select {
+    height: 36px;
+    width: 150px;
+    text-align: center;
+    border-radius: (6px);
+    border: none;
+    appearance : none;
+    -webkit-appearance : none;
+    -moz-appearance : none;
+    &:hover{
+      cursor: pointer;
+    }
+  }
+  select::-ms-expand{
+    display:none;
+  }
+  .select-arrow{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 8px;
+    right: 26px;
+  }
 }
 
 @media screen and (max-width: $DESKTOP-VW) {
@@ -185,7 +200,7 @@
           position: relative;
           height: vw(36px);
           & > img {
-            top: vw(6px);
+            top: vw(12px);
             left: vw(8px);
             position: absolute;
             height: vw(24px);
@@ -197,7 +212,7 @@
             width: vw(470px);
             border: solid 2px $MAIN_YELLOW;
             border-radius: vw(8px);
-            height: vw(36px);
+            height: vw(48px);
             font-size: vw(16px);
           }
         }
@@ -229,23 +244,36 @@
           width: 45%;
           font-size: vw(24px);
         }
-        & > select {
-          width: 10%;
-          height: 24px;
-          width: 100px;
-        }
       }
     }
     #card-list {
       margin-top: vw(48px);
     }
+    select {
+      height: 36px;
+      width: 150px;
+      text-align: center;
+      border-radius: (6px);
+      border: none;
+      appearance : none;
+      -webkit-appearance : none;
+      -moz-appearance : none;
+      &:hover{
+        cursor: pointer;
+      }
+    }
+    select::-ms-expand{
+      display:none;
+    }
+    .select-arrow{
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      top: 8px;
+      right: 26px;
+    }
   }
 
-  .active {
-    color: $MAIN_YELLOW;
-    border-bottom: solid 2px $MAIN_YELLOW;
-  }
-}
 
 @media screen and (max-width: $TABLET-VW) {
   #deal-page {
@@ -368,17 +396,34 @@
           width: 45%;
           font-size: vw-t(24px);
         }
-        & > select {
-          width: 10%;
-          height: vw-t(24px);
-          width: vw-t(120px);
-          font-size: vw-t(16px);
-        }
       }
     }
     #card-list {
       margin-top: vw-t(48px);
     }
+  }
+  select {
+    height: 36px;
+    width: 150px;
+    text-align: center;
+    border-radius: (6px);
+    border: none;
+    appearance : none;
+    -webkit-appearance : none;
+    -moz-appearance : none;
+    &:hover{
+      cursor: pointer;
+    }
+  }
+  select::-ms-expand{
+    display:none;
+  }
+  .select-arrow{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 8px;
+    right: 26px;
   }
 }
 
@@ -508,24 +553,40 @@
           width: 45%;
           font-size: vw-p(24px);
         }
-        & > select {
-          width: 10%;
-          height: vw-p(24px);
-          width: vw-p(120px);
-          font-size: vw-p(16px);
-        }
       }
     }
-    #card-list {
-      margin-top: vw-p(48px);
+    select {
+      height: 36px;
+      width: 100px;
+      padding-left: 20px;
+      text-align: start;
+      border-radius: (6px);
+      appearance : none;
+      -webkit-appearance : none;
+      -moz-appearance : none;
+      &:hover{
+        cursor: pointer;
+      }
+    }
+    select::-ms-expand{
+      display:none;
+    }
+    .select-arrow{
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      top: 8px;
+      right: 12px;
     }
   }
-
   .p-none {
     display: none;
   }
+  #card-list {
+    margin-top: vw-p(48px);
+  }
 }
-
+}
 .active {
   color: $MAIN_YELLOW;
   border-bottom: solid 2px $MAIN_YELLOW;
