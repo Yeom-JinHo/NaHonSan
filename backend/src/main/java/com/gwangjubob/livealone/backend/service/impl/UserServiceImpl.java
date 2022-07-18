@@ -17,4 +17,11 @@ public class UserServiceImpl implements UserService {
     public boolean loginUser(UserLoginDto userLoginDto){
         return userRepository.findByIdAndPassword(userLoginDto.getId(),userLoginDto.getPassword()).isPresent();
     }
+
+    @Override
+    public void userDelete(String id) {
+        userRepository.deleteById(id);
+    }
+
+
 }

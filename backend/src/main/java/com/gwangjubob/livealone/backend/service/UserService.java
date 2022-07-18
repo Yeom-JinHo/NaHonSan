@@ -4,4 +4,8 @@ import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
 
 public interface UserService {
     boolean loginUser(UserLoginDto userLoginDto);
+
+    void userDelete(String id);
+
+
 }
