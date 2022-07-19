@@ -28,6 +28,14 @@ public class UserEntity {
     private Boolean followOpen;
     @Column(name="follower_open")
     private Boolean followerOpen;
+    @Column(name="like_notice")
+    private Boolean likeNotice;
+    @Column(name="follow_notice")
+    private Boolean followNotice;
+    @Column(name="comment_notice")
+    private Boolean commentNotice;
+    @Column(name="reply_notice")
+    private Boolean replyNotice;
     @Column(name="profile_msg")
     private String profileMsg;
     @Column(name="profile_img")
