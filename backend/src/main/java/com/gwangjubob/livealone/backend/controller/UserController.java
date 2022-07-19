@@ -89,21 +89,22 @@ public class UserController {
         return new ResponseEntity<>(resultMap, status);
     }
     @PostMapping("/user/auth")
-    public ResponseEntity<?> sendMail(@RequestBody MailSendDto mailSendDto) throws Exception{
+    public ResponseEntity<?> sendMail(@RequestBody MailSendDto mailSendDto) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
         try {
-            if(mailService.sendMail(mailSendDto)==true){
-                resultMap.put("message",okay);
-            }else{
-                resultMap.put("message",fail);
+            if (mailService.sendMail(mailSendDto) == true) {
+                resultMap.put("message", okay);
+            } else {
+                resultMap.put("message", fail);
             }
             status = HttpStatus.OK;
-        }catch (Exception e){
+        } catch (Exception e) {
             status = HttpStatus.UNAUTHORIZED;
         }
 
         return new ResponseEntity<>(resultMap, status);
+    }
     @PutMapping("/user")
     public ResponseEntity<?> updateUser(@RequestBody UserUpdateDto userUpdateDto) throws Exception{
         HttpStatus status;
@@ -134,7 +135,5 @@ public class UserController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
-
-}
 
 }
