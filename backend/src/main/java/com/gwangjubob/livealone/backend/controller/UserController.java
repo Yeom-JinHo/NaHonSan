@@ -1,5 +1,6 @@
 package com.gwangjubob.livealone.backend.controller;
 
+import com.gwangjubob.livealone.backend.dto.user.UserRegistDto;
 import com.gwangjubob.livealone.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,34 @@ public class UserController {
     @Autowired
     UserController(UserService userService){
         this.userService = userService;
+    }
+    @PostMapping("/user")
+    public ResponseEntity<?> registUser(@RequestBody UserRegistDto userRegistDto) throws Exception{
+        boolean result = userService.registUser(userRegistDto);
+        if(result){
+            HttpStatus status = HttpStatus.ACCEPTED;
+            return new ResponseEntity<>(okay, status);
+        }else {
+            HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+            return new ResponseEntity<>(fail, status);
+        }
+    }
+
+    @GetMapping("/user/check/{nickname}")
+    public ResponseEntity<?> checkNickName(@PathVariable String nickname){
+        HttpStatus status;
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            if(userService.checkNickName(nickname) == true){
+                resultMap.put("message", fail);
+            } else{
+                resultMap.put("message", okay);
+            }
+            status = HttpStatus.ACCEPTED;
+        }catch (Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, status);
     }
     @PostMapping("/user/login")
     public ResponseEntity<?> refreshToken(@RequestBody UserLoginDto userLoginDto, HttpServletRequest request) throws Exception{
