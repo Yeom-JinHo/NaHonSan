@@ -33,7 +33,7 @@ public class UserEntity {
     @Column(name="profile_img")
     private String profileImg;
     private String social;
-    private Integer notice;
+    private String notice;
     @Column(name="background_img")
     private String backgroundImg;
 

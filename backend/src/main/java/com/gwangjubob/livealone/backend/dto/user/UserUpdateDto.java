@@ -19,6 +19,6 @@ public class UserUpdateDto {
     private Boolean followerOpen;
     private String profileMsg;
     private String profileImg;
-    private Integer notice;
+    private String notice;
     private String backgroundImg;
 }
