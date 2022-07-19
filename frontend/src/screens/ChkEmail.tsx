@@ -80,7 +80,11 @@ function ChkEmail({ type }: ChkEmailProps) {
     }, 500);
     setDebounceTimer(timeoutId);
   };
-
+  const handleKeyUP = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      chkCode();
+    }
+  };
   return (
     <div id="chk-email">
       <header className="header">
@@ -98,6 +102,7 @@ function ChkEmail({ type }: ChkEmailProps) {
           className="form__input notoReg fs-15"
           placeholder="인증번호를 입력해주세요"
           ref={inputRef}
+          onKeyUp={handleKeyUP}
         />
         <Timer setErrMsg={setErrMsg} initTime={180} timerKey={timerKey} />
         <p className="form__msg notoMid fs-12">{errMsg}</p>

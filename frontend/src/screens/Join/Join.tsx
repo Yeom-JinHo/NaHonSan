@@ -21,6 +21,11 @@ function Join() {
       return;
     }
     if (inputRef.current) {
+      if (inputRef.current?.value === "") {
+        inputRef.current?.focus();
+        setErrMsg("이메일을 입력해주세요.");
+        return;
+      }
       const userId = inputRef.current?.value;
       const res = await chkEmailExist(userId);
       if (res === "JOINED") {
@@ -33,14 +38,17 @@ function Join() {
     }
   };
 
-  const chkEmailReg = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const chkEmailReg = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      chkValidate();
+      return;
+    }
     if (emailReg.test(e.target.value)) {
       setErrMsg("");
     } else {
       setErrMsg("이메일 형식을 확인해주세요.");
     }
   };
-
   return (
     <div id="join">
       <header className="header">
@@ -83,7 +91,7 @@ function Join() {
           className="form__input notoReg fs-15"
           type="text"
           placeholder="이메일을 입력해주세요."
-          onChange={chkEmailReg}
+          onKeyUp={chkEmailReg}
           ref={inputRef}
         />
         {errMsg === "" ? (
