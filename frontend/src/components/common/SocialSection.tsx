@@ -3,7 +3,11 @@ import KakaoIcon from "@images/Kakao.svg";
 import GoogleIcon from "@images/Google.svg";
 import NaverIcon from "@images/Naver.svg";
 import "./SocialSecion.scss";
-import { KAKAO_AUTH_URL, NAVER_AUTH_URL } from "@store/ducks/auth/authThunk";
+import {
+  KAKAO_AUTH_URL,
+  NAVER_AUTH_URL,
+  googleClientId
+} from "@store/ducks/auth/authThunk";
 import GoogleLogin from "react-google-login";
 
 function SocialSection() {
@@ -16,6 +20,7 @@ function SocialSection() {
   const startGoogle = (res: any) => {
     console.log(res);
   };
+  console.log(googleClientId);
   return (
     <section className="social">
       <button
@@ -35,7 +40,7 @@ function SocialSection() {
         <p className="social__content notoMid fs-15">네이버로 시작하기</p>
       </button>
       <GoogleLogin
-        clientId="487116735373-3p94f9a8buuqinjt0ume6t00334jnbpr.apps.googleusercontent.com"
+        clientId={googleClientId}
         onSuccess={startGoogle}
         className="simple-login-form__google-login-btn modal-box fs-16"
         render={renderProps => (

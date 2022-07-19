@@ -2,7 +2,7 @@ import axios from "axios";
 
 const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID;
 const naverClientId = process.env.REACT_APP_NAVER_CLIENT_ID;
-const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+export const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID as string;
 
 const kakaoRedirectUrl = `http://localhost:3000/oauth/kakao`;
 const naverRedirectUrl = `http://localhost:3000/oauth/naver`;
