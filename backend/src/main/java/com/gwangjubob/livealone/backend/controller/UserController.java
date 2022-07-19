@@ -34,7 +34,7 @@ public class UserController {
     public ResponseEntity<?> registUser(@RequestBody UserRegistDto userRegistDto) throws Exception{
         boolean result = userService.registUser(userRegistDto);
         if(result){
-            HttpStatus status = HttpStatus.ACCEPTED;
+            HttpStatus status = HttpStatus.OK;
             return new ResponseEntity<>(okay, status);
         }else {
             HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -52,7 +52,7 @@ public class UserController {
             } else{
                 resultMap.put("message", okay);
             }
-            status = HttpStatus.ACCEPTED;
+            status = HttpStatus.OK;
         }catch (Exception e){
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
@@ -67,7 +67,7 @@ public class UserController {
                 String accessToken = jwtService.createAccessToken("id", userLoginDto.getId());// key, data
                 String refreshToken = jwtService.createRefreshToken("id", userLoginDto.getId());
                 resultMap.put("access-token", accessToken);
-                resultMap.put("message", "로그인 성공");
+                resultMap.put("message", okay);
                 // create a cookie
                 ResponseCookie cookie = ResponseCookie.from("refresh-token",refreshToken)
                         .maxAge(7 * 24 * 60 * 60)
@@ -78,10 +78,9 @@ public class UserController {
                         .build();
                 response.setHeader("Set-Cookie",cookie.toString());
             }else {
-                resultMap.put("message","로그인 실패");
+                resultMap.put("message",fail);
             }
-            resultMap.put("message",okay);
-            status = HttpStatus.ACCEPTED;
+            status = HttpStatus.OK;
         }catch (Exception e){
             status = HttpStatus.UNAUTHORIZED;
         }
@@ -98,7 +97,7 @@ public class UserController {
             }else{
                 resultMap.put("message",fail);
             }
-            status = HttpStatus.ACCEPTED;
+            status = HttpStatus.OK;
         }catch (Exception e){
             status = HttpStatus.UNAUTHORIZED;
         }
@@ -112,7 +111,7 @@ public class UserController {
         try {
             userService.userDelete(id);
             resultMap.put("message", okay);
-            status = HttpStatus.ACCEPTED;
+            status = HttpStatus.OK;
         } catch (Exception e){
             resultMap.put("message", fail);
             status = HttpStatus.INTERNAL_SERVER_ERROR;

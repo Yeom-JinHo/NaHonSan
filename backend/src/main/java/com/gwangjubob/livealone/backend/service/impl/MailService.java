@@ -9,6 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Random;
 
 
@@ -35,18 +36,17 @@ public class MailService {
         message.setText(subText);
         try{
             javaMailSender.send(message); //메일 전송
+            MailEntity mail = MailEntity.builder()
+                    .id(mailSendDto.getId())
+                    .type(mailSendDto.getType())
+                    .number(authKey)
+                    .build();
+            mailRepository.deleteById(mailSendDto.getId()); //이전에 인증번호 제거
+            mailRepository.saveAndFlush(mail);
+            return true;
         }catch (Exception e){
-            System.out.println(e.toString());
             return false;
         }
-        MailEntity mail = MailEntity.builder()
-                .id(mailSendDto.getId())
-                .type(mailSendDto.getType())
-                .number(authKey)
-                .build();
-        mailRepository.save(mail);
-
-        return true;
     }
     public String makeAuthNumber(){
         Random random = new Random();
