@@ -33,7 +33,7 @@ public class UserEntity {
     @Column(name="profile_img")
     private String profileImg;
     private String social;
-    private int notice;
+    private String notice;
     @Column(name="background_img")
     private String backgroundImg;
 
@@ -46,5 +46,6 @@ public class UserEntity {
         this.password = password;
         this.nickname = nickname;
     }
+
 
 }

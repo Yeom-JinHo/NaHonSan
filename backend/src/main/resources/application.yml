@@ -16,6 +16,8 @@ spring:
   devtools:
     livereload:
       enabled: true
+    restart:
+      enabled: true
 
 logging:
   level:
