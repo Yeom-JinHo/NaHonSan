@@ -1,5 +1,6 @@
 package com.gwangjubob.livealone.backend.controller;
 
+import com.gwangjubob.livealone.backend.dto.mail.MailCheckDto;
 import com.gwangjubob.livealone.backend.dto.mail.MailSendDto;
 import com.gwangjubob.livealone.backend.dto.user.UserRegistDto;
 import com.gwangjubob.livealone.backend.dto.user.UserUpdateDto;
@@ -88,6 +89,29 @@ public class UserController {
 
         return new ResponseEntity<>(resultMap, status);
     }
+    @PutMapping("/user/password")
+    public ResponseEntity<?> updatePassword(@RequestBody UserLoginDto userLoginDto) throws Exception{
+        HttpStatus status;
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            boolean res = userService.updatePassword(userLoginDto);
+            if(res){
+                status = HttpStatus.OK;
+                resultMap.put("message", okay);
+            } else{
+                status = HttpStatus.NO_CONTENT;
+                resultMap.put("message", fail);
+            }
+
+            return new ResponseEntity<>(resultMap, status);
+        } catch(Exception e){
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            return new ResponseEntity<>(resultMap, status);
+        }
+    }
+
+
+
     @PostMapping("/user/auth")
     public ResponseEntity<?> sendMail(@RequestBody MailSendDto mailSendDto) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
@@ -102,6 +126,24 @@ public class UserController {
         } catch (Exception e) {
             status = HttpStatus.UNAUTHORIZED;
         }
+
+        return new ResponseEntity<>(resultMap, status);
+    }
+    @GetMapping("/user/auth")
+    public ResponseEntity<?> checkMail(@ModelAttribute("MailCheckDto") MailCheckDto mailCheckDto) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status;
+        try {
+            if (mailService.checkAuthNumber(mailCheckDto) == true) {
+                resultMap.put("message", okay);
+            } else {
+                resultMap.put("message", fail);
+            }
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            status = HttpStatus.UNAUTHORIZED;
+        }
+
 
         return new ResponseEntity<>(resultMap, status);
     }
@@ -121,12 +163,14 @@ public class UserController {
         }
 
     }
-    @DeleteMapping("user/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable String id) throws Exception{
+    @DeleteMapping("/user")
+    public ResponseEntity<?> deleteUser(HttpServletRequest request) throws Exception{
+        String accessToken = request.getHeader("access-token");
+        String decodeId = jwtService.decodeToken(accessToken);
         HttpStatus status;
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            userService.userDelete(id);
+            userService.userDelete(decodeId);
             resultMap.put("message", okay);
             status = HttpStatus.OK;
         } catch (Exception e){
@@ -137,3 +181,4 @@ public class UserController {
     }
 
 }
+

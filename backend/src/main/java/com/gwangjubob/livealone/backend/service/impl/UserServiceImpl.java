@@ -7,6 +7,7 @@ import com.gwangjubob.livealone.backend.dto.user.UserRegistDto;
 import com.gwangjubob.livealone.backend.dto.user.UserUpdateDto;
 import com.gwangjubob.livealone.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,13 +15,21 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    UserServiceImpl(UserRepository userRepository){
+    UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
     @Override
     public boolean loginUser(UserLoginDto userLoginDto){
-        return userRepository.findByIdAndPassword(userLoginDto.getId(),userLoginDto.getPassword()).isPresent();
+        Optional<UserEntity> user = userRepository.findById(userLoginDto.getId());
+        Boolean passwordCheck = passwordEncoder.matches(userLoginDto.getPassword(),user.get().getPassword());
+        if(passwordCheck == true){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     @Override
@@ -30,9 +39,10 @@ public class UserServiceImpl implements UserService {
 
     
     public boolean registUser(UserRegistDto userRegistDto) {
+        String password = passwordEncoder.encode(userRegistDto.getPassword());
         UserEntity user = UserEntity.builder()
                 .id(userRegistDto.getId())
-                .password(userRegistDto.getPassword())
+                .password(password)
                 .nickname(userRegistDto.getNickname())
                 .build();
         userRepository.save(user);
@@ -55,7 +65,10 @@ public class UserServiceImpl implements UserService {
             user.get().setFollowerOpen(userUpdateDto.getFollowerOpen());
             user.get().setProfileImg(userUpdateDto.getProfileImg());
             user.get().setProfileMsg(userUpdateDto.getProfileMsg());
-            user.get().setNotice(userUpdateDto.getNotice());
+            user.get().setLikeNotice(userUpdateDto.getLikeNotice());
+            user.get().setFollowNotice(userUpdateDto.getFollowNotice());
+            user.get().setCommentNotice(userUpdateDto.getCommentNotice());
+            user.get().setReplyNotice(userUpdateDto.getReplyNotice());
             user.get().setBackgroundImg(userUpdateDto.getBackgroundImg());
             userRepository.save(user.get());
             return userUpdateDto;
@@ -63,5 +76,15 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-
+    @Override
+    public boolean updatePassword(UserLoginDto userLoginDto) {
+        Optional<UserEntity> user =  userRepository.findById(userLoginDto.getId());
+        if(user.isPresent()){
+            user.get().setPassword(userLoginDto.getPassword());
+            userRepository.save(user.get());
+            return true;
+        } else{
+            return false;
+        }
+    }
 }
