@@ -42,5 +42,4 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByNickname(nickname).isPresent();
     }
 
-
 }

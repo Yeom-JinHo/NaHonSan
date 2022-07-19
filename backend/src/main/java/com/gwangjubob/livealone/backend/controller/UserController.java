@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -101,4 +100,5 @@ public class UserController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
+
 }
