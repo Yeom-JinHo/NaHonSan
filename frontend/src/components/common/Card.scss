@@ -2,8 +2,16 @@
   border-top-right-radius: (28px);
   border-top-left-radius: (28px);
 }
-
+@keyframes show {
+  0% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 #card {
+  animation: show 1s ease-in-out;
   position: relative;
   width: (370px);
   .card-header {
@@ -23,15 +31,19 @@
     box-shadow: 4px 4px 30px rgba(0, 0, 0, 0.25);
     @include boaderRaduisTop();
     .img-container {
+      position: relative;
       overflow: hidden;
       @include boaderRaduisTop();
-      max-width: (370px);
-      max-height: (232px);
+      width: (370px);
+      height: (232px);
     }
 
     &__thumnail {
-      width: (370px);
-      height: (232px);
+      position: absolute;
+      right: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       @include boaderRaduisTop();
 
       transform: scale(1);
@@ -99,6 +111,7 @@
 
       &__cnt {
         color: $MAIN_GRAY;
+        width: 28px;
       }
     }
   }
@@ -132,13 +145,13 @@
       .img-container {
         overflow: hidden;
         @include boaderRaduisTop();
-        max-width: vw(370px);
-        max-height: vw(232px);
+        width: vw(370px);
+        height: vw(232px);
       }
 
       &__thumnail {
-        width: vw(370px);
-        height: vw(232px);
+        // width: vw(370px);
+        // height: vw(232px);
         @include boaderRaduisTop();
 
         transform: scale(1);
@@ -206,6 +219,7 @@
 
         &__cnt {
           color: $MAIN_GRAY;
+          width: vw(24px);
         }
       }
     }
@@ -237,13 +251,13 @@
       @include boaderRaduisTop();
       .img-container {
         @include boaderRaduisTop();
-        max-width: vw-t(326px);
-        max-height: vw-t(189px);
+        width: vw-t(326px);
+        height: vw-t(189px);
       }
 
       &__thumnail {
-        width: vw-t(326px);
-        height: vw-t(189px);
+        // width: vw-t(326px);
+        // height: vw-t(189px);
         @include boaderRaduisTop();
       }
 
@@ -291,6 +305,10 @@
         & + .icon-container {
           margin-left: vw-t(40px);
         }
+
+        &__cnt {
+          width: vw-t(24px);
+        }
       }
     }
   }
@@ -321,13 +339,13 @@
       @include boaderRaduisTop();
       .img-container {
         @include boaderRaduisTop();
-        max-width: vw-p(326px);
-        max-height: vw-p(189px);
+        width: vw-p(326px);
+        height: vw-p(189px);
       }
 
       &__thumnail {
-        width: vw-p(326px);
-        height: vw-p(189px);
+        // width: vw-p(326px);
+        // height: vw-p(189px);
         @include boaderRaduisTop();
       }
 
@@ -374,6 +392,9 @@
 
         & + .icon-container {
           margin-left: vw-p(40px);
+        }
+        &__cnt {
+          width: 24px;
         }
       }
     }
