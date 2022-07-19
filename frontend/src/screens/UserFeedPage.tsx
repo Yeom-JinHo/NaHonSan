@@ -5,19 +5,22 @@ import UserDummyIcon from "@images/UserDummy.svg";
 import SetIcon from "@images/SetIcon.svg";
 import FeedList from "@components/common/UserFeed/FeedList";
 import FollowList from "@components/common/UserFeed/FollowList";
+import getCounts from "@utils/getCounts";
 
 function UserFeedPage() {
   const [tagSwitch, setTagSwitch] = useState(true);
   const [followClick, setFollowClick] = useState(false);
-  const tagChange = (str: string, e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const [followModal, setFollowModal] = useState("");
+
+  const tagChange = (str: string) => {
     if (str === "tip") {
-      setTagSwitch(false);
-    } else {
       setTagSwitch(true);
+    } else {
+      setTagSwitch(false);
     }
   };
-  const follow = () => {
+  const follow = (state: string) => {
+    setFollowModal(state);
     setFollowClick(true);
   };
   const signal = () => {
@@ -35,16 +38,30 @@ function UserFeedPage() {
         </div>
       </div>
       <div className="info">
-        <div className="info__nickname">
+        <div className="info__nickname notoBold">
           <p>UserName</p>
           <img src={SetIcon} alt="set" />
         </div>
         <div className="info__follow flex">
-          <button type="button" onClick={follow}>
-            팔로워<span>123.K</span>
+          <button
+            className="notoMid"
+            type="button"
+            onClick={() => {
+              follow("Follower");
+            }}
+          >
+            팔로워
+            <span>{getCounts(12324)}</span>
           </button>
-          <button type="button" onClick={follow}>
-            팔로잉<span>123.K</span>
+          <button
+            className="notoMid"
+            type="button"
+            onClick={() => {
+              follow("Following");
+            }}
+          >
+            팔로잉
+            <span>{getCounts(12324)}</span>
           </button>
         </div>
         <div className="info__btn flex">
@@ -61,27 +78,29 @@ function UserFeedPage() {
       <div className="feed">
         <div className="feed-tag flex">
           <button
-            onClick={e => {
-              tagChange("tip", e);
+            onClick={() => {
+              tagChange("tip");
+            }}
+            className={`notoBold ${tagSwitch ? "active" : null}`}
+            type="button"
+          >
+            꿀팁보기<span>{`(${getCounts(1234)})`}</span>
+          </button>
+          <button
+            onClick={() => {
+              tagChange("deal");
             }}
             className={`notoBold ${tagSwitch ? null : "active"}`}
             type="button"
           >
-            꿀팁보기<span>(123)</span>
-          </button>
-          <button
-            onClick={e => {
-              tagChange("deal", e);
-            }}
-            className={`notoBold ${!tagSwitch ? null : "active"}`}
-            type="button"
-          >
-            꿀딜보기<span>(123)</span>
+            꿀딜보기<span>{`(${getCounts(1234)})`}</span>
           </button>
         </div>
         <FeedList />
       </div>
-      {followClick ? <FollowList signal={signal} /> : null}
+      {followClick ? (
+        <FollowList signal={signal} followModal={followModal} />
+      ) : null}
     </div>
   );
 }

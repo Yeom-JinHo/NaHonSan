@@ -27,7 +27,7 @@ function RootRouter() {
           <Route path="/tip" element={<TipPage />} />
           <Route path="/feed" element={<FeedPage />} />
           <Route path="/deal" element={<DealPage />} />
-          <Route path="/userfeed" element={<UserFeedPage />} />
+          <Route path="/userfeed/:id" element={<UserFeedPage />} />
           <Route path="/join/*">
             <Route index element={<Join />} />
             <Route path="chkEmail" element={<ChkEmail type="login" />} />

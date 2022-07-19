@@ -1,6 +1,7 @@
 #userfeed-page{
+  padding-bottom: (40px);
   .profile{
-    margin-top: (20px);
+    margin-top: (60px);
     position: relative;
     width: (570px);
     &-background{
@@ -59,16 +60,17 @@
       }
     }
     &__state{
-      margin-top: (12px);
+      margin-top: (24px);
       text-align: start;
       font-size: (16px);
       padding-left: (12px);
       padding-right: (12px);
+      line-height: (24px);
     }
   }
   .feed{
     max-width: (970px);
-    margin-top: (80px);
+    margin-top: (60px);
     &-tag{
       width: 100%;
       justify-content: space-evenly;
@@ -86,8 +88,9 @@
 
 @media screen and (max-width: $DESKTOP-VW) {
   #userfeed-page{
+    padding-bottom: vw(40px);
     .profile{
-      margin-top: vw(20px);
+      margin-top: vw(60px);
       position: relative;
       width: vw(570px);
       &-background{
@@ -146,16 +149,17 @@
         }
       }
       &__state{
-        margin-top: vw(12px);
+        margin-top: vw(24px);
         text-align: start;
         font-size: vw(16px);
         padding-left: vw(12px);
         padding-right: vw(12px);
+        line-height: vw(24px);
       }
     }
     .feed{
       max-width: vw(970px);
-      margin-top: vw(80px);
+      margin-top: vw(60px);
       &-tag{
         width: 100%;
         justify-content: space-evenly;
@@ -174,8 +178,9 @@
 
 @media screen and (max-width: $TABLET-VW) {
   #userfeed-page{
+    padding-bottom: vw-t(40px);
     .profile{
-      margin-top: vw-t(20px);
+      margin-top: vw-t(60px);
       position: relative;
       width: vw-t(570px);
       &-background{
@@ -234,16 +239,17 @@
         }
       }
       &__state{
-        margin-top: vw-t(12px);
+        margin-top: vw-t(24px);
         text-align: start;
         font-size: vw-t(16px);
-        padding-left: vw-t(12px);
-        padding-right: vw-t(12px);
+        padding-left: vw-t(24px);
+        padding-right: vw-t(24px);
+        line-height: vw-t(24px);
       }
     }
     .feed{
       max-width: vw-t(970px);
-      margin-top: vw-t(80px);
+      margin-top: vw-t(60px);
       &-tag{
         width: 100%;
         justify-content: space-evenly;
@@ -262,14 +268,16 @@
 
 @media screen and (max-width: $PHONE-VW) {
   #userfeed-page{
+    padding-bottom: vw-p(40px);
     .profile{
-      margin-top: vw-p(20px);
+      margin-top: vw-p(40px);
       position: relative;
       width: 100%;
       &-background{
         height: vw-p(200px);
         &__img{
           height: vw-p(200px);
+          border-radius: 0px;
         }
       }
       &-user{
@@ -321,15 +329,16 @@
         }
       }
       &__state{
-        margin-top: vw-p(12px);
+        margin-top: vw-p(24px);
         text-align: start;
-        font-size: vw-p(16px);
-        padding-left: vw-p(12px);
+        font-size: vw-p(12px);
+        padding-left: vw-p(36px);
         padding-right: vw-p(12px);
+        line-height: vw-p(20px);
       }
     }
     .feed{
-      margin-top: vw-p(30px);
+      margin-top: vw-p(20px);
       &-tag{
         width: 100%;
         justify-content: space-evenly;

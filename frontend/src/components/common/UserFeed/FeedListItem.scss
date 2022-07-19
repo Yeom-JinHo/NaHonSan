@@ -15,10 +15,12 @@
     }
   }
   .feed-info{
+    width: 100%;
+    height: 164px;
     position: absolute;
-    top: 5%;
-    left: 25%;
     color: white;
+    align-items: center;
+    justify-content: center;
     z-index: 1;
     & > p{
       margin-top: (24px);
@@ -64,10 +66,12 @@
       }
     }
     .feed-info{
+      width: 100%;
+      height: vw(164px);
       position: absolute;
-      top: 5%;
-      left: 25%;
       color: white;
+      align-items: center;
+      justify-content: center;
       z-index: 1;
       & > p{
         margin-top: vw(24px);
@@ -114,10 +118,12 @@
       }
     }
     .feed-info{
+      width: 100%;
+      height: vw-t(110px);
       position: absolute;
-      top: 5%;
-      left: 20%;
       color: white;
+      align-items: center;
+      justify-content: center;
       z-index: 1;
       & > p{
         margin-top: vw-t(12px);
@@ -164,10 +170,12 @@
       }
     }
     .feed-info{
+      width: 100%;
+      height: vw-p(96px);
       position: absolute;
-      top: 5%;
-      left: 20%;
       color: white;
+      align-items: center;
+      justify-content: center;
       z-index: 1;
       & > p{
         margin-top: vw-p(16px);
