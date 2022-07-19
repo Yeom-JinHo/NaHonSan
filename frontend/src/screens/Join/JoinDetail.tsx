@@ -3,23 +3,46 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./JoinDetail.scss";
 import { passwordReg } from "@constants/reg";
+import { useAppSelector } from "@store/hooks";
+import { join } from "@apis/join";
+
+type nickNameDupliType = "" | "err" | "success";
 
 function JoinDetail() {
-  const email = "JinhoJJANG@gmail.com";
+  const userId = useAppSelector(state => state.auth.userId);
   const navigate = useNavigate();
   const [validPassword, setValidPassword] = useState(true);
   const [samePassword, setSamePassword] = useState(true);
-  const [nickNameDupli, setNickNameDupli] = useState("");
+  const [nickNameDupli, setNickNameDupli] = useState<nickNameDupliType>("");
+
+  const nickNameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const chkPasswordRef = useRef<HTMLInputElement>(null);
+
   const [form, setForm] = useState({
-    email,
+    userId,
     nickName: "",
-    password: "",
-    chkPassword: ""
+    password: ""
   });
 
-  const submitUserInfo = () => navigate("/join/more");
+  const submitUserInfo = () => {
+    if (nickNameDupli !== "success" || form.nickName === "") {
+      nickNameRef.current?.focus();
+      return;
+    }
+    if (!validPassword || form.password === "") {
+      passwordRef.current?.focus();
+      return;
+    }
+    if (!samePassword) {
+      console.log(form);
+      chkPasswordRef.current?.focus();
+      return;
+    }
+
+    join();
+    navigate("/join/welcome");
+  };
 
   const chkValidPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValidPassword(passwordReg.test(e.target.value));
@@ -31,19 +54,19 @@ function JoinDetail() {
         chkPasswordRef.current.value === passwordRef.current.value
       );
   };
+  const changeForm = (type: string, value: string) => {
+    setForm({ ...form, [type]: value });
+  };
 
   const chkNickNameDupli = () => {
     if (nickNameDupli === "") {
       setNickNameDupli("err");
     } else if (nickNameDupli === "err") {
       setNickNameDupli("success");
+      changeForm("nickName", "dummy");
     } else {
       setNickNameDupli("");
     }
-  };
-
-  const changeForm = (type: string, value: string) => {
-    setForm({ ...form, [type]: value });
   };
 
   return (
@@ -51,12 +74,12 @@ function JoinDetail() {
       <header className="header">
         <p className="header__title notoBold fs-24">회원정보를 입력해주세요</p>
       </header>
-      <main className="form">
+      <form className="form">
         <p className="form__type notoBold fs-16">이메일</p>
         <input
           type="text"
           className="form__input fs-15 notoReg"
-          defaultValue={email}
+          defaultValue={userId}
           disabled
         />
         <p className="form__type notoBold fs-16">닉네임</p>
@@ -64,6 +87,8 @@ function JoinDetail() {
           type="text"
           className="form__input input-nickName fs-15 notoReg"
           placeholder="닉네임을 입력해주세요."
+          autoComplete="nickname"
+          ref={nickNameRef}
         />
         <button
           type="button"
@@ -94,6 +119,7 @@ function JoinDetail() {
           onBlur={chkSamePassword}
           ref={passwordRef}
           placeholder="비밀번호를 입력해주세요."
+          autoComplete="new-password"
         />
         {validPassword ? (
           <div className="dummy" />
@@ -110,6 +136,7 @@ function JoinDetail() {
           onChange={chkSamePassword}
           ref={chkPasswordRef}
           placeholder="비밀번호를 다시 한번 입력해주세요."
+          autoComplete="new-password"
         />
         {samePassword ? (
           <div className="dummy" />
@@ -126,7 +153,7 @@ function JoinDetail() {
         >
           다음
         </button>
-      </main>
+      </form>
     </div>
   );
 }

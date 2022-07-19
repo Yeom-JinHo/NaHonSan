@@ -5,7 +5,7 @@ import GoogleIcon from "@images/Google.svg";
 import NaverIcon from "@images/Naver.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { emailReg } from "@constants/reg";
-import { chkEmailExist, sendAuthCode } from "@apis/auth";
+import { chkEmailExist, sendAuthCode } from "@apis/join";
 import { useDispatch } from "react-redux";
 import { setUserId } from "@store/ducks/auth/authSlice";
 

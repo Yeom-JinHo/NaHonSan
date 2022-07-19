@@ -7,7 +7,7 @@ import React, {
   useRef
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { chkAuthCode, sendAuthCode } from "@apis/auth";
+import { chkAuthCode, sendAuthCode } from "@apis/join";
 import "./ChkEmail.scss";
 import { v4 } from "uuid";
 
