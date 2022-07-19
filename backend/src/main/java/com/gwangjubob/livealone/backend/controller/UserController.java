@@ -2,6 +2,7 @@ package com.gwangjubob.livealone.backend.controller;
 
 import com.gwangjubob.livealone.backend.dto.mail.MailSendDto;
 import com.gwangjubob.livealone.backend.dto.user.UserRegistDto;
+import com.gwangjubob.livealone.backend.dto.user.UserUpdateDto;
 import com.gwangjubob.livealone.backend.service.JwtService;
 import com.gwangjubob.livealone.backend.service.impl.MailService;
 import com.gwangjubob.livealone.backend.service.UserService;
@@ -103,6 +104,21 @@ public class UserController {
         }
 
         return new ResponseEntity<>(resultMap, status);
+    @PutMapping("/user")
+    public ResponseEntity<?> updateUser(@RequestBody UserUpdateDto userUpdateDto) throws Exception{
+        HttpStatus status;
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            UserUpdateDto user = userService.updateUser(userUpdateDto);
+            status = HttpStatus.ACCEPTED;
+            return new ResponseEntity<>(user, status);
+
+        } catch (Exception e){
+            resultMap.put("message", fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            return new ResponseEntity<>(resultMap, status);
+        }
+
     }
     @DeleteMapping("user/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable String id) throws Exception{
@@ -118,4 +134,7 @@ public class UserController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
+
+}
+
 }

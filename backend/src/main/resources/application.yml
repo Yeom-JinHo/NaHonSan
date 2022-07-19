@@ -4,6 +4,7 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     username: ssafy
     password: ssafy
+
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
@@ -30,6 +31,8 @@ spring:
     port: '587'
     transport:
       protocol: smtp
+    restart:
+      enabled: true
 
 logging:
   level:
