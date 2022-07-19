@@ -16,6 +16,7 @@ import FindPw from "@screens/Login/FindPw";
 import UserFeedPage from "@screens/UserFeedPage";
 import "./RootLayout.scss";
 import PageNotFound from "@screens/PageNotFound";
+import KakaoOauthHandler from "@screens/KakaoOauthHandler";
 
 function RootRouter() {
   return (
@@ -43,6 +44,7 @@ function RootRouter() {
             <Route path="*" element={<PageNotFound />} />
           </Route>
           <Route path="/reset/pw" element={<ResetPw />} />
+          <Route path="/oauth/kakao" element={<KakaoOauthHandler />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>
