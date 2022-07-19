@@ -17,6 +17,7 @@ import UserFeedPage from "@screens/UserFeedPage";
 import "./RootLayout.scss";
 import PageNotFound from "@screens/PageNotFound";
 import KakaoOauthHandler from "@screens/KakaoOauthHandler";
+import NaverOauthHandler from "@screens/NaverOauthHandler";
 
 function RootRouter() {
   return (
@@ -45,6 +46,7 @@ function RootRouter() {
           </Route>
           <Route path="/reset/pw" element={<ResetPw />} />
           <Route path="/oauth/kakao" element={<KakaoOauthHandler />} />
+          <Route path="/oauth/naver" element={<NaverOauthHandler />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>
