@@ -55,7 +55,10 @@ public class UserServiceImpl implements UserService {
             user.get().setFollowerOpen(userUpdateDto.getFollowerOpen());
             user.get().setProfileImg(userUpdateDto.getProfileImg());
             user.get().setProfileMsg(userUpdateDto.getProfileMsg());
-            user.get().setNotice(userUpdateDto.getNotice());
+            user.get().setLikeNotice(userUpdateDto.getLikeNotice());
+            user.get().setFollowNotice(userUpdateDto.getFollowNotice());
+            user.get().setCommentNotice(userUpdateDto.getCommentNotice());
+            user.get().setReplyNotice(userUpdateDto.getReplyNotice());
             user.get().setBackgroundImg(userUpdateDto.getBackgroundImg());
             userRepository.save(user.get());
             return userUpdateDto;
