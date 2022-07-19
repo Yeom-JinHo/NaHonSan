@@ -63,5 +63,15 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-
+    @Override
+    public boolean updatePassword(UserLoginDto userLoginDto) {
+        Optional<UserEntity> user =  userRepository.findById(userLoginDto.getId());
+        if(user.isPresent()){
+            user.get().setPassword(userLoginDto.getPassword());
+            userRepository.save(user.get());
+            return true;
+        } else{
+            return false;
+        }
+    }
 }
