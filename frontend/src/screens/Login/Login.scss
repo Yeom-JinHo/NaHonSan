@@ -16,29 +16,7 @@
       line-height: (35px);
     }
   }
-  .social {
-    &__btn {
-      @include box();
-      & + .social__btn {
-        margin-top: (12px);
-      }
-    }
-    &__img {
-      width: (16px);
-      height: (16px);
-      margin-right: (8px);
-    }
-    .kakao {
-      background-color: $KAKAO_YELLOW;
-    }
-    .naver {
-      background-color: $NAVER;
-      color: $WHITE;
-    }
-    .google {
-      border: 1px solid $GRAY_CB;
-    }
-  }
+
   .or {
     margin: (32px) 0;
     height: (20px);
@@ -105,29 +83,7 @@
         line-height: vw(35px);
       }
     }
-    .social {
-      &__btn {
-        @include box();
-        & + .social__btn {
-          margin-top: vw(12px);
-        }
-      }
-      &__img {
-        width: vw(16px);
-        height: vw(16px);
-        margin-right: vw(8px);
-      }
-      .kakao {
-        background-color: $KAKAO_YELLOW;
-      }
-      .naver {
-        background-color: $NAVER;
-        color: $WHITE;
-      }
-      .google {
-        border: 1px solid $GRAY_CB;
-      }
-    }
+
     .or {
       margin: vw(32px) 0;
       height: vw(20px);
@@ -194,19 +150,7 @@
         line-height: vw-t(35px);
       }
     }
-    .social {
-      &__btn {
-        @include box();
-        & + .social__btn {
-          margin-top: vw-t(12px);
-        }
-      }
-      &__img {
-        width: vw-t(16px);
-        height: vw-t(16px);
-        margin-right: vw-t(8px);
-      }
-    }
+
     .or {
       margin: vw-t(32px) 0;
       height: vw-t(20px);
@@ -266,19 +210,7 @@
         line-height: vw-p(35px);
       }
     }
-    .social {
-      &__btn {
-        @include box();
-        & + .social__btn {
-          margin-top: vw-p(12px);
-        }
-      }
-      &__img {
-        width: vw-p(16px);
-        height: vw-p(16px);
-        margin-right: vw-p(8px);
-      }
-    }
+
     .or {
       margin: vw-p(16px) 0;
       height: vw-p(20px);

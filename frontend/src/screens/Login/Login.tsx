@@ -1,9 +1,8 @@
 import React from "react";
 import "./Login.scss";
-import KakaoIcon from "@images/Kakao.svg";
-import GoogleIcon from "@images/Google.svg";
-import NaverIcon from "@images/Naver.svg";
+
 import { Link, useNavigate } from "react-router-dom";
+import SocialSection from "@components/common/SocialSection";
 
 function Login() {
   return (
@@ -15,29 +14,7 @@ function Login() {
             나혼자 잘살아 봐요!
           </p>
         </header>
-        <section className="social">
-          <button
-            type="button"
-            className="social__btn flex align-center justify-center kakao"
-          >
-            <img className="social__img" src={KakaoIcon} alt="카카오" />
-            <p className="social__content notoMid fs-15">카카오로 시작하기</p>
-          </button>
-          <button
-            type="button"
-            className="social__btn flex align-center justify-center naver"
-          >
-            <img className="social__img" src={NaverIcon} alt="네이버" />
-            <p className="social__content notoMid fs-15">네이버로 시작하기</p>
-          </button>
-          <button
-            type="button"
-            className="social__btn flex align-center justify-center google"
-          >
-            <img className="social__img" src={GoogleIcon} alt="구글" />
-            <p className="social__content notoMid fs-15">구글로 시작하기</p>
-          </button>
-        </section>
+        <SocialSection />
         <div className="or flex align-center justify-center">
           <span className="or__line" />
           <p className="or__title notoBold fs-14">또는</p>
