@@ -87,12 +87,6 @@ public class NoticeServiceImpl implements NoticeService {
     public boolean readNotice(String decodeId, int idx) {
         Optional<NoticeEntity> noticeEntity = noticeRepository.findByIdx(idx);
         String id = noticeEntity.get().getUser().getId();
-//        System.out.println("==========================");
-//        System.out.println(decodeId);
-//        System.out.println(id);
-//        System.out.println(noticeEntity.get().getRead());
-//        System.out.println(noticeEntity.get().getIdx());
-//        System.out.println("==========================");
         if(id.equals(decodeId) && noticeEntity.isPresent()){
             noticeEntity.get().setRead(true);
 
