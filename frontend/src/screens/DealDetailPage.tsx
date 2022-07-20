@@ -29,7 +29,7 @@ function DealDetailPage() {
         <div className="header flex">
           <div className="header-info flex">
             <div className="header-info__img-container flex">
-              <img src={UserDummyIcon} alt="dum" />
+              <img src={UserDummyIcon} alt="dum" title="user-icon" />
             </div>
             <div className="header-info__text flex column">
               <p className="user-name notoMid">username</p>
@@ -56,12 +56,12 @@ function DealDetailPage() {
                   <option value="2">거래 완료</option>
                 </select>
                 <img src={SelectArrow} alt="arrow" />
-                <img src={EditIcon} alt="edit" />
+                <img src={EditIcon} alt="edit" title="edit" />
               </div>
             ) : (
               <div className="header-func-btn flex">
-                <img src={KakaoMap} alt="123" />
-                <img src={EmptyHeart} alt="123" />
+                <img src={KakaoMap} alt="123" title="map" />
+                <img src={EmptyHeart} alt="123" title="like" />
               </div>
             )}
           </div>
@@ -75,7 +75,7 @@ function DealDetailPage() {
           </div>
           <div className="comment-input flex">
             <div className="input-img-container flex">
-              <img src={UserDummyIcon} alt="dum" />
+              <img src={UserDummyIcon} alt="dum" title="user-icon" />
             </div>
             <input
               type="text"

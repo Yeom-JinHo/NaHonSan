@@ -112,6 +112,7 @@
     margin-top: (48px);
   }
   select {
+    background-color: #fff;
     height: 36px;
     width: 150px;
     text-align: center;
@@ -120,6 +121,7 @@
     appearance : none;
     -webkit-appearance : none;
     -moz-appearance : none;
+    background: url('../assets/images/SelectArrow.svg') no-repeat 95% 50%/12px;
     &:hover{
       cursor: pointer;
     }
