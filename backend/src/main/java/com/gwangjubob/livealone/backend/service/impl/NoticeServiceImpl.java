@@ -10,9 +10,7 @@ import com.gwangjubob.livealone.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class NoticeServiceImpl implements NoticeService {
@@ -34,38 +32,37 @@ public class NoticeServiceImpl implements NoticeService {
         UserInfoDto user = userService.infoUser(id);
 
         // 2. 조회한 UserEntity에서 get으로 알림정보 얻어오기
-        List<Boolean> infoNotice = new ArrayList<>();
-        infoNotice.add(user.getLikeNotice()); // true
-        infoNotice.add(user.getFollowNotice());
-        infoNotice.add(user.getCommentNotice()); // true
-        infoNotice.add(user.getReplyNotice());
+        Map<String, Object> infos = new HashMap<>();
+        infos.put("like",user.getLikeNotice());
+        infos.put("follow", user.getFollowNotice());
+        infos.put("comment", user.getCommentNotice());
+        infos.put("reply", user.getReplyNotice());
 
-        for(Boolean info : infoNotice){
-            // 알림 정보가 true 라면 -> 사용자에게 보여줌
-            if(info){
+        List<NoticeViewDto> result = new ArrayList<>();
 
+        for(Map.Entry<String, Object> info : infos.entrySet()){
+            // 3. 얻어와서 true인 것만
+            if((boolean)info.getValue()){
+                // 유저아이디 기준 알림 리스트 전체 조회
+                List<NoticeEntity> notices = noticeRepository.findByUserIdAndNoticeType(id, info.getKey());
+
+                for(NoticeEntity n : notices){
+                    NoticeViewDto tmp = new NoticeViewDto();
+                    tmp.setIdx(n.getIdx());
+                    tmp.setNoticeType(n.getNoticeType());
+                    tmp.setUserId(n.getUser().getId());
+                    tmp.setFromUserId(n.getFromUserId());
+                    tmp.setPostIdx(n.getPostIdx());
+                    tmp.setRead(n.getRead());
+                    tmp.setTime(n.getTime());
+                    tmp.setPostType(n.getPostType());
+
+                    result.add(tmp);
+                }
             }
         }
 
-        // 3. 얻어와서 true인 것만 보여줌...?
 
-        // 유저아이디 기준 알림 리스트 전체 조회
-        List<NoticeEntity> notices = noticeRepository.findByUserId(id);
-        List<NoticeViewDto> result = new ArrayList<>();
-
-        for(NoticeEntity n : notices){
-            NoticeViewDto tmp = new NoticeViewDto();
-            tmp.setIdx(n.getIdx());
-            tmp.setNoticeType(n.getNoticeType());
-            tmp.setUserId(n.getUser().getId());
-            tmp.setFromUserId(n.getFromUserId());
-            tmp.setPostIdx(n.getPostIdx());
-            tmp.setRead(n.getRead());
-            tmp.setTime(n.getTime());
-            tmp.setPostType(n.getPostType());
-
-            result.add(tmp);
-        }
        return result;
     }
 
