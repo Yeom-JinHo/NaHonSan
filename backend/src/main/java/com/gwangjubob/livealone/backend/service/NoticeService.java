@@ -5,6 +5,7 @@ import com.gwangjubob.livealone.backend.domain.repository.NoticeRepository;
 import com.gwangjubob.livealone.backend.dto.notice.NoticeReadDto;
 import com.gwangjubob.livealone.backend.dto.notice.NoticeViewDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 

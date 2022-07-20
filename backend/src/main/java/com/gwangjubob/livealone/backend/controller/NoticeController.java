@@ -77,6 +77,7 @@ public class NoticeController {
 
         return new ResponseEntity<>(resultMap, status);
     }
+
     // 알림 삭제
     @DeleteMapping("/user/notice/{idx}")
     public ResponseEntity<?> deleteNotice(HttpServletRequest request, @PathVariable int idx) throws Exception{
@@ -90,7 +91,7 @@ public class NoticeController {
             noticeService.deleteNotice(decodeId, idx);
             resultMap.put("message", SUCCESS);
             status = HttpStatus.OK;
-        }catch (Exception e){
+        }catch(Exception e){
             resultMap.put("message", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }

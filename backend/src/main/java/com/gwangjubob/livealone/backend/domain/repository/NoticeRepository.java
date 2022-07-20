@@ -14,8 +14,5 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Integer> {
     // userId user_id
    List<NoticeEntity> findByUserId(String id);
 
-   @Modifying
-   @Query("delete from NoticeEntity n where n.user.id=:id and n.idx=:idx")
-    void deleteByuserIdandIdx(String id, int idx);
-
+    NoticeEntity findByIdx(int idx);
 }
