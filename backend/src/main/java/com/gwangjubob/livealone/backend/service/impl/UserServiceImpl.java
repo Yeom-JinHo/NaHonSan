@@ -1,8 +1,12 @@
 package com.gwangjubob.livealone.backend.service.impl;
 
+import com.gwangjubob.livealone.backend.domain.entity.NoticeEntity;
+import com.gwangjubob.livealone.backend.domain.entity.UserCategoryEntity;
 import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
+import com.gwangjubob.livealone.backend.domain.repository.UserCategoryRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
+import com.gwangjubob.livealone.backend.dto.user.UserMoreDTO;
 import com.gwangjubob.livealone.backend.dto.user.UserRegistDto;
 import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.service.UserService;
@@ -10,16 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
+    private UserCategoryRepository userCategoryRepository;
     private final PasswordEncoder passwordEncoder;
     @Autowired
-    UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
+    UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserCategoryRepository userCategoryRepository){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userCategoryRepository = userCategoryRepository;
     }
     @Override
     public boolean loginUser(UserLoginDto userLoginDto){
@@ -90,8 +97,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updatePassword(UserLoginDto userLoginDto) {
         Optional<UserEntity> user =  userRepository.findById(userLoginDto.getId());
+        String password = passwordEncoder.encode(userLoginDto.getPassword());
         if(user.isPresent()){
-            user.get().setPassword(userLoginDto.getPassword());
+            user.get().setPassword(password);
             userRepository.save(user.get());
             return true;
         } else{
@@ -100,6 +108,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void moreUpdate(UserMoreDTO userMoreDTO) {
+        Optional<UserEntity> user = userRepository.findById(userMoreDTO.getUserId());
+        UserEntity userGet = user.get();
+        userGet.setArea(userMoreDTO.getArea());
+        userRepository.save(userGet);
+        List<UserCategoryEntity> delCategorys = userCategoryRepository.findByUser(userGet);
+        for (UserCategoryEntity uc : delCategorys) {
+            userCategoryRepository.delete(uc);
+        }
+        List<String> categorys = userMoreDTO.getCategorys();
+        for (String c : categorys) {
+            UserCategoryEntity usercategory = UserCategoryEntity.builder()
+                    .category(c)
+                    .user(userGet)
+                    .build();
+            userCategoryRepository.save(usercategory);
+        }
+    }
     public UserInfoDto infoUser(String id) {
         Optional<UserEntity> user = userRepository.findById(id);
         UserEntity userGet = user.get();
