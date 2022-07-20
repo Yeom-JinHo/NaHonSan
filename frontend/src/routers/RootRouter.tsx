@@ -18,6 +18,7 @@ import "./RootLayout.scss";
 import PageNotFound from "@screens/PageNotFound";
 import Letters from "@screens/Letters";
 import ChatRoom from "@screens/ChatRoom";
+import DealDetail from "@screens/DealDetailPage";
 
 function RootRouter() {
   return (
@@ -29,6 +30,7 @@ function RootRouter() {
           <Route path="/tip" element={<TipPage />} />
           <Route path="/feed" element={<FeedPage />} />
           <Route path="/deal" element={<DealPage />} />
+          <Route path="/deal/detail/:id" element={<DealDetail />} />
           <Route path="/userfeed/:id" element={<UserFeedPage />} />
           <Route path="/join/*">
             <Route index element={<Join />} />
