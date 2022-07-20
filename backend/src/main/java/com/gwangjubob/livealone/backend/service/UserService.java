@@ -1,6 +1,7 @@
 package com.gwangjubob.livealone.backend.service;
 
 import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
+import com.gwangjubob.livealone.backend.dto.user.UserMoreDTO;
 import com.gwangjubob.livealone.backend.dto.user.UserRegistDto;
 import com.gwangjubob.livealone.backend.dto.user.UserUpdateDto;
 
@@ -17,4 +18,6 @@ public interface UserService {
     UserUpdateDto updateUser(UserUpdateDto userUpdateDto);
 
     boolean updatePassword(UserLoginDto userLoginDto);
+
+    void moreUpdate(UserMoreDTO userMoreDTO);
 }
