@@ -66,22 +66,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfoDto updateUser(UserInfoDto userUpdateDto) {
-        Optional<UserEntity> user =  userRepository.findById(userUpdateDto.getId());
+    public UserInfoDto updateUser(UserInfoDto userInfoDto) {
+        Optional<UserEntity> user =  userRepository.findById(userInfoDto.getId());
+        UserEntity userGet = user.get();
         if(user != null){
-            user.get().setNickname(userUpdateDto.getNickname());
-            user.get().setArea(userUpdateDto.getArea());
-            user.get().setFollowOpen(userUpdateDto.getFollowOpen());
-            user.get().setFollowerOpen(userUpdateDto.getFollowerOpen());
-            user.get().setProfileImg(userUpdateDto.getProfileImg());
-            user.get().setProfileMsg(userUpdateDto.getProfileMsg());
-            user.get().setLikeNotice(userUpdateDto.getLikeNotice());
-            user.get().setFollowNotice(userUpdateDto.getFollowNotice());
-            user.get().setCommentNotice(userUpdateDto.getCommentNotice());
-            user.get().setReplyNotice(userUpdateDto.getReplyNotice());
-            user.get().setBackgroundImg(userUpdateDto.getBackgroundImg());
-            userRepository.save(user.get());
-            return userUpdateDto;
+            userGet.setNickname(userInfoDto.getNickname());
+            userGet.setArea(userInfoDto.getArea());
+            userGet.setFollowOpen(userInfoDto.getFollowOpen());
+            userGet.setFollowerOpen(userInfoDto.getFollowerOpen());
+            userGet.setProfileImg(userInfoDto.getProfileImg());
+            userGet.setProfileMsg(userInfoDto.getProfileMsg());
+            userGet.setLikeNotice(userInfoDto.getLikeNotice());
+            userGet.setFollowNotice(userInfoDto.getFollowNotice());
+            userGet.setCommentNotice(userInfoDto.getCommentNotice());
+            userGet.setReplyNotice(userInfoDto.getReplyNotice());
+            userGet.setBackgroundImg(userInfoDto.getBackgroundImg());
+            userRepository.save(userGet);
+            return userInfoDto;
         }
         return null;
     }
@@ -103,9 +104,10 @@ public class UserServiceImpl implements UserService {
         Optional<UserEntity> user = userRepository.findById(id);
         UserEntity userGet = user.get();
         UserInfoDto userInfo = new UserInfoDto();
+        userInfo.setId(userGet.getId());
         userInfo.setNickname(userGet.getNickname());
         userInfo.setArea(userGet.getArea());
-        userInfo.setFollowerOpen(userGet.getFollowerOpen());
+        userInfo.setFollowOpen(userGet.getFollowOpen());
         userInfo.setFollowerOpen(userGet.getFollowerOpen());
         userInfo.setLikeNotice(userGet.getLikeNotice());
         userInfo.setFollowNotice(userGet.getFollowNotice());

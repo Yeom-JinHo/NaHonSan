@@ -150,20 +150,26 @@ public class UserController {
         return new ResponseEntity<>(resultMap, status);
     }
     @PutMapping("/user")
-    public ResponseEntity<?> updateUser(@RequestBody UserInfoDto userUpdateDto) throws Exception{
+    public ResponseEntity<?> updateUser(@RequestBody UserInfoDto userInfoDto, HttpServletRequest request) throws Exception{
+        String accessToken = request.getHeader("access-token");
+        String decodeId = jwtService.decodeToken(accessToken);
         HttpStatus status;
         Map<String, Object> resultMap = new HashMap<>();
-        try {
-            UserInfoDto user = userService.updateUser(userUpdateDto);
-            status = HttpStatus.ACCEPTED;
-            return new ResponseEntity<>(user, status);
-
-        } catch (Exception e){
-            resultMap.put("message", fail);
+        if (!decodeId.equals("timeout")){
+            try {
+                userInfoDto.setId(decodeId);
+                UserInfoDto user = userService.updateUser(userInfoDto);
+                status = HttpStatus.ACCEPTED;
+                return new ResponseEntity<>(user, status);
+            } catch (Exception e){
+                resultMap.put("message", fail);
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+        } else{
+            resultMap.put("message", timeOut);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            return new ResponseEntity<>(resultMap, status);
         }
-
+        return new ResponseEntity<>(resultMap, status);
     }
     @DeleteMapping("/user")
     public ResponseEntity<?> deleteUser(HttpServletRequest request) throws Exception{
