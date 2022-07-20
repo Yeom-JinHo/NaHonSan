@@ -3,7 +3,7 @@ package com.gwangjubob.livealone.backend.service;
 import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
 import com.gwangjubob.livealone.backend.dto.user.UserMoreDTO;
 import com.gwangjubob.livealone.backend.dto.user.UserRegistDto;
-import com.gwangjubob.livealone.backend.dto.user.UserUpdateDto;
+import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 
 public interface UserService {
     boolean loginUser(UserLoginDto userLoginDto);
@@ -15,9 +15,10 @@ public interface UserService {
 
     boolean checkNickName(String nickname);
 
-    UserUpdateDto updateUser(UserUpdateDto userUpdateDto);
+    UserInfoDto updateUser(UserInfoDto userUpdateDto);
 
     boolean updatePassword(UserLoginDto userLoginDto);
 
     void moreUpdate(UserMoreDTO userMoreDTO);
+    UserInfoDto infoUser(String id);
 }
