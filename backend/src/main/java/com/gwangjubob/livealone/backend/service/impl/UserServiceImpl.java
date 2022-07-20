@@ -4,7 +4,7 @@ import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
 import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
 import com.gwangjubob.livealone.backend.dto.user.UserRegistDto;
-import com.gwangjubob.livealone.backend.dto.user.UserUpdateDto;
+import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserUpdateDto updateUser(UserUpdateDto userUpdateDto) {
+    public UserInfoDto updateUser(UserInfoDto userUpdateDto) {
         Optional<UserEntity> user =  userRepository.findById(userUpdateDto.getId());
         if(user != null){
             user.get().setNickname(userUpdateDto.getNickname());
@@ -96,5 +96,24 @@ public class UserServiceImpl implements UserService {
         } else{
             return false;
         }
+    }
+
+    @Override
+    public UserInfoDto infoUser(String id) {
+        Optional<UserEntity> user = userRepository.findById(id);
+        UserEntity userGet = user.get();
+        UserInfoDto userInfo = new UserInfoDto();
+        userInfo.setNickname(userGet.getNickname());
+        userInfo.setArea(userGet.getArea());
+        userInfo.setFollowerOpen(userGet.getFollowerOpen());
+        userInfo.setFollowerOpen(userGet.getFollowerOpen());
+        userInfo.setLikeNotice(userGet.getLikeNotice());
+        userInfo.setFollowNotice(userGet.getFollowNotice());
+        userInfo.setCommentNotice(userGet.getCommentNotice());
+        userInfo.setReplyNotice(userGet.getReplyNotice());
+        userInfo.setProfileMsg(userGet.getProfileMsg());
+        userInfo.setProfileImg(userGet.getProfileImg());
+        userInfo.setBackgroundImg(userGet.getBackgroundImg());
+        return userInfo;
     }
 }
