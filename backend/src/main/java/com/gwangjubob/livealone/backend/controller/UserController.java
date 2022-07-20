@@ -206,6 +206,8 @@ public class UserController {
             }
         }else{
             resultMap.put("message", timeOut);
+=======
+>>>>>>> backend/src/main/java/com/gwangjubob/livealone/backend/controller/UserController.java
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity<>(resultMap, status);
