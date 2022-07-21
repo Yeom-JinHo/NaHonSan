@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import "./DealDetailPage.scss";
 import UserDummyIcon from "@images/UserDummy.svg";
 import EmptyHeart from "@images/ArticleEmptyHeart.svg";

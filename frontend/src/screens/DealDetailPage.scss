@@ -71,8 +71,8 @@
           }
           &__select {
             appearance: none;
-            -moz-appearance:none;
-            -webkit-appearance:none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
             font-size: (16px);
             width: (140px);
             margin-right: (36px);
@@ -80,7 +80,7 @@
             border: none;
             border-radius: (12px);
             text-align: center;
-            &:focus{
+            &:focus {
               outline: none;
             }
             &:hover {
@@ -104,7 +104,7 @@
       &-head {
         & > p {
           margin-top: (24px);
-          font-size: (30px)
+          font-size: (30px);
         }
         & span {
           margin-left: (12px);
@@ -219,8 +219,8 @@
             }
             &__select {
               appearance: none;
-              -moz-appearance:none;
-              -webkit-appearance:none;
+              -moz-appearance: none;
+              -webkit-appearance: none;
               font-size: vw(16px);
               width: vw(140px);
               margin-right: vw(36px);
@@ -228,7 +228,7 @@
               border: none;
               border-radius: vw(12px);
               text-align: center;
-              &:focus{
+              &:focus {
                 outline: none;
               }
               &:hover {
@@ -252,7 +252,7 @@
         &-head {
           & > p {
             margin-top: vw(24px);
-            font-size: vw(30px)
+            font-size: vw(30px);
           }
           & span {
             margin-left: vw(12px);
@@ -368,8 +368,8 @@
             }
             &__select {
               appearance: none;
-              -moz-appearance:none;
-              -webkit-appearance:none;
+              -moz-appearance: none;
+              -webkit-appearance: none;
               font-size: vw-t(16px);
               width: vw-t(140px);
               margin-right: vw-t(36px);
@@ -377,7 +377,7 @@
               border: none;
               border-radius: vw-t(12px);
               text-align: center;
-              &:focus{
+              &:focus {
                 outline: none;
               }
               &:hover {
@@ -401,7 +401,7 @@
         &-head {
           & > p {
             margin-top: vw-t(24px);
-            font-size: vw-t(30px)
+            font-size: vw-t(30px);
           }
           & span {
             margin-left: vw-t(12px);
@@ -529,7 +529,7 @@
               border-radius: vw-p(8px);
               text-align: start;
               padding-left: (8px);
-              &:focus{
+              &:focus {
                 outline: none;
               }
               &:hover {
@@ -555,7 +555,7 @@
           margin-right: (12px);
           & > p {
             margin-top: vw-p(24px);
-            font-size: vw-p(24px)
+            font-size: vw-p(24px);
           }
           & span {
             margin-left: vw-p(12px);
@@ -600,9 +600,8 @@
   }
 }
 
-
 .green {
-  background-color: 	#03C04A;
+  background-color: #63e260;
 }
 
 .yellow {
@@ -610,5 +609,5 @@
 }
 
 .brown {
-  background-color: $MAIN_BROWN;
+  background-color: #d9d9d9;
 }
