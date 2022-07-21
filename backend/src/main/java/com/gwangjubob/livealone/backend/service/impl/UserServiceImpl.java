@@ -1,28 +1,39 @@
 package com.gwangjubob.livealone.backend.service.impl;
 
+import com.gwangjubob.livealone.backend.domain.entity.NoticeEntity;
+import com.gwangjubob.livealone.backend.domain.entity.UserCategoryEntity;
 import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
+import com.gwangjubob.livealone.backend.domain.repository.UserCategoryRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
+import com.gwangjubob.livealone.backend.dto.user.UserMoreDTO;
 import com.gwangjubob.livealone.backend.dto.user.UserRegistDto;
+<<<<<<< backend/src/main/java/com/gwangjubob/livealone/backend/service/impl/UserServiceImpl.java
 import com.gwangjubob.livealone.backend.dto.user.UserUpdateDto;
 import com.gwangjubob.livealone.backend.service.JwtService;
+=======
+import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
+>>>>>>> backend/src/main/java/com/gwangjubob/livealone/backend/service/impl/UserServiceImpl.java
 import com.gwangjubob.livealone.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
+    private UserCategoryRepository userCategoryRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     @Autowired
-    UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService){
+
+    UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserCategoryRepository userCategoryRepository){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
+        this.userCategoryRepository = userCategoryRepository;
     }
     @Override
     public boolean loginUser(UserLoginDto userLoginDto){
@@ -65,37 +76,76 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserUpdateDto updateUser(UserUpdateDto userUpdateDto) {
-        Optional<UserEntity> user =  userRepository.findById(userUpdateDto.getId());
+    public UserInfoDto updateUser(UserInfoDto userInfoDto) {
+        Optional<UserEntity> user =  userRepository.findById(userInfoDto.getId());
+        UserEntity userGet = user.get();
         if(user != null){
-            user.get().setNickname(userUpdateDto.getNickname());
-            user.get().setArea(userUpdateDto.getArea());
-            user.get().setFollowOpen(userUpdateDto.getFollowOpen());
-            user.get().setFollowerOpen(userUpdateDto.getFollowerOpen());
-            user.get().setProfileImg(userUpdateDto.getProfileImg());
-            user.get().setProfileMsg(userUpdateDto.getProfileMsg());
-            user.get().setLikeNotice(userUpdateDto.getLikeNotice());
-            user.get().setFollowNotice(userUpdateDto.getFollowNotice());
-            user.get().setCommentNotice(userUpdateDto.getCommentNotice());
-            user.get().setReplyNotice(userUpdateDto.getReplyNotice());
-            user.get().setBackgroundImg(userUpdateDto.getBackgroundImg());
-            userRepository.save(user.get());
-            return userUpdateDto;
-        }else{
-            return null;
+
+            userGet.setNickname(userInfoDto.getNickname());
+            userGet.setArea(userInfoDto.getArea());
+            userGet.setFollowOpen(userInfoDto.getFollowOpen());
+            userGet.setFollowerOpen(userInfoDto.getFollowerOpen());
+            userGet.setProfileImg(userInfoDto.getProfileImg());
+            userGet.setProfileMsg(userInfoDto.getProfileMsg());
+            userGet.setLikeNotice(userInfoDto.getLikeNotice());
+            userGet.setFollowNotice(userInfoDto.getFollowNotice());
+            userGet.setCommentNotice(userInfoDto.getCommentNotice());
+            userGet.setReplyNotice(userInfoDto.getReplyNotice());
+            userGet.setBackgroundImg(userInfoDto.getBackgroundImg());
+            userRepository.save(userGet);
+            return userInfoDto;
         }
     }
 
     @Override
     public boolean updatePassword(UserLoginDto userLoginDto) {
-        UserEntity user =  userRepository.findById(userLoginDto.getId()).get();
-        if(user != null){
-            user.setPassword(userLoginDto.getPassword());
-            userRepository.save(user);
+
+        Optional<UserEntity> user =  userRepository.findById(userLoginDto.getId());
+        String password = passwordEncoder.encode(userLoginDto.getPassword());
+        if(user.isPresent()){
+            user.get().setPassword(password);
+            userRepository.save(user.get());
             return true;
         } else{
             return false;
         }
     }
 
+    @Override
+    public void moreUpdate(UserMoreDTO userMoreDTO) {
+        Optional<UserEntity> user = userRepository.findById(userMoreDTO.getUserId());
+        UserEntity userGet = user.get();
+        userGet.setArea(userMoreDTO.getArea());
+        userRepository.save(userGet);
+        List<UserCategoryEntity> delCategorys = userCategoryRepository.findByUser(userGet);
+        for (UserCategoryEntity uc : delCategorys) {
+            userCategoryRepository.delete(uc);
+        }
+        List<String> categorys = userMoreDTO.getCategorys();
+        for (String c : categorys) {
+            UserCategoryEntity usercategory = UserCategoryEntity.builder()
+                    .category(c)
+                    .user(userGet)
+                    .build();
+            userCategoryRepository.save(usercategory);
+        }
+    }
+    public UserInfoDto infoUser(String id) {
+        Optional<UserEntity> user = userRepository.findById(id);
+        UserEntity userGet = user.get();
+        UserInfoDto userInfo = new UserInfoDto();
+        userInfo.setId(userGet.getId());
+        userInfo.setNickname(userGet.getNickname());
+        userInfo.setArea(userGet.getArea());
+        userInfo.setFollowOpen(userGet.getFollowOpen());
+        userInfo.setFollowerOpen(userGet.getFollowerOpen());
+        userInfo.setLikeNotice(userGet.getLikeNotice());
+        userInfo.setFollowNotice(userGet.getFollowNotice());
+        userInfo.setCommentNotice(userGet.getCommentNotice());
+        userInfo.setReplyNotice(userGet.getReplyNotice());
+        userInfo.setProfileMsg(userGet.getProfileMsg());
+        userInfo.setProfileImg(userGet.getProfileImg());
+        userInfo.setBackgroundImg(userGet.getBackgroundImg());
+        return userInfo;
+    }
 }
