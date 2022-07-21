@@ -152,7 +152,7 @@ public class UserController {
                 userInfoDto.setId(decodeId);
                 UserInfoDto user = userService.updateUser(userInfoDto); //회원 수정 서비스 호출
                 if (user !=null){
-                    resultMap.put("user", user);
+                    resultMap.put("data", user);
                     resultMap.put("message", okay);
                 } else{
                     resultMap.put("message", fail);
@@ -226,7 +226,7 @@ public class UserController {
                 UserInfoDto user = userService.infoUser(decodeId); //회원 조회 서비스 호출
                 if(user != null){
                     resultMap.put("message", okay);
-                    resultMap.put("user", user);
+                    resultMap.put("data", user);
                 } else{
                     resultMap.put("message", fail);
                 }
