@@ -5,6 +5,7 @@ import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
 import com.gwangjubob.livealone.backend.dto.user.UserRegistDto;
 import com.gwangjubob.livealone.backend.dto.user.UserUpdateDto;
+import com.gwangjubob.livealone.backend.service.JwtService;
 import com.gwangjubob.livealone.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,16 +17,18 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
     @Autowired
-    UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
+    UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
     @Override
     public boolean loginUser(UserLoginDto userLoginDto){
         Optional<UserEntity> user = userRepository.findById(userLoginDto.getId());
         Boolean passwordCheck = passwordEncoder.matches(userLoginDto.getPassword(),user.get().getPassword());
-        if(passwordCheck == true){
+        if(passwordCheck){
             return true;
         }else{
             return false;
@@ -33,7 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void userDelete(String id) {
+    public void userDelete(String id){
         userRepository.deleteById(id);
     }
 
@@ -53,7 +56,6 @@ public class UserServiceImpl implements UserService {
                 .nickname(userRegistDto.getNickname())
                 .build();
         userRepository.save(user);
-        System.out.println(userRepository.save(user));
         return true;
     }
 
@@ -79,19 +81,21 @@ public class UserServiceImpl implements UserService {
             user.get().setBackgroundImg(userUpdateDto.getBackgroundImg());
             userRepository.save(user.get());
             return userUpdateDto;
+        }else{
+            return null;
         }
-        return null;
     }
 
     @Override
     public boolean updatePassword(UserLoginDto userLoginDto) {
-        Optional<UserEntity> user =  userRepository.findById(userLoginDto.getId());
-        if(user.isPresent()){
-            user.get().setPassword(userLoginDto.getPassword());
-            userRepository.save(user.get());
+        UserEntity user =  userRepository.findById(userLoginDto.getId()).get();
+        if(user != null){
+            user.setPassword(userLoginDto.getPassword());
+            userRepository.save(user);
             return true;
         } else{
             return false;
         }
     }
+
 }

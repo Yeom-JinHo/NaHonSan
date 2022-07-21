@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
 
@@ -37,8 +38,7 @@ public class UserController {
     }
     @PostMapping("/user")
     public ResponseEntity<?> registUser(@RequestBody UserRegistDto userRegistDto) throws Exception{
-        boolean result = userService.registUser(userRegistDto);
-        if(result){
+        if(userService.registUser(userRegistDto)){ // 회원 등록 서비스 호출
             HttpStatus status = HttpStatus.OK;
             return new ResponseEntity<>(okay, status);
         }else {
@@ -49,10 +49,9 @@ public class UserController {
 
     @GetMapping("/user/check/{nickname}")
     public ResponseEntity<?> checkNickName(@PathVariable String nickname){
-        HttpStatus status;
-        Map<String, Object> resultMap = new HashMap<>();
+        resultMap = new HashMap<>();
         try {
-            if(userService.checkNickName(nickname) == true){
+            if(userService.checkNickName(nickname)){ // 닉네임 서비스 호출
                 resultMap.put("message", fail);
             } else{
                 resultMap.put("message", okay);
@@ -65,11 +64,10 @@ public class UserController {
     }
     @PostMapping("/user/login")
     public ResponseEntity<?> loginUser(@RequestBody UserLoginDto userLoginDto, HttpServletRequest request, HttpServletResponse response) throws Exception{
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status;
+        resultMap = new HashMap<>();
         try {
-            if(userService.loginUser(userLoginDto) == true){
-                String accessToken = jwtService.createAccessToken("id", userLoginDto.getId());// key, data
+            if(userService.loginUser(userLoginDto)){ //로그인 서비스 호출
+                String accessToken = jwtService.createAccessToken("id", userLoginDto.getId());
                 String refreshToken = jwtService.createRefreshToken("id", userLoginDto.getId());
                 resultMap.put("access-token", accessToken);
                 resultMap.put("message", okay);
@@ -94,10 +92,9 @@ public class UserController {
     }
     @PutMapping("/user/password")
     public ResponseEntity<?> updatePassword(@RequestBody UserLoginDto userLoginDto) throws Exception{
-        HttpStatus status;
-        Map<String, Object> resultMap = new HashMap<>();
+        resultMap = new HashMap<>();
         try {
-            boolean res = userService.updatePassword(userLoginDto);
+            boolean res = userService.updatePassword(userLoginDto); // 회원 수정 서비스 호출
             if(res){
                 status = HttpStatus.OK;
                 resultMap.put("message", okay);
@@ -113,15 +110,11 @@ public class UserController {
         }
     }
 
-
-
     @PostMapping("/user/auth")
     public ResponseEntity<?> sendMail(@RequestBody MailSendDto mailSendDto) throws Exception {
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status;
-        System.out.println("test");
+        resultMap = new HashMap<>();
         try {
-            if (mailService.sendMail(mailSendDto) == true) {
+            if (mailService.sendMail(mailSendDto)) { // 메일 전송 서비스 호출
                 resultMap.put("message", okay);
             } else {
                 resultMap.put("message", fail);
@@ -135,10 +128,9 @@ public class UserController {
     }
     @GetMapping("/user/auth")
     public ResponseEntity<?> checkMail(@ModelAttribute("MailCheckDto") MailCheckDto mailCheckDto) throws Exception {
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status;
+        resultMap = new HashMap<>();
         try {
-            if (mailService.checkAuthNumber(mailCheckDto) == true) {
+            if (mailService.checkAuthNumber(mailCheckDto)) { // 인증번호 체크 서비스 호출
                 resultMap.put("message", okay);
             } else {
                 resultMap.put("message", fail);
@@ -153,29 +145,28 @@ public class UserController {
     }
     @PutMapping("/user")
     public ResponseEntity<?> updateUser(@RequestBody UserUpdateDto userUpdateDto) throws Exception{
-        HttpStatus status;
-        Map<String, Object> resultMap = new HashMap<>();
+        resultMap = new HashMap<>();
         try {
-            UserUpdateDto user = userService.updateUser(userUpdateDto);
-            status = HttpStatus.ACCEPTED;
-            return new ResponseEntity<>(user, status);
+            UserUpdateDto user = userService.updateUser(userUpdateDto); //회원 수정 서비스 호출
+            status = HttpStatus.OK;
+            resultMap.put("user",user);
+            resultMap.put("message", okay);
 
         } catch (Exception e){
             resultMap.put("message", fail);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
-            return new ResponseEntity<>(resultMap, status);
         }
+        return new ResponseEntity<>(resultMap, status);
 
     }
     @DeleteMapping("/user")
     public ResponseEntity<?> deleteUser(HttpServletRequest request) throws Exception{
         String accessToken = request.getHeader("access-token");
         String decodeId = jwtService.decodeToken(accessToken);
-        HttpStatus status;
-        Map<String, Object> resultMap = new HashMap<>();
+        resultMap = new HashMap<>();
         if(!decodeId.equals("timeout")){
             try {
-                userService.userDelete(decodeId);
+                userService.userDelete(decodeId); // 회원 탈퇴 서비스 호출
                 resultMap.put("message", okay);
                 status = HttpStatus.OK;
             } catch (Exception e){
@@ -190,12 +181,11 @@ public class UserController {
     }
     @PostMapping("/user/password")
     public ResponseEntity<?> passwordCheckUser(@RequestBody UserLoginDto userLoginDto,HttpServletRequest request) throws Exception{
-        String accessToken = request.getHeader("access-token");
-        String decodeId = jwtService.decodeToken(accessToken);
         resultMap = new HashMap<>();
-        if(!decodeId.equals("timeout")){
+        String decodeId = checkToken(request);
+        if(decodeId!=null){
             try {
-                if(userService.passwordCheckUser(decodeId, userLoginDto.getPassword())){
+                if(userService.passwordCheckUser(decodeId, userLoginDto.getPassword())){ //비밀번호 확인 서비스 호출
                     resultMap.put("message", okay);
                 }else{
                     resultMap.put("message", fail);
@@ -205,11 +195,19 @@ public class UserController {
                 resultMap.put("message", fail);
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
             }
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
+    public String checkToken(HttpServletRequest request){
+        String accessToken = request.getHeader("access-token");
+        String decodeId = jwtService.decodeToken(accessToken);
+        if(!decodeId.equals("timeout")){
+            return decodeId;
         }else{
             resultMap.put("message", timeOut);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
+            return null;
         }
-        return new ResponseEntity<>(resultMap, status);
     }
 }
 

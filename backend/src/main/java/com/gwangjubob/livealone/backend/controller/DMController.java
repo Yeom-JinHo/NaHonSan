@@ -22,7 +22,8 @@ public class DMController {
     private static final String okay = "SUCCESS";
     private static final String fail = "FAIL";
 
-
+    private static HttpStatus status = HttpStatus.NOT_FOUND;
+    private static Map<String, Object> resultMap;
     private final UserService userService;
     private final JwtService jwtService;
     private final DMService dmService;
@@ -35,8 +36,7 @@ public class DMController {
     public ResponseEntity<?> sendDM(@RequestBody DMSendDto dmSendDto, HttpServletRequest request) throws Exception{
         String accessToken = request.getHeader("access-token");
         String decodeId = jwtService.decodeToken(accessToken);
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status;
+        resultMap = new HashMap<>();
         dmSendDto.setFromId(decodeId);
         try {
             if(!decodeId.equals("timeout") && dmService.sendDM(dmSendDto)){

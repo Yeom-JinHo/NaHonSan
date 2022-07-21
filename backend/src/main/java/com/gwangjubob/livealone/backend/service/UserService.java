@@ -17,4 +17,5 @@ public interface UserService {
     UserUpdateDto updateUser(UserUpdateDto userUpdateDto);
 
     boolean updatePassword(UserLoginDto userLoginDto);
+
 }
