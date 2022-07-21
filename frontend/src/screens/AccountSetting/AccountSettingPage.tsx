@@ -6,6 +6,7 @@ import UserDummyIcon from "@images/UserDummy.svg";
 import { v4 } from "uuid";
 
 function AccountSettingPage() {
+  const [errMsg] = useState(true);
   const navigate = useNavigate();
   const noti = ["좋아요", "팔로잉", "댓글", "대댓글"];
   const followState = ["팔로우", "팔로잉"];
@@ -45,7 +46,7 @@ function AccountSettingPage() {
         <div className="text-wrapper flex column">
           <p>UserName</p>
           <textarea
-            className="state"
+            className="state notoReg"
             maxLength={100}
             readOnly
             value="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente
@@ -67,7 +68,12 @@ function AccountSettingPage() {
           <div className="main-account flex column">
             <div className="main-account__nickname flex">
               <p className="fs-16 notoReg">닉네임</p>
-              <input type="text" />
+              <div>
+                <input type="text" />
+                {errMsg ? (
+                  <p className="notoReg">중복된 닉네임 입니다.</p>
+                ) : null}
+              </div>
               <button className="notoMid fs-12" type="button">
                 중복확인
               </button>
@@ -93,7 +99,18 @@ function AccountSettingPage() {
               return (
                 <div className="main-noti__toggle-item flex" key={v4()}>
                   <p className="notoReg fs-14">{title}</p>
-                  <div
+                  <button
+                    onClick={() => {
+                      setNotiList(
+                        notiList.map((state, num) => {
+                          if (num === idx) {
+                            return !state;
+                          }
+                          return state;
+                        })
+                      );
+                    }}
+                    type="button"
                     className={`main-noti__toggle-btn flex ${
                       notiList[idx] ? "justify-end" : null
                     }`}
@@ -105,25 +122,14 @@ function AccountSettingPage() {
                     >
                       {null}
                     </div>
-                    <button
-                      onClick={() => {
-                        setNotiList(
-                          notiList.map((state, num) => {
-                            if (num === idx) {
-                              return !state;
-                            }
-                            return state;
-                          })
-                        );
-                      }}
+                    <div
                       className={
                         notiList[idx] ? "active-toggle-circle" : "toggle-circle"
                       }
-                      type="button"
                     >
                       {null}
-                    </button>
-                  </div>
+                    </div>
+                  </button>
                 </div>
               );
             })}
@@ -135,7 +141,18 @@ function AccountSettingPage() {
               return (
                 <div className="main-noti__toggle-item flex" key={v4()}>
                   <p className="notoReg fs-14">{title}</p>
-                  <div
+                  <button
+                    onClick={() => {
+                      setNotiList(
+                        notiList.map((state, num) => {
+                          if (num === idxx) {
+                            return !state;
+                          }
+                          return state;
+                        })
+                      );
+                    }}
+                    type="button"
                     className={`main-noti__toggle-btn flex ${
                       notiList[idxx] ? "justify-end" : null
                     }`}
@@ -147,27 +164,16 @@ function AccountSettingPage() {
                     >
                       {null}
                     </div>
-                    <button
-                      onClick={() => {
-                        setNotiList(
-                          notiList.map((state, num) => {
-                            if (num === idxx) {
-                              return !state;
-                            }
-                            return state;
-                          })
-                        );
-                      }}
+                    <div
                       className={
                         notiList[idxx]
                           ? "active-toggle-circle"
                           : "toggle-circle"
                       }
-                      type="button"
                     >
                       {null}
-                    </button>
-                  </div>
+                    </div>
+                  </button>
                 </div>
               );
             })}

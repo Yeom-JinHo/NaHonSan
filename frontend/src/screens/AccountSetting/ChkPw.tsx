@@ -16,10 +16,10 @@ function FindPw() {
           <p className="header__title notoBold fs-24">
             본인 인증을 완료해주세요.
           </p>
-          <p className="header__sub-title notoRef fs-16">
+          <p className="header__sub-title notoReg fs-16">
             설정을 위해 본인 인증이 필요해요.
           </p>
-          <p className="header__sub-title notoRef fs-16">
+          <p className="header__sub-title notoReg fs-16">
             비밀번호를 입력해주세요.
           </p>
         </header>

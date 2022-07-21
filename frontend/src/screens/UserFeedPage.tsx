@@ -71,7 +71,7 @@ function UserFeedPage() {
           <button type="button">팔로우</button>
           <button type="button">DM</button>
         </div>
-        <div className="info__state">
+        <div className="info__state notoReg">
           <p>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente
             eos mollitia qui dolores sed facilis quidem voluptate

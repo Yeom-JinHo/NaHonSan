@@ -16,10 +16,10 @@ function FindPw() {
           <p className="header__title notoBold fs-24">
             우리 회원님 탈퇴하신다.
           </p>
-          <p className="header__sub-title notoRef fs-16">
+          <p className="header__sub-title notoReg fs-16">
             회원 탈퇴 페이지입니다.
           </p>
-          <p className="header__sub-title notoRef fs-16">
+          <p className="header__sub-title notoReg fs-16">
             아래 문구를 정확히 입력해주세요.
           </p>
         </header>
@@ -28,7 +28,7 @@ function FindPw() {
           <input
             type="text"
             className="form__input notoReg fs-15"
-            placeholder="비밀번호를 입력해주세요"
+            placeholder="탈퇴 문구를 입력해주세요"
           />
           {errMsg ? (
             <p className="form__msg notoMid fs-12">일치하지 않습니다.</p>
