@@ -1,16 +1,12 @@
 import React from "react";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
-import { fireEvent, screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import renderWithProviders from "@utils/test-utils";
 import userEvent from "@testing-library/user-event";
 import Login from "@screens/Login/Login";
 import { createMemoryHistory } from "history";
-import { wait } from "@testing-library/user-event/dist/utils";
 import { MemoryRouter } from "react-router-dom";
-import { act } from "react-dom/test-utils";
-import App from "@app";
-import Join from "@screens/Join/Join";
 
 const handlers = [
   rest.post("/login", (req, res, ctx) => {
@@ -21,14 +17,22 @@ const handlers = [
   })
 ];
 const server = setupServer(...handlers);
+const mockNavigate = jest.fn();
+
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: () => mockNavigate
+}));
 
 describe("로그인페이지", () => {
   let idInput;
   let passwordInput;
   let loginBtn;
-  const history = createMemoryHistory();
+  let history;
   beforeEach(() => {
     server.listen();
+    history = createMemoryHistory("/init");
+
     renderWithProviders(
       <MemoryRouter history={history}>
         <Login />
@@ -65,29 +69,30 @@ describe("로그인페이지", () => {
     expect(idInput).toHaveFocus();
   });
 
-  // test("로그인 성공", () => {
-  //   userEvent.type(idInput, "ssafy");
-  //   userEvent.type(passwordInput, "ssafy");
-  //   userEvent.click(loginBtn);
-  //   expect(history.location.pathname).toBe("/4");
-  // });
+  test("로그인 성공", async () => {
+    loginBtn = screen.getByText("로그인");
+    userEvent.type(idInput, "ssafy");
+    userEvent.type(passwordInput, "ssafy");
+    userEvent.click(loginBtn);
+
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/"));
+  });
 
   test("로그인 실패", async () => {
     userEvent.type(idInput, "ssafy1");
     userEvent.type(passwordInput, "ssafy1234");
     userEvent.click(loginBtn);
-
     await screen.findByText("아이디 또는 비밀번호가 일치하지 않습니다.");
   });
 
-  // test("회원가입 라우팅", async () => {
-  //   history.push = jest.fn();
-  //   const joinBtn = screen.getByText("회원가입");
-  //   userEvent.click(joinBtn);
-  //   // expect(history.location.pathname).toBe("/4");
-  //   // expect(history.location.pathname).toBe("join");
-  //   // expect(history.push).toHaveBeenCalledTimes(1);
-  //   // await screen.findByText("404");
-  //   // expect(history.push).toHaveBeenCalledWith();
-  // });
+  test("회원가입 라우팅", async () => {
+    const joinBtn = screen.getByText("회원가입");
+    expect(joinBtn).toHaveAttribute("href", "/join");
+  });
+
+  test("비밀번호찾기 라우팅", async () => {
+    const findpwBtn = screen.getByText("비밀번호찾기");
+    expect(findpwBtn).toHaveAttribute("href", "/find/pw");
+  });
 });

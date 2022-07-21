@@ -24,7 +24,7 @@ function Login() {
         passwordInputRef.current.value
       );
       if (res === "SUCCESS") {
-        navigate("/1235");
+        navigate("/");
       } else {
         setErrMsg("아이디 또는 비밀번호가 일치하지 않습니다.");
       }
