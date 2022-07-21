@@ -61,6 +61,6 @@ describe("비밀번호찾기 (이메일입력부분)", () => {
     userEvent.click(authBtn);
 
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledTimes(1));
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("chkmail"));
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("chkEmail"));
   });
 });
