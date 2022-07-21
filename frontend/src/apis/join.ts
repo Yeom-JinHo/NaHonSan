@@ -1,12 +1,10 @@
+import axios from "axios";
 import API from "./index";
 
-export const chkEmailExist = async (userId: string) => {
-  const res = await API.get(`/emailCheck?userId=${userId}`);
-  return res.data.message;
-};
+export const sendAuthCode = async (id: string) => {
+  const res = await axios.post(`/user/auth`, { id, type: 1 });
 
-export const sendAuthCode = (userId: string) => {
-  API.post(`/email`, { userId });
+  return res.data;
 };
 
 export const chkAuthCode = async (
