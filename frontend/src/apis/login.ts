@@ -15,3 +15,9 @@ export const emailValidate = async (id: string) => {
 export const logout = async () => {
   console.log("로그아웃");
 };
+
+export const resetPassword = async (newpassword: string) => {
+  const res = await axios.post("/user/password", { password: newpassword });
+
+  return res.data;
+};
