@@ -40,7 +40,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean passwordCheckUser(String id, String password) {
         Optional<UserEntity> user = userRepository.findById(id);
+        System.out.println(password);
+        System.out.println(user.get().getPassword());
         Boolean passwordCheck = passwordEncoder.matches(password,user.get().getPassword());
+        System.out.println(passwordCheck);
         return passwordCheck;
     }
 

@@ -27,9 +27,7 @@ public class UserController {
     private final UserService userService;
     private final JwtService jwtService;
     private final MailService mailService;
-    private static HttpStatus status = HttpStatus.NOT_FOUND;
-    private static Map<String, Object> resultMap;
-            @Autowired
+    @Autowired
     UserController(UserService userService ,JwtService jwtService,MailService mailService){
         this.userService = userService;
         this.jwtService = jwtService;
@@ -192,7 +190,8 @@ public class UserController {
     public ResponseEntity<?> passwordCheckUser(@RequestBody UserLoginDto userLoginDto,HttpServletRequest request) throws Exception{
         String accessToken = request.getHeader("access-token");
         String decodeId = jwtService.decodeToken(accessToken);
-        resultMap = new HashMap<>();
+        HttpStatus status;
+        Map<String, Object> resultMap = new HashMap<>();
         if(!decodeId.equals("timeout")){
             try {
                 if(userService.passwordCheckUser(decodeId, userLoginDto.getPassword())){
