@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import "./DealDetailPage.scss";
 import UserDummyIcon from "@images/UserDummy.svg";
 import EmptyHeart from "@images/ArticleEmptyHeart.svg";
@@ -12,6 +12,7 @@ function DealDetailPage() {
   const changeDealState = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setDealState(parseInt(e.target.value, 10));
   };
+
   const changeColor = (state: number) => {
     if (state === 0) {
       return "green";

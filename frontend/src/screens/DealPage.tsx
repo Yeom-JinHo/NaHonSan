@@ -6,12 +6,6 @@ import { v4 } from "uuid";
 
 function DealPage() {
   const [dealState, setDealState] = useState(true);
-  const changeStateTrue = () => {
-    setDealState(true);
-  };
-  const changeStateFalse = () => {
-    setDealState(false);
-  };
   const cate = [
     "전체",
     "생활",
@@ -77,14 +71,18 @@ function DealPage() {
         </div>
         <div className="deal-state notoBold flex">
           <button
-            onClick={changeStateTrue}
+            onClick={() => {
+              setDealState(true);
+            }}
             className={dealState ? `${"active"}` : ""}
             type="button"
           >
             거래 대기
           </button>
           <button
-            onClick={changeStateFalse}
+            onClick={() => {
+              setDealState(false);
+            }}
             className={dealState ? "" : `${"active"}`}
             type="button"
           >
