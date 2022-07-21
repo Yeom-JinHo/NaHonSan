@@ -10,10 +10,7 @@ import com.gwangjubob.livealone.backend.service.impl.MailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,8 +59,24 @@ public class DMController {
         resultMap = new HashMap<>();
         try {
             if(decodeId != null){
-                System.out.println(decodeId);
                 List<DMViewDto> dmViewDtoList =dmService.listDM(decodeId);
+                resultMap.put("message",okay);
+                resultMap.put("data",dmViewDtoList);
+            }
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            status = HttpStatus.UNAUTHORIZED;
+        }
+
+        return new ResponseEntity<>(resultMap, status);
+    }
+    @GetMapping("/dm/{fromId}")
+    public ResponseEntity<?> listDetailDM(@PathVariable("fromId")String fromId, HttpServletRequest request){
+        String decodeId = checkToken(request);
+        resultMap = new HashMap<>();
+        try {
+            if(decodeId != null){
+                List<DMViewDto> dmViewDtoList =dmService.listDetailDM(decodeId,fromId);
                 resultMap.put("message",okay);
                 resultMap.put("data",dmViewDtoList);
             }
