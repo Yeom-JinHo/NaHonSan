@@ -7,6 +7,11 @@ export const login = async (id: string, password: string) => {
   return res.data;
 };
 
+export const emailValidate = async (id: string) => {
+  const res = await axios.post("/user/auth", { id, type: 1 });
+  return res.data;
+};
+
 export const logout = async () => {
   console.log("로그아웃");
 };

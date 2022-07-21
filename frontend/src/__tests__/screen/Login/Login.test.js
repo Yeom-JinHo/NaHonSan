@@ -5,7 +5,6 @@ import { screen, waitFor } from "@testing-library/react";
 import renderWithProviders from "@utils/test-utils";
 import userEvent from "@testing-library/user-event";
 import Login from "@screens/Login/Login";
-import { createMemoryHistory } from "history";
 import { MemoryRouter } from "react-router-dom";
 
 const handlers = [
@@ -28,13 +27,12 @@ describe("로그인페이지", () => {
   let idInput;
   let passwordInput;
   let loginBtn;
-  let history;
-  beforeEach(() => {
-    server.listen();
-    history = createMemoryHistory("/init");
 
+  beforeAll(() => server.listen());
+
+  beforeEach(() => {
     renderWithProviders(
-      <MemoryRouter history={history}>
+      <MemoryRouter>
         <Login />
       </MemoryRouter>
     );
