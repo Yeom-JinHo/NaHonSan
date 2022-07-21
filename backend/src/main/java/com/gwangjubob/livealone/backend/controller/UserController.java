@@ -151,7 +151,7 @@ public class UserController {
             try {
                 userInfoDto.setId(decodeId);
                 UserInfoDto user = userService.updateUser(userInfoDto); //회원 수정 서비스 호출
-                if (user !=null){
+                if (user != null){
                     resultMap.put("data", user);
                     resultMap.put("message", okay);
                 } else{
