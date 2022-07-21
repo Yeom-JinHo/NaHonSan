@@ -9,7 +9,7 @@ import { createMemoryHistory } from "history";
 import { MemoryRouter } from "react-router-dom";
 
 const handlers = [
-  rest.post("/login", (req, res, ctx) => {
+  rest.post("/user/login", (req, res, ctx) => {
     if (req.body.id === "ssafy" && req.body.password === "ssafy") {
       return res(ctx.json("SUCCESS"), ctx.delay(10));
     }
