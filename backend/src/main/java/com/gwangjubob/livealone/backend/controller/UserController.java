@@ -145,8 +145,8 @@ public class UserController {
     }
     @PutMapping("/user")
     public ResponseEntity<?> updateUser(@RequestBody UserInfoDto userInfoDto, HttpServletRequest request) throws Exception{
-        String decodeId = checkToken(request);
         resultMap = new HashMap<>();
+        String decodeId = checkToken(request);
         if (decodeId != null){
             try {
                 userInfoDto.setId(decodeId);
@@ -167,8 +167,8 @@ public class UserController {
     }
     @PutMapping("/user/more")
     public ResponseEntity<?> moreUpdateUser(@RequestBody UserMoreDTO userMoreDTO, HttpServletRequest request){
-        String decodeId = checkToken(request);
         resultMap = new HashMap<>();
+        String decodeId = checkToken(request);
         if (decodeId != null){
             try {
                 userMoreDTO.setUserId(decodeId);
@@ -184,8 +184,8 @@ public class UserController {
     }
     @DeleteMapping("/user")
     public ResponseEntity<?> deleteUser(HttpServletRequest request) throws Exception{
-        String decodeId = checkToken(request);
         resultMap = new HashMap<>();
+        String decodeId = checkToken(request);
         if(decodeId != null){
             try {
                 userService.userDelete(decodeId); // 회원 탈퇴 서비스 호출
