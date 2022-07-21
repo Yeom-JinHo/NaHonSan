@@ -16,29 +16,6 @@
       line-height: (35px);
     }
   }
-  .social {
-    &__btn {
-      @include btn();
-      & + .social__btn {
-        margin-top: (12px);
-      }
-    }
-    &__img {
-      width: (16px);
-      height: (16px);
-      margin-right: (8px);
-    }
-    .kakao {
-      background-color: $KAKAO_YELLOW;
-    }
-    .naver {
-      background-color: $NAVER;
-      color: $WHITE;
-    }
-    .google {
-      border: 1px solid $GRAY_CB;
-    }
-  }
   .or {
     margin: (32px) 0 (20px) 0;
     height: (20px);
@@ -69,8 +46,8 @@
       color: $RED;
     }
     .dummy {
-      margin-bottom: vw(40px);
-      height: vw(12px);
+      margin-bottom: 40px;
+      height: 12px;
     }
     &__btn {
       margin-bottom: (24px);
@@ -103,29 +80,6 @@
       &__title {
         margin-bottom: vw(40px);
         line-height: vw(35px);
-      }
-    }
-    .social {
-      &__btn {
-        @include btn();
-        & + .social__btn {
-          margin-top: vw(12px);
-        }
-      }
-      &__img {
-        width: vw(16px);
-        height: vw(16px);
-        margin-right: vw(8px);
-      }
-      .kakao {
-        background-color: $KAKAO_YELLOW;
-      }
-      .naver {
-        background-color: $NAVER;
-        color: $WHITE;
-      }
-      .google {
-        border: 1px solid $GRAY_CB;
       }
     }
     .or {
@@ -190,19 +144,6 @@
         line-height: vw-t(35px);
       }
     }
-    .social {
-      &__btn {
-        @include btn();
-        & + .social__btn {
-          margin-top: vw-t(12px);
-        }
-      }
-      &__img {
-        width: vw-t(16px);
-        height: vw-t(16px);
-        margin-right: vw-t(8px);
-      }
-    }
     .or {
       margin: vw-t(32px) 0 vw-t(20px) 0;
       height: vw-t(20px);
@@ -261,19 +202,6 @@
       &__title {
         margin-bottom: vw-p(24px);
         line-height: vw-p(35px);
-      }
-    }
-    .social {
-      &__btn {
-        @include btn();
-        & + .social__btn {
-          margin-top: vw-p(12px);
-        }
-      }
-      &__img {
-        width: vw-p(16px);
-        height: vw-p(16px);
-        margin-right: vw-p(8px);
       }
     }
     .or {
