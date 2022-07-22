@@ -1,0 +1,16 @@
+#newspage {
+  .headline {
+    width: (1070px);
+    margin-top: (80px);
+    margin-bottom: (80px);
+    background-color: antiquewhite;
+    & > p {
+      & > span {
+        color: $MAIN_YELLOW;
+      }
+    }
+  }
+  .newspagelist {
+    width: 50%;
+  }
+}

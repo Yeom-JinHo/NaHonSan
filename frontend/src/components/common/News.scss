@@ -1,0 +1,160 @@
+#news {
+  flex-direction: row;
+  .item {
+    &__img {
+      background-color: antiquewhite;
+      width: (200px);
+      height: (200px);
+      margin-right: 40px;
+    }
+    &__content {
+      width: 80%;
+      margin-bottom: 30px;
+      &__head {
+        width: 100%;
+        &__title {
+          background-color: aqua;
+          // width: 100px;
+          margin-bottom: 20px;
+        }
+        &__date {
+          background-color: aquamarine;
+          // width: 100px;
+          margin-bottom: 20px;
+        }
+      }
+      &__description {
+        background-color: chocolate;
+        width: 100%;
+      }
+    }
+  }
+  hr {
+    color: aquamarine;
+    height: 10px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+}
+@media screen and (max-width: $DESKTOP-VW) {
+  #news {
+    flex-direction: row;
+    .item {
+      &__img {
+        background-color: antiquewhite;
+        width: vw(200px);
+        height: vw(200px);
+        margin-right: vw(40px);
+      }
+      &__content {
+        width: 80%;
+        margin-bottom: vw(30px);
+        &__head {
+          width: 100%;
+          &__title {
+            background-color: aqua;
+            // width: 100px;
+            margin-bottom: vw(20px);
+          }
+          &__date {
+            background-color: aquamarine;
+            // width: 100px;
+            margin-bottom: vw(20px);
+          }
+        }
+        &__description {
+          background-color: chocolate;
+          width: 100%;
+        }
+      }
+    }
+    hr {
+      color: aquamarine;
+      height: 10px;
+      margin-top: vw(40px);
+      margin-bottom: vw(40px);
+    }
+  }
+}
+
+@media screen and (max-width: $TABLET-VW) {
+  #news {
+    flex-direction: row;
+    .item {
+      &__img {
+        background-color: antiquewhite;
+        width: vw-t(200px);
+        height: vw-t(200px);
+        margin-right: vw-t(40px);
+      }
+      &__content {
+        width: 80%;
+        margin-bottom: vw-t(30px);
+        &__head {
+          width: 100%;
+          &__title {
+            background-color: aqua;
+            // width: 100px;
+            margin-bottom: vw-t(20px);
+          }
+          &__date {
+            background-color: aquamarine;
+            // width: 100px;
+            margin-bottom: vw-t(20px);
+          }
+        }
+        &__description {
+          background-color: chocolate;
+          width: 100%;
+        }
+      }
+    }
+    hr {
+      color: aquamarine;
+      height: 10px;
+      margin-top: vw-t(40px);
+      margin-bottom: vw-t(40px);
+    }
+  }
+}
+
+@media screen and (max-width: $PHONE-VW) {
+  #news {
+    flex-direction: row;
+    .item {
+      &__img {
+        background-color: antiquewhite;
+        width: vw-p(200px);
+        height: vw-p(200px);
+        margin-right: vw-p(40px);
+      }
+      &__content {
+        width: 80%;
+        margin-bottom: vw-p(30px);
+        &__head {
+          width: 100%;
+          &__title {
+            background-color: aqua;
+            // width: 100px;
+            margin-bottom: vw-p(20px);
+          }
+          &__date {
+            background-color: aquamarine;
+            // width: 100px;
+            margin-bottom: vw-p(20px);
+          }
+        }
+        &__description {
+          background-color: chocolate;
+          width: 100%;
+        }
+      }
+    }
+    hr {
+      color: aquamarine;
+      height: 10px;
+      margin-top: vw-p(40px);
+      margin-bottom: vw-p(40px);
+    }
+  }
+}
