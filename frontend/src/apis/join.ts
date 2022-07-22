@@ -6,8 +6,10 @@ export const sendAuthCode = async (id: string, type: number) => {
   return res.data.message;
 };
 
-export const chkAuthCode = async (number: number) => {
-  const res = await API.get(`/email?&number=${number}`);
+export const chkAuthCode = async (id: string, number: string, type: number) => {
+  const res = await API.get(
+    `/user/auth?id=${id}&number=${number}&type=${type}`
+  );
   return res.data.message;
 };
 
