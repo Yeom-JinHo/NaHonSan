@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,6 +77,37 @@ public class UserServiceTest {
             System.out.println(okay);
         }
     }
+
+    @Test
+    public void 회원_가입_추가_정보(){
+        String id = "userTest";
+        String area = "gwangju";
+        List<String> categorys = new ArrayList<>();
+        categorys.add("A");
+        categorys.add("B");
+        categorys.add("C");
+        Optional<UserEntity> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            UserEntity user = optionalUser.get();
+            user.setArea(area);
+            userRepository.save(user);
+            List<UserCategoryEntity> delCategorys = userCategoryRepository.findByUser(user);
+            for (UserCategoryEntity uc : delCategorys) {
+                userCategoryRepository.delete(uc);
+            }
+            for (String c : categorys) {
+                UserCategoryEntity usercategory = UserCategoryEntity.builder()
+                        .category(c)
+                        .user(user)
+                        .build();
+                userCategoryRepository.save(usercategory);
+            }
+            System.out.println(okay);
+        } else{
+            System.out.println(fail);
+        }
+    }
+
 
 }
 
