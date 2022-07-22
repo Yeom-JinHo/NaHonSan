@@ -11,10 +11,7 @@ import com.gwangjubob.livealone.backend.service.impl.MailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,8 +38,8 @@ public class DMController {
     }
     @PostMapping("/dm")
     public ResponseEntity<?> sendDM(@RequestBody DMSendDto dmSendDto, HttpServletRequest request){
-        String decodeId = checkToken(request);
         resultMap = new HashMap<>();
+        String decodeId = checkToken(request);
         try {
             if(decodeId != null&& dmService.sendDM(dmSendDto)){
                 dmSendDto.setFromId(decodeId);
@@ -52,15 +49,15 @@ public class DMController {
             }
             status = HttpStatus.OK;
         }catch (Exception e){
-            status = HttpStatus.UNAUTHORIZED;
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
         return new ResponseEntity<>(resultMap, status);
     }
     @GetMapping("/dm")
     public ResponseEntity<?> listDM(HttpServletRequest request){
-        String decodeId = checkToken(request);
         resultMap = new HashMap<>();
+        String decodeId = checkToken(request);
         try {
             if(decodeId != null){
                 List<DMViewDto> dmViewDtoList =dmService.listDM(decodeId);
@@ -69,15 +66,15 @@ public class DMController {
             }
             status = HttpStatus.OK;
         }catch (Exception e){
-            status = HttpStatus.UNAUTHORIZED;
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
         return new ResponseEntity<>(resultMap, status);
     }
     @GetMapping("/dm/{fromId}")
     public ResponseEntity<?> listDetailDM(@PathVariable("fromId")String fromId, HttpServletRequest request){
-        String decodeId = checkToken(request);
         resultMap = new HashMap<>();
+        String decodeId = checkToken(request);
         try {
             if(decodeId != null){
                 List<DMViewDto> dmViewDtoList =dmService.listDetailDM(decodeId,fromId);
@@ -86,7 +83,7 @@ public class DMController {
             }
             status = HttpStatus.OK;
         }catch (Exception e){
-            status = HttpStatus.UNAUTHORIZED;
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
         return new ResponseEntity<>(resultMap, status);
@@ -98,7 +95,7 @@ public class DMController {
             return decodeId;
         }else{
             resultMap.put("message", timeOut);
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            status = HttpStatus.UNAUTHORIZED;
             return null;
         }
     }
