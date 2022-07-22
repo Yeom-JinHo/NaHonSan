@@ -5,22 +5,11 @@ import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
 import com.gwangjubob.livealone.backend.domain.repository.UserCategoryRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
-import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
-import com.gwangjubob.livealone.backend.dto.user.UserMoreDTO;
-import com.gwangjubob.livealone.backend.dto.user.UserRegistDto;
 import com.gwangjubob.livealone.backend.mapper.UserInfoMapper;
-import org.assertj.core.api.AbstractStringAssert;
-import org.assertj.core.api.Assert;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -108,6 +97,16 @@ public class UserServiceTest {
         }
     }
 
+    @Test
+    public void 닉네임_중복_체크(){
+        String nickname = "킴싸피";
+        Optional<UserEntity> optionalUser = userRepository.findByNickname(nickname);
+        if(optionalUser.isPresent()){
+            System.out.println(fail);
+        } else{
+            System.out.println(okay);
+        }
+    }
 
 }
 
