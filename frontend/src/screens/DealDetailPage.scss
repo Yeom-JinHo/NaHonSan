@@ -70,9 +70,6 @@
             height: (48px);
             border: none;
             border-radius: (12px);
-            -webkit-appearance: none;
-            -moz-appearance: none; 
-            appearance: none;
             &:focus {
               outline: none;
             }
@@ -82,12 +79,6 @@
             & > option {
               background-color: white;
             }
-          }
-          & :nth-child(2) {
-            position: absolute;
-            width: (12px);
-            height: (12px);
-            right: (120px);
           }
         }
       }
@@ -156,14 +147,10 @@
       .header {
         margin-top: vw(48px);
         height: vw(120px);
-        border-bottom: solid 2px #d9d9d9;
         &-info {
-          align-items: center;
-          justify-content: space-around;
           height: 100%;
           width: 50%;
           &__img-container {
-            align-items: center;
             & > img {
               width: vw(56px);
               height: vw(56px);
@@ -171,15 +158,12 @@
             }
           }
           &__text {
-            justify-content: center;
-            align-items: flex-start;
             height: 100%;
             .user-name {
               font-size: vw(24px);
             }
             .created {
               font-size: vw(16px);
-              color: #666;
               margin-top: vw(12px);
             }
           }
@@ -195,27 +179,20 @@
         }
         &-func {
           width: 50%;
-          justify-content: flex-end;
           & img {
             width: vw(48px);
             height: vw(48px);
           }
           &-btn {
             width: 50%;
-            justify-content: space-evenly;
-            align-items: center;
           }
           &-box {
-            position: relative;
             width: 70%;
-            justify-content: center;
-            align-items: center;
             &__select {
               font-size: vw(16px);
               width: vw(140px);
               margin-right: vw(36px);
               height: vw(48px);
-              border: none;
               border-radius: vw(12px);
               padding-left: vW(24px);
               &:focus {
@@ -224,15 +201,6 @@
               &:hover {
                 cursor: pointer;
               }
-              & > option {
-                background-color: white;
-              }
-            }
-            & :nth-child(2) {
-              position: absolute;
-              width: vw(12px);
-              height: vw(12px);
-              right: vw(120px);
             }
           }
         }
@@ -302,14 +270,10 @@
       .header {
         margin-top: vw-t(36px);
         height: vw-t(120px);
-        border-bottom: solid 2px #d9d9d9;
         &-info {
-          align-items: center;
-          justify-content: space-around;
           height: 100%;
           width: 50%;
           &__img-container {
-            align-items: center;
             & > img {
               width: vw-t(56px);
               height: vw-t(56px);
@@ -317,8 +281,6 @@
             }
           }
           &__text {
-            justify-content: center;
-            align-items: flex-start;
             height: 100%;
             .user-name {
               font-size: vw-t(24px);
@@ -341,21 +303,15 @@
         }
         &-func {
           width: 50%;
-          justify-content: flex-end;
           & img {
             width: vw-t(48px);
             height: vw-t(48px);
           }
           &-btn {
             width: 50%;
-            justify-content: space-evenly;
-            align-items: center;
           }
           &-box {
-            position: relative;
             width: 70%;
-            justify-content: center;
-            align-items: center;
             &__select {
               font-size: vw-t(16px);
               width: vw-t(140px);
@@ -363,21 +319,6 @@
               height: vw-t(48px);
               border: none;
               border-radius: vw-t(12px);
-              &:focus {
-                outline: none;
-              }
-              &:hover {
-                cursor: pointer;
-              }
-              & > option {
-                background-color: white;
-              }
-            }
-            & :nth-child(2) {
-              position: absolute;
-              width: vw-t(12px);
-              height: vw-t(12px);
-              right: vw-t(92px);
             }
           }
         }
@@ -385,11 +326,9 @@
       .body {
         margin-top: vw-t(48px);
         height: vw-t(500px);
-        background-color: #333;
       }
       .comment {
         margin-top: vw-t(60px);
-        border-top: solid 2px #d9d9d9;
         &-head {
           & > p {
             margin-top: vw-t(24px);
@@ -407,7 +346,6 @@
           & > input {
             width: 80%;
             height: vw-t(48px);
-            border: solid 2px #d9d9d9;
             border-radius: vw-t(12px);
             padding-left: vw-t(24px);
             &:focus {
@@ -416,8 +354,6 @@
           }
           .input-img-container {
             width: 20%;
-            justify-content: center;
-            align-items: center;
             & > img {
               width: vw-t(48px);
               height: vw-t(48px);
@@ -426,7 +362,6 @@
         }
         &-component {
           margin-top: vw-t(48px);
-          background-color: #666;
           width: 100%;
           height: vw-t(400px);
         }
@@ -451,14 +386,10 @@
         padding-right: vw-p(12px);
         margin-top: vw-p(12px);
         height: vw-p(80px);
-        border-bottom: solid 2px #d9d9d9;
         &-info {
-          align-items: center;
-          justify-content: space-around;
           height: 100%;
           width: 50%;
           &__img-container {
-            align-items: center;
             & > img {
               width: vw-p(36px);
               height: vw-p(36px);
@@ -466,8 +397,6 @@
             }
           }
           &__text {
-            justify-content: center;
-            align-items: flex-start;
             height: 100%;
             .user-name {
               font-size: vw-p(12px);
@@ -482,7 +411,7 @@
             background-color: $MAIN_YELLOW;
             margin-left: vw-p(12px);
             padding: vw-p(8px);
-            font-size: vw-p(8px);
+            font-size: vw-p(12px);
             width: vw-p(60px);
             height: vw-p(36px);
             border-radius: vw-p(8px);
@@ -513,21 +442,6 @@
               height: vw-p(36px);
               border: none;
               border-radius: vw-p(8px);
-              &:focus {
-                outline: none;
-              }
-              &:hover {
-                cursor: pointer;
-              }
-              & > option {
-                background-color: white;
-              }
-            }
-            & :nth-child(2) {
-              position: absolute;
-              width: vw-p(8px);
-              height: vw-p(8px);
-              right: vw-p(40px);
             }
           }
         }
@@ -539,7 +453,6 @@
       }
       .comment {
         margin-top: vw-p(60px);
-        border-top: solid 2px #d9d9d9;
         &-head {
           margin-left: (12px);
           margin-right: (12px);
@@ -562,7 +475,6 @@
             font-size: (12px);
             width: 80%;
             height: vw-p(36px);
-            border: solid 2px #d9d9d9;
             border-radius: vw-p(12px);
             padding-left: vw-p(8px);
             &:focus {

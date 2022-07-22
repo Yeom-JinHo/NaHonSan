@@ -4,7 +4,6 @@ import UserDummyIcon from "@images/UserDummy.svg";
 import EmptyHeart from "@images/ArticleEmptyHeart.svg";
 import KakaoMap from "@images/kakao_map.png";
 import EditIcon from "@images/EditIcon.svg";
-import SelectArrow from "@images/SelectArrow.svg";
 
 function DealDetailPage() {
   const [test] = useState(true);
@@ -56,7 +55,6 @@ function DealDetailPage() {
                   <option value="1">거래 진행</option>
                   <option value="2">거래 완료</option>
                 </select>
-                <img src={SelectArrow} alt="arrow" />
                 <img src={EditIcon} alt="edit" title="edit" />
               </div>
             ) : (
@@ -78,10 +76,7 @@ function DealDetailPage() {
             <div className="input-img-container flex">
               <img src={UserDummyIcon} alt="dum" title="user-icon" />
             </div>
-            <input
-              type="text"
-              placeholder="사진을 드래그 하고댓글을 입력해라"
-            />
+            <input type="text" placeholder="댓글을 입력해" />
           </div>
           <div className="comment-component"> </div>
         </div>
