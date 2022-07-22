@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -31,7 +32,9 @@ public class UserServiceTest {
     private UserRepository userRepository;
     private UserCategoryRepository userCategoryRepository;
     private UserInfoMapper userInfoMapper;
-
+    private static final String okay = "SUCCESS";
+    private static final String fail = "FAIL";
+    private final PasswordEncoder passwordEncoder;
 
 
     static UserInfoDto userInfoDto;
@@ -40,6 +43,7 @@ public class UserServiceTest {
         this.userRepository = userRepository;
         this.userCategoryRepository = userCategoryRepository;
         this.userInfoMapper = userInfoMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Test
@@ -54,7 +58,24 @@ public class UserServiceTest {
     }
 
 
-
+    @Test
+    public void 회원_가입(){
+        String id = "usertest";
+        String nickname = "비밀번호는usertest입니다.";
+        String password = "usertest";
+        UserEntity inputUser = UserEntity.builder()
+                .id(id)
+                .password(passwordEncoder.encode(password))
+                .nickname(nickname)
+                .build();
+        Optional<UserEntity> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            System.out.println(fail);
+        } else{
+            userRepository.save(inputUser);
+            System.out.println(okay);
+        }
+    }
 
 }
 
