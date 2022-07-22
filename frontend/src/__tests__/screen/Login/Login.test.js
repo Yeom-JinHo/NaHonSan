@@ -6,9 +6,10 @@ import renderWithProviders from "@utils/test-utils";
 import userEvent from "@testing-library/user-event";
 import Login from "@screens/Login/Login";
 import { MemoryRouter } from "react-router-dom";
+import { BASE_URL } from "@apis/";
 
 const handlers = [
-  rest.post("/user/login", (req, res, ctx) => {
+  rest.post(`${BASE_URL}/user/login`, (req, res, ctx) => {
     if (req.body.id === "ssafy" && req.body.password === "ssafy") {
       return res(ctx.json("SUCCESS"), ctx.delay(10));
     }
