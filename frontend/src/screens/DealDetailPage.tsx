@@ -53,7 +53,7 @@ function DealDetailPage() {
                   value={dealState}
                 >
                   <option value="0">거래 대기</option>
-                  <option value="1">거래 중</option>
+                  <option value="1">거래 진행</option>
                   <option value="2">거래 완료</option>
                 </select>
                 <img src={SelectArrow} alt="arrow" />
