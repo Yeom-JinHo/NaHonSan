@@ -25,8 +25,8 @@ function Join() {
         return;
       }
       const userId = inputRef.current?.value;
-      const res = await sendAuthCode(userId);
-      if (res === "JOINED") {
+      const res = await sendAuthCode(userId, 0);
+      if (res === "FAIL") {
         setErrMsg("이미 존재하는 아이디입니다.");
         inputRef.current?.focus();
       } else if (res === "SUCCESS") {

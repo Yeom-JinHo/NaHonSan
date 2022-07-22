@@ -1,17 +1,13 @@
 import axios from "axios";
 import API from "./index";
 
-export const sendAuthCode = async (id: string) => {
-  const res = await axios.post(`/user/auth`, { id, type: 1 });
-
-  return res.data;
+export const sendAuthCode = async (id: string, type: number) => {
+  const res = await API.post(`/user/auth`, { id, type });
+  return res.data.message;
 };
 
-export const chkAuthCode = async (
-  userId: string,
-  authCode: string | undefined
-) => {
-  const res = await API.get(`/email?userId=${userId}&authKey=${authCode}`);
+export const chkAuthCode = async (number: number) => {
+  const res = await API.get(`/email?&number=${number}`);
   return res.data.message;
 };
 

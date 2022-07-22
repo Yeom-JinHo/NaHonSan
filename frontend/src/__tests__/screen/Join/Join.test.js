@@ -4,18 +4,16 @@ import { setupServer } from "msw/node";
 import { screen, waitFor } from "@testing-library/react";
 import renderWithProviders from "@utils/test-utils";
 import userEvent from "@testing-library/user-event";
-import Login from "@screens/Login/Login";
 import { MemoryRouter } from "react-router-dom";
 import Join from "@screens/Join/Join";
-import { setUpStore } from "@store/";
-import reducer, { setUserId } from "@store/ducks/auth/authSlice";
+import { BASE_URL } from "@apis/index";
 
 const handlers = [
-  rest.post("/user/auth", (req, res, ctx) => {
-    if (req.body.id === "ssafy@naver.com" && req.body.type === 1) {
-      return res(ctx.json("SUCCESS"), ctx.delay(10));
+  rest.post(`${BASE_URL}/user/auth`, (req, res, ctx) => {
+    if (req.body.id === "ssafy@naver.com" && req.body.type === 0) {
+      return res(ctx.json({ message: "SUCCESS" }), ctx.delay(10));
     }
-    return res(ctx.json("JOINED"), ctx.delay(10));
+    return res(ctx.json({ message: "FAIL" }), ctx.delay(10));
   })
 ];
 const server = setupServer(...handlers);
