@@ -111,23 +111,18 @@
     width: 150px;
     text-align: center;
     border-radius: (6px);
-    border: none;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    background: url("../assets/images/SelectArrow.svg") no-repeat 95% 50%/12px;
+    border: none;
+    appearance: none;
     &:hover {
       cursor: pointer;
     }
   }
   select::-ms-expand {
     display: none;
-  }
-  .select-arrow {
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    top: 8px;
-    right: 26px;
   }
 }
 
@@ -141,7 +136,6 @@
         padding-top: vw(18px);
         width: 65%;
         &__title {
-          justify-content: space-between;
           padding-right: vw(24px);
           & > p {
             & > span {
@@ -151,7 +145,6 @@
           & > button {
             font-size: vw(24px);
             width: vw(140px);
-            background-color: $MAIN_YELLOW;
             border-radius: vw(12px);
           }
         }
@@ -165,7 +158,6 @@
       }
       &-container {
         width: 35%;
-        text-align: center;
         &__img {
           width: vw(120px);
           height: vw(120px);
@@ -187,22 +179,18 @@
       margin-top: vw(80px);
       width: vw(1170px);
       &-header {
-        justify-content: space-between;
         & div {
-          position: relative;
           height: vw(36px);
           & > img {
-            top: 6px;
-            left: 8px;
-            position: absolute;
-            height: 24px;
-            width: 24px;
+            top: (6px);
+            left: (8px);
+            height: (24px);
+            width: (24px);
           }
           & > input {
-            padding-left: 36px;
-            padding-right: 36px;
+            padding-left: (36px);
+            padding-right: (36px);
             width: vw(470px);
-            border: solid 2px $MAIN_YELLOW;
             border-radius: (8px);
             height: (36px);
           }
@@ -210,12 +198,10 @@
       }
       .tag {
         margin-top: vw(60px);
-        justify-content: space-evenly;
         font-size: vw(24px);
         padding: vw(12px);
         &-item {
           padding: vw(12px);
-          align-items: center;
           & > img {
             height: vw(120px);
             width: vw(120px);
@@ -227,8 +213,6 @@
         }
       }
       &-sort {
-        position: relative;
-        justify-content: flex-end;
         margin-top: vw(24px);
         & > button {
           width: 45%;
@@ -240,27 +224,11 @@
       margin-top: vw(48px);
     }
     select {
-      height: 36px;
-      width: 150px;
-      text-align: center;
+      height: (36px);
+      width: (150px);
       border-radius: vw(6px);
       border: none;
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-    select::-ms-expand {
-      display: none;
-    }
-    .select-arrow {
-      width: 20px;
-      height: 20px;
-      position: absolute;
-      top: 8px;
-      right: 26px;
+      background: url("../assets/images/SelectArrow.svg") no-repeat 95% 50%/12px;
     }
   }
 
@@ -554,4 +522,14 @@
 .active {
   color: $MAIN_YELLOW;
   border-bottom: solid 2px $MAIN_YELLOW;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-align-last: center;
+  text-align: center;
+  -ms-text-align-last: center;
+  -moz-text-align-last: center;
 }

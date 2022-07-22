@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./TipPage.scss";
 import CardList from "@components/common/CardList";
-import SelectArrow from "@images/SelectArrow.svg";
 import tipIcon from "@images/TipIcon.svg";
 import searchIcon from "@images/Search.svg";
 import HoneyRecipe from "@images/HoneyRecipe.svg";
@@ -87,7 +86,6 @@ function TipPage() {
             <option value="2">조회순</option>
             <option value="3">인기순</option>
           </select>
-          <img className="select-arrow" src={SelectArrow} alt="arrow" />
         </div>
         <CardList type="tip" />
       </div>
