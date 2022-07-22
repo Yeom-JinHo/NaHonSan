@@ -14,9 +14,12 @@ export const chkAuthCode = async (id: string, number: string, type: number) => {
 };
 
 export const chkNickNameExist = async (nickName: string) => {
-  return true;
+  const res = await API.get(`/user/check/${nickName}`);
+
+  return res.data.message;
 };
 
-export const join = async () => {
-  return true;
+export const join = async (id: string, password: string, nickname: string) => {
+  const res = await API.post("/user", { id, password, nickname });
+  return res.data.message;
 };
