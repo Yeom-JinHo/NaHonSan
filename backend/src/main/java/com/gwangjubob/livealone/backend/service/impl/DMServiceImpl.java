@@ -53,4 +53,22 @@ public class DMServiceImpl implements DMService {
 		}
 		return dmViewDtoList;
 	}
+	@Override
+	public List<DMViewDto> listDetailDM(String id, String fromId){
+		List<DMViewDto> dmViewDtoList = new ArrayList<>();
+//		List<DMEntity> dmEntityList = dmRepository.findByIdAndFromId(id,fromId);
+//
+//		for(DMEntity dmEntity : dmEntityList){
+//			DMViewDto dmViewDto = new DMViewDto();
+//			dmViewDto.setIdx(dmEntity.getIdx());
+//			dmViewDto.setFromId(dmEntity.getFromUserId());
+//			dmViewDto.setToId(dmEntity.getToUserId());
+//			dmViewDto.setTime(dmEntity.getTime());
+//			dmViewDto.setRead(dmEntity.getRead());
+//			dmViewDto.setContent(dmEntity.getContent());
+//			dmViewDto.setImage((dmEntity.getImage()));
+//			dmViewDtoList.add(dmViewDto);
+//		}
+		return dmViewDtoList;
+	}
 }

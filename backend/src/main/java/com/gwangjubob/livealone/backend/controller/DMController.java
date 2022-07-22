@@ -2,6 +2,7 @@ package com.gwangjubob.livealone.backend.controller;
 
 import com.gwangjubob.livealone.backend.dto.dm.DMSendDto;
 import com.gwangjubob.livealone.backend.dto.dm.DMViewDto;
+import com.gwangjubob.livealone.backend.dto.dm.DMViewDto;
 import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
 import com.gwangjubob.livealone.backend.service.DMService;
 import com.gwangjubob.livealone.backend.service.JwtService;
@@ -62,8 +63,24 @@ public class DMController {
         resultMap = new HashMap<>();
         try {
             if(decodeId != null){
-                System.out.println(decodeId);
                 List<DMViewDto> dmViewDtoList =dmService.listDM(decodeId);
+                resultMap.put("message",okay);
+                resultMap.put("data",dmViewDtoList);
+            }
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            status = HttpStatus.UNAUTHORIZED;
+        }
+
+        return new ResponseEntity<>(resultMap, status);
+    }
+    @GetMapping("/dm/{fromId}")
+    public ResponseEntity<?> listDetailDM(@PathVariable("fromId")String fromId, HttpServletRequest request){
+        String decodeId = checkToken(request);
+        resultMap = new HashMap<>();
+        try {
+            if(decodeId != null){
+                List<DMViewDto> dmViewDtoList =dmService.listDetailDM(decodeId,fromId);
                 resultMap.put("message",okay);
                 resultMap.put("data",dmViewDtoList);
             }
