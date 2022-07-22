@@ -41,11 +41,13 @@ public class DMController {
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
         try {
-            if(decodeId != null&& dmService.sendDM(dmSendDto)){
+            if(decodeId != null){
                 dmSendDto.setFromId(decodeId);
-                resultMap.put("message",okay);
-            }else {
-                resultMap.put("message",fail);
+                if(dmService.sendDM(dmSendDto)) {
+                    resultMap.put("message", okay);
+                }else {
+                    resultMap.put("message",fail);
+                }
             }
             status = HttpStatus.OK;
         }catch (Exception e){
