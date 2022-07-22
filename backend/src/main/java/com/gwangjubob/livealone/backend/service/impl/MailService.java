@@ -61,6 +61,7 @@ public class MailService {
     }
     public boolean checkAuthNumber(MailCheckDto mailCheckDto){
         if(mailRepository.findById(mailCheckDto.getId(),mailCheckDto.getNumber(), mailCheckDto.getType()) == 1){
+            mailRepository.deleteById(mailCheckDto.getId());
             return true;
         }
         return false;
