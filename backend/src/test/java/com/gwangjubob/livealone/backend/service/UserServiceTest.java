@@ -26,8 +26,6 @@ public class UserServiceTest {
     private static final String fail = "FAIL";
     private final PasswordEncoder passwordEncoder;
 
-
-    static UserInfoDto userInfoDto;
     @Autowired
     UserServiceTest(UserRepository userRepository, PasswordEncoder passwordEncoder, UserCategoryRepository userCategoryRepository, UserInfoMapper userInfoMapper){
         this.userRepository = userRepository;
@@ -108,5 +106,44 @@ public class UserServiceTest {
         }
     }
 
+    @Test
+    public void 회원_정보_수정(){
+        String id = "asdf";
+        String nickname = "test";
+        String area = "test";
+        Boolean followOpen = true;
+        Boolean followerOpen = true;
+        Boolean likeNotice = true;
+        Boolean followNotice = true;
+        Boolean commentNotice = true;
+        Boolean replyNotice = true;
+        String profileMsg = "test";
+        String profileImg = "test";
+        String backgroundImg = "test";
+        UserInfoDto userInfoDto = UserInfoDto.builder()
+                .id(id)
+                .nickname(nickname)
+                .area(area)
+                .followOpen(followOpen)
+                .followerOpen(followerOpen)
+                .likeNotice(likeNotice)
+                .followNotice(followNotice)
+                .commentNotice(commentNotice)
+                .replyNotice(replyNotice)
+                .profileMsg(profileMsg)
+                .profileImg(profileImg)
+                .backgroundImg(backgroundImg)
+                .build();
+        Optional<UserEntity> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()){
+            UserEntity user = optionalUser.get();
+            userInfoMapper.updateFromDto(userInfoDto, user);
+            userRepository.save(user);
+            userInfoDto = userInfoMapper.toDto(user);
+            System.out.println(userInfoDto);
+        } else{
+            System.out.println(fail);
+        }
+    }
 }
 
