@@ -5,7 +5,6 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import TipPage from "@screens/TipPage";
 import DealPage from "@screens/DealPage";
-import NewsPage from "@screens/NewsPage";
 import Join from "@screens/Join/Join";
 import ChkEmail from "@screens/ChkEmail";
 import JoinDetail from "@screens/Join/JoinDetail";
@@ -19,6 +18,11 @@ import "./RootLayout.scss";
 import PageNotFound from "@screens/PageNotFound";
 import Letters from "@screens/Letters";
 import ChatRoom from "@screens/ChatRoom";
+import ChkPw from "@screens/AccountSetting/ChkPw";
+import AccountSettingPage from "@screens/AccountSetting/AccountSettingPage";
+import Withdrawal from "@screens/AccountSetting/Withdrawal";
+import DealDetailPage from "@screens/DealDetailPage";
+import TipDetail from "@screens/TipDetail";
 
 function RootRouter() {
   return (
@@ -27,11 +31,21 @@ function RootRouter() {
       <div id="root-layout">
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/tip" element={<TipPage />} />
+          <Route path="/tip">
+            <Route index element={<TipPage />} />
+            <Route path="detail/:id" element={<TipDetail />} />
+          </Route>
           <Route path="/feed" element={<FeedPage />} />
-          <Route path="/deal" element={<DealPage />} />
-          <Route path="/news" element={<NewsPage />} />
+          <Route path="/deal">
+            <Route index element={<DealPage />} />
+            <Route path="detail/:id" element={<DealDetailPage />} />
+          </Route>
           <Route path="/userfeed/:id" element={<UserFeedPage />} />
+          <Route path="/account/*">
+            <Route index element={<ChkPw />} />
+            <Route path="set" element={<AccountSettingPage />} />
+            <Route path="withdrawal" element={<Withdrawal />} />
+          </Route>
           <Route path="/join/*">
             <Route index element={<Join />} />
             <Route path="chkEmail" element={<ChkEmail type="login" />} />

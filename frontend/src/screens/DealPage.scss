@@ -112,20 +112,25 @@
     margin-top: (48px);
   }
   select {
+    background-color: #fff;
     height: 36px;
     width: 150px;
-    text-align: center;
     border-radius: (6px);
     border: none;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+<<<<<<< HEAD
+=======
+    background: url("../assets/images/SelectArrow.svg") no-repeat 95% 50%/12px;
+>>>>>>> 282b1664248bbf1ff015e2f65e3eab024852f70c
     &:hover {
       cursor: pointer;
     }
   }
   select::-ms-expand {
     display: none;
+<<<<<<< HEAD
   }
   .select-arrow {
     width: 20px;
@@ -133,6 +138,8 @@
     position: absolute;
     top: 8px;
     right: 26px;
+=======
+>>>>>>> 282b1664248bbf1ff015e2f65e3eab024852f70c
   }
 }
 
@@ -252,18 +259,21 @@
     select {
       height: 36px;
       width: 150px;
-      text-align: center;
       border-radius: (6px);
       border: none;
+<<<<<<< HEAD
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
+=======
+>>>>>>> 282b1664248bbf1ff015e2f65e3eab024852f70c
       &:hover {
         cursor: pointer;
       }
     }
     select::-ms-expand {
       display: none;
+<<<<<<< HEAD
     }
     .select-arrow {
       width: 20px;
@@ -271,6 +281,8 @@
       position: absolute;
       top: 8px;
       right: 26px;
+=======
+>>>>>>> 282b1664248bbf1ff015e2f65e3eab024852f70c
     }
   }
 
@@ -404,18 +416,24 @@
     select {
       height: 36px;
       width: 150px;
+<<<<<<< HEAD
       text-align: center;
       border-radius: (6px);
       border: none;
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
+=======
+      border-radius: (6px);
+      border: none;
+>>>>>>> 282b1664248bbf1ff015e2f65e3eab024852f70c
       &:hover {
         cursor: pointer;
       }
     }
     select::-ms-expand {
       display: none;
+<<<<<<< HEAD
     }
     .select-arrow {
       width: 20px;
@@ -423,6 +441,8 @@
       position: absolute;
       top: 8px;
       right: 26px;
+=======
+>>>>>>> 282b1664248bbf1ff015e2f65e3eab024852f70c
     }
   }
 
@@ -557,12 +577,16 @@
       select {
         height: 36px;
         width: 100px;
+<<<<<<< HEAD
         padding-left: 20px;
         text-align: start;
         border-radius: (6px);
         appearance: none;
         -webkit-appearance: none;
         -moz-appearance: none;
+=======
+        border-radius: (6px);
+>>>>>>> 282b1664248bbf1ff015e2f65e3eab024852f70c
         &:hover {
           cursor: pointer;
         }
@@ -570,6 +594,7 @@
       select::-ms-expand {
         display: none;
       }
+<<<<<<< HEAD
       .select-arrow {
         width: 20px;
         height: 20px;
@@ -577,6 +602,8 @@
         top: 8px;
         right: 12px;
       }
+=======
+>>>>>>> 282b1664248bbf1ff015e2f65e3eab024852f70c
     }
     .p-none {
       display: none;
@@ -590,3 +617,13 @@
   color: $MAIN_YELLOW;
   border-bottom: solid 2px $MAIN_YELLOW;
 }
+<<<<<<< HEAD
+=======
+
+select {
+  text-align-last: center;
+  text-align: center;
+  -ms-text-align-last: center;
+  -moz-text-align-last: center;
+}
+>>>>>>> 282b1664248bbf1ff015e2f65e3eab024852f70c
