@@ -42,4 +42,9 @@ public class NoticeEntity {
 
     @Column(name = "time")
     LocalDateTime time;
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+        user.getNotices().add(this); // 양방향 매핑 
+    }
 }
