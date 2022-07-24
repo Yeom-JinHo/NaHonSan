@@ -17,6 +17,7 @@
         width: 100%;
         height: 40%;
         align-items: center;
+        font-size: 24px;
         // &__title {
         // }
         // &__date {
@@ -25,6 +26,8 @@
       &__description {
         height: 60%;
         width: 100%;
+        font-size: 20px;
+
         white-space: normal;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -58,6 +61,7 @@
         width: 100%;
         height: 40%;
         align-items: center;
+        font-size: vw(24px);
         // &__title {
         // }
         // &__date {
@@ -66,12 +70,14 @@
       &__description {
         text-overflow: ellipsis;
         overflow: hidden;
+
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
 
         height: 60%;
         width: 100%;
+        font-size: vw(20px);
       }
     }
   }
@@ -110,6 +116,7 @@
         // font-size: vw-t(12px);
         height: 60%;
         width: 100%;
+        font-size: vw-t(20px);
         text-overflow: ellipsis;
         overflow: hidden;
         display: -webkit-box;
@@ -152,7 +159,7 @@
         &__description {
           width: 100%;
           height: 60%;
-
+          font-size: vw-p(8px);
           text-overflow: ellipsis;
           overflow: hidden;
           display: -webkit-box;

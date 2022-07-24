@@ -11,10 +11,10 @@ function News() {
         </div>
         <div className="item__content">
           <div className="item__content__head flex justify-space-between">
-            <p className="item__content__head__title fs-24 notoReg">title</p>
-            <p className="item__content__head__date fs-24 notoReg">date</p>
+            <p className="item__content__head__title notoReg">title</p>
+            <p className="item__content__head__date notoReg">date</p>
           </div>
-          <p className="item__content__description column fs-20 notoReg">
+          <p className="item__content__description column notoReg">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
             quam obcaecati odit, unde facere a voluptatum dignissimos saepe odio
             rem modi cumque cupiditate tempore quos autem provident ab nam
