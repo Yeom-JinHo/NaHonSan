@@ -68,6 +68,10 @@
       margin-bottom: (40px);
       color: $RED;
     }
+    .dummy {
+      margin-bottom: 40px;
+      height: 12px;
+    }
     &__btn {
       margin-bottom: (24px);
       @include btn();
@@ -153,6 +157,11 @@
         margin-bottom: vw(40px);
         color: $RED;
       }
+      .dummy {
+        margin-bottom: vw(40px);
+        height: vw(12px);
+      }
+
       &__btn {
         margin-bottom: vw(24px);
         @include btn();
@@ -224,6 +233,10 @@
       &__msg {
         margin-bottom: vw-t(40px);
       }
+      .dummy {
+        margin-bottom: vw-t(40px);
+        height: vw-t(12px);
+      }
       &__btn {
         margin-bottom: vw-t(24px);
         @include btn();
@@ -292,6 +305,10 @@
       }
       &__msg {
         margin-bottom: vw-p(40px);
+      }
+      .dummy {
+        margin-bottom: vw-p(40px);
+        height: vw-p(12px);
       }
       &__btn {
         margin-bottom: vw-p(24px);
