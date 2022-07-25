@@ -14,7 +14,7 @@ function News() {
             <p className="item__content__head__title notoReg">title</p>
             <p className="item__content__head__date notoReg">date</p>
           </div>
-          <p className="item__content__description column notoReg">
+          <p className="item__content__description flex align-center column notoReg">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
             quam obcaecati odit, unde facere a voluptatum dignissimos saepe odio
             rem modi cumque cupiditate tempore quos autem provident ab nam

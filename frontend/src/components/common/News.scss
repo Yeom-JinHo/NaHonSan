@@ -12,7 +12,7 @@
     }
     &__content {
       width: 80%;
-      margin-bottom: 30px;
+      // margin-bottom: 30px;
       &__head {
         width: 100%;
         height: 40%;
@@ -24,7 +24,7 @@
         // }
       }
       &__description {
-        height: 100px;
+        height: 82px;
         width: 100%;
         font-size: 20px;
 
@@ -44,99 +44,101 @@
   }
 }
 @media screen and (max-width: $DESKTOP-VW) {
-  .item {
-    &__img {
-      width: vw(200px);
-      height: vw(200px);
-      margin-right: vw(40px);
-      & > img {
-        width: 100%;
-        height: 100%;
+  #news {
+    .item {
+      &__img {
+        width: vw(200px);
+        height: vw(200px);
+        margin-right: vw(40px);
+        & > img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      &__content {
+        width: 80%;
+        // margin-bottom: vw(32px);
+        &__head {
+          width: 100%;
+          height: 40%;
+          align-items: center;
+          font-size: vw(24px);
+          // &__title {
+          // }
+          // &__date {
+          // }
+        }
+        &__description {
+          text-overflow: ellipsis;
+          overflow: hidden;
+
+          display: -webkit-box;
+          -webkit-line-clamp: 4;
+          -webkit-box-orient: vertical;
+
+          height: 82px;
+          width: 100%;
+          font-size: 20px;
+        }
       }
     }
-    &__content {
-      width: 80%;
-      margin-bottom: vw(32px);
-      &__head {
-        width: 100%;
-        height: 40%;
-        align-items: center;
-        font-size: vw(24px);
-        // &__title {
-        // }
-        // &__date {
-        // }
-      }
-      &__description {
-        text-overflow: ellipsis;
-        overflow: hidden;
-
-        display: -webkit-box;
-        -webkit-line-clamp: 4;
-        -webkit-box-orient: vertical;
-
-        height: 60%;
-        width: 100%;
-        font-size: vw(20px);
-      }
+    hr {
+      height: vw(12px);
+      margin-top: vw(40px);
+      margin-bottom: vw(40px);
     }
-  }
-  hr {
-    height: vw(12px);
-    margin-top: vw(40px);
-    margin-bottom: vw(40px);
   }
 }
-
 @media screen and (max-width: $TABLET-VW) {
-  .item {
-    &__img {
-      width: vw-t(200px);
-      height: vw-t(200px);
-      margin-right: vw-t(20px);
-      & > img {
-        width: 100%;
-        height: 100%;
+  #news {
+    .item {
+      &__img {
+        width: vw-t(160px);
+        height: vw-t(160px);
+        margin-right: vw-t(20px);
+        & > img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      &__content {
+        width: 80%;
+        // margin-bottom: vw-t(16px);
+        &__head {
+          width: 100%;
+          height: 40%;
+          align-items: center;
+          font-size: vw-t(24px);
+          // &__title {
+          // }
+          // &__date {
+          // }
+        }
+        &__description {
+          height: 50px;
+          width: 100%;
+          font-size: 16px;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+        }
       }
     }
-    &__content {
-      width: 80%;
-      margin-bottom: vw-t(16px);
-      &__head {
-        width: 100%;
-        height: 40%;
-        align-items: center;
-        font-size: vw-t(24px);
-        // &__title {
-        // }
-        // &__date {
-        // }
-      }
-      &__description {
-        // font-size: vw-t(12px);
-        height: 60%;
-        width: 100%;
-        font-size: vw-t(20px);
-        text-overflow: ellipsis;
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 4;
-        -webkit-box-orient: vertical;
-      }
+    hr {
+      height: vw-t(8px);
+      // margin-top: vw-t(8px);
+      // margin-bottom: vw-t(8px);
     }
-  }
-  hr {
-    height: vw-t(8px);
-    // margin-top: vw-t(8px);
-    // margin-bottom: vw-t(8px);
   }
 }
 @media screen and (max-width: $PHONE-VW) {
   #news {
     .item {
       &__img {
-        width: vw-p(200px);
-        height: vw-p(200px);
+        width: vw-p(100px);
+        height: vw-p(100px);
         margin-right: vw-p(20px);
         & > img {
           width: 100%;
@@ -158,12 +160,12 @@
         }
         &__description {
           width: 100%;
-          height: 60%;
-          font-size: vw-p(8px);
+          height: 20px;
+          font-size: 8px;
           text-overflow: ellipsis;
           overflow: hidden;
           display: -webkit-box;
-          -webkit-line-clamp: 2;
+          -webkit-line-clamp: 3;
           -webkit-box-orient: vertical;
         }
       }
