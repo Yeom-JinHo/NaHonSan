@@ -8,6 +8,7 @@ import com.gwangjubob.livealone.backend.dto.dm.DMSendDto;
 import com.gwangjubob.livealone.backend.service.impl.DMServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -47,8 +50,38 @@ public class DMServiceTest {
         Assertions.assertThat(res.getToUserId()).isEqualTo(dmEntity.getToUserId());
         Assertions.assertThat(res.getContent()).isEqualTo(dmEntity.getContent());
     }
-
     @Test
+    public void 메시지_리스트_조회_테스트(){
+        // given
+        final String id = "ssafy";
+
+
+        // when
+        List<DMEntity> dmEntityList = dmRepository.findListViews(id);
+
+        // thens
+        System.out.println("start");
+        for (int i = 0; i < dmEntityList.size(); i++) {
+            System.out.println(dmEntityList.get(i).toString());
+        }
+    }
+    @Test
+    public void 메시지_세부_조회_테스트(){
+        // given
+        final String toId = "ssafy";
+        final String fromId = "test";
+
+
+        // when
+        List<DMEntity> dmEntityList = dmRepository.findByToUserIdAndFromUserId(toId, fromId);
+
+        // thens
+        for (int i = 0; i < dmEntityList.size(); i++) {
+            System.out.println(dmEntityList.get(i).toString());
+        }
+    }
+    @Test
+    @Disabled
     public void 메시지_전송_존재하지않는사용자_테스트() {
         // given
         DMSendDto dmSendDto = new DMSendDto();
