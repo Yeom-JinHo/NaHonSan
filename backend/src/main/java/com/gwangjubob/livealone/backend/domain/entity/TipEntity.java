@@ -1,7 +1,9 @@
 package com.gwangjubob.livealone.backend.domain.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -9,6 +11,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Getter
+@ToString
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
@@ -36,4 +39,13 @@ public class TipEntity {
     private String view; // 조회수
 
     private LocalDate time; // 글 작성 시간
+
+    @Builder
+    public TipEntity(UserEntity user, String category, String title, String content, String bannerImg) {
+        this.user = user;
+        this.category = category;
+        this.title = title;
+        this.content = content;
+        this.bannerImg = bannerImg;
+    }
 }
