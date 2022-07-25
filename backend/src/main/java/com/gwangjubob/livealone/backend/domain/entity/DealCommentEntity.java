@@ -40,4 +40,16 @@ public class DealCommentEntity {
     @Column(name = "position_y")
     Integer positionY;
 
+    @Override
+    public String toString() {
+        return "DealCommentEntity{" +
+                "idx=" + idx +
+                ", time=" + time +
+                ", content='" + content + '\'' +
+                ", bannerImg='" + bannerImg + '\'' +
+                ", upIdx=" + upIdx +
+                ", positionX=" + positionX +
+                ", positionY=" + positionY +
+                '}';
+    }
 }

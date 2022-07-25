@@ -9,7 +9,9 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,7 +20,6 @@ import java.util.Date;
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
-@ToString
 public class DealEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +38,22 @@ public class DealEntity {
     private String state;
     private String area;
     private Integer view;
+
+    @OneToMany(mappedBy = "deal")
+    List<DealCommentEntity> comments = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "DealEntity{" +
+                "idx=" + idx +
+                ", time=" + time +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", category='" + category + '\'' +
+                ", bannerImg='" + bannerImg + '\'' +
+                ", state='" + state + '\'' +
+                ", area='" + area + '\'' +
+                ", view=" + view +
+                '}';
+    }
 }
