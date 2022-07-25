@@ -44,6 +44,7 @@ public class UserServiceTest {
         if(user != null) {
             UserInfoDto userInfo = userInfoMapper.toDto(user);
             System.out.println(userInfo);
+            System.out.println(okay);
         }
     }
 
@@ -69,7 +70,7 @@ public class UserServiceTest {
 
     @Test
     public void 회원_가입_추가_정보(){
-        String id = "userTest";
+        String id = "test";
         String area = "gwangju";
         List<String> categorys = new ArrayList<>();
         categorys.add("A");
@@ -99,7 +100,7 @@ public class UserServiceTest {
 
     @Test
     public void 닉네임_중복_체크(){
-        String nickname = "킴싸피";
+        String nickname = "nickname";
         Optional<UserEntity> optionalUser = userRepository.findByNickname(nickname);
         if(optionalUser.isPresent()){
             System.out.println(fail);
@@ -110,7 +111,7 @@ public class UserServiceTest {
 
     @Test
     public void 회원_정보_수정(){
-        String id = "asdf";
+        String id = "test";
         String nickname = "test";
         String area = "test";
         Boolean followOpen = true;
@@ -143,6 +144,7 @@ public class UserServiceTest {
             userRepository.save(user);
             userInfoDto = userInfoMapper.toDto(user);
             System.out.println(userInfoDto);
+            System.out.println(okay);
         } else{
             System.out.println(fail);
         }
