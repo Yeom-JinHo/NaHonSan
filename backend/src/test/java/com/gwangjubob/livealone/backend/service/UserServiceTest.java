@@ -7,6 +7,7 @@ import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
 import com.gwangjubob.livealone.backend.mapper.UserInfoMapper;
+import org.apache.catalina.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -148,13 +149,25 @@ public class UserServiceTest {
     }
     @Test
     public void 회원_비밀번호_수정(){
-        String id = "asdf";
+        String id = "test";
         String password = "test";
         Optional<UserEntity> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()){
             UserEntity user = optionalUser.get();
             user.setPassword(passwordEncoder.encode(password));
             userRepository.save(user);
+            System.out.println(okay);
+        } else{
+            System.out.println(fail);
+        }
+    }
+    @Test
+    public void 회원_탈퇴(){
+        String id = "test";
+        Optional<UserEntity> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            UserEntity user = optionalUser.get();
+            userRepository.delete(user);
             System.out.println(okay);
         } else{
             System.out.println(fail);
