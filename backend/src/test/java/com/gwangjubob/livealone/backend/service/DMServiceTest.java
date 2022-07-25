@@ -106,6 +106,23 @@ public class DMServiceTest {
         }
     }
     @Test
+    public void 로그인_테스트(){
+        //given
+        final String id = "test";
+        final String password = "test";
+
+        //when
+        Optional<UserEntity> user = userRepository.findById(id);
+        boolean res = passwordEncoder.matches(password,user.get().getPassword());
+
+        //thens
+        if(res){
+            System.out.println("OK");
+        }else {
+            System.out.println("FAIL");
+        }
+    }
+    @Test
     @Disabled
     public void 메시지_전송_존재하지않는사용자_테스트() {
         // given
