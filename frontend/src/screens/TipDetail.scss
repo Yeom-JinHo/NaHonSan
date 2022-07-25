@@ -256,7 +256,7 @@
           }
           &__btn {
             padding: vw-t(8px);
-            font-size: vw-t(8px);
+            font-size: vw-t(12px);
             width: vw-t(80px);
             height: vw-t(36px);
             border-radius: vw-t(12px);
@@ -298,9 +298,9 @@
             border-radius: vw-t(12px);
             padding-left: vw-t(12px);
             font-size: vw-t(12px);
-          }
-          &::placeholder {
-            font-size: vw-t(12px);
+            &::placeholder {
+              font-size: vw-t(12px);
+            }
           }
           .input-img-container {
             width: 20%;
@@ -397,7 +397,7 @@
             font-size: vw-p(16px);
           }
           & span {
-            margin-left: vw-p(0px);
+            margin-left: vw-p(12px);
             color: $MAIN_YELLOW;
           }
         }
