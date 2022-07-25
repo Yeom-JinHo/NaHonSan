@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @SpringBootTest
@@ -66,5 +68,20 @@ public class DealServiceTest {
         }
     }
 
-
+    @Test
+    public void 꿀딜_게시글_상세조회(){
+        Map<String, Object> resultMap = new HashMap<>();
+        Integer idx = 10;
+        Optional<DealEntity> optionalDeal = dealRepository.findById(idx);
+        if(optionalDeal.isPresent()){
+            DealEntity dealEntity = optionalDeal.get();
+            DealDto deal = dealMapper.toDto(dealEntity);
+            deal.setUserId(dealEntity.getUser().getId());
+            resultMap.put("deal", deal);
+            System.out.println(resultMap);
+            System.out.println(okay);
+        } else{
+            System.out.println(fail);
+        }
+    }
 }
