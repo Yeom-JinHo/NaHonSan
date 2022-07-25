@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getUserInfo } from "./authThunk";
 
-interface InitialStateType {
-  tmpId: string;
+export interface UserInfoType {
   id: string;
   nickname: string;
   area: string | null;
@@ -15,21 +15,14 @@ interface InitialStateType {
   profileImg: string | null;
   backgroundImg: string | null;
 }
+interface InitialStateType {
+  tmpId: string;
+  userInfo: UserInfoType | null;
+}
 
 const initialState: InitialStateType = {
   tmpId: "",
-  id: "",
-  nickname: "",
-  area: null,
-  followOpen: false,
-  followerOpen: false,
-  likeNotice: false,
-  followNotice: false,
-  commentNotice: false,
-  replyNotice: false,
-  profileMsg: null,
-  profileImg: null,
-  backgroundImg: null
+  userInfo: null
 };
 
 export const authSlice = createSlice({
@@ -39,6 +32,11 @@ export const authSlice = createSlice({
     setUserId: (state, action) => {
       state.tmpId = action.payload.tmpId;
     }
+  },
+  extraReducers: builder => {
+    builder.addCase(getUserInfo.fulfilled, (state, { payload }) => {
+      state.userInfo = payload;
+    });
   }
 });
 

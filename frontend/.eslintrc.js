@@ -35,7 +35,8 @@ module.exports = {
     //   "error",
     //   { props: true, ignorePropertyModificationsFor: ["state"] }
     // ]
-    "no-param-reassign": 0
+    "no-param-reassign": 0,
+    "@typescript-eslint/no-empty-interface": 0
   },
   settings: {
     "import/resolver": {

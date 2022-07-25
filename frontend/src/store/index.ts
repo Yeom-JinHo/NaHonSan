@@ -15,7 +15,8 @@ export const setUpStore = (preloadedState?: PreloadedState<RootState>) => {
   return configureStore({
     reducer: rootReducer,
     preloadedState,
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger)
+    middleware: getDefaultMiddleware =>
+      getDefaultMiddleware({ serializableCheck: false }).concat(logger)
   });
 };
 
