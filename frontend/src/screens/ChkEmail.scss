@@ -14,6 +14,7 @@
     }
   }
   .form {
+    position: relative;
     &__title {
       margin-bottom: (20px);
     }
@@ -26,7 +27,14 @@
       border: 1px solid $GRAY_DB;
       border-radius: (4px);
     }
+    &__time {
+      position: absolute;
+      top: (53px);
+      left: (280px);
+      color: $RED;
+    }
     &__msg {
+      height: (12px);
       margin-bottom: (16px);
       color: $RED;
     }
@@ -45,6 +53,9 @@
       color: $GRAY_76;
       &__msg {
         margin-right: (16px);
+      }
+      &__btn {
+        text-decoration: underline;
       }
     }
     &-bottom {
@@ -96,7 +107,14 @@
         border: 1px solid $GRAY_DB;
         border-radius: vw(4px);
       }
+      &__time {
+        position: absolute;
+        top: vw(53px);
+        left: vw(280px);
+        color: $RED;
+      }
       &__msg {
+        height: vw(12px);
         margin-bottom: vw(16px);
         color: $RED;
       }
@@ -167,7 +185,12 @@
         border-radius: vw-t(4px);
       }
       &__msg {
+        height: vw-t(12px);
         margin-bottom: vw-t(16px);
+      }
+      &__time {
+        top: vw-t(53px);
+        left: vw-t(280px);
       }
       &__btn {
         margin-bottom: vw-t(24px);
@@ -231,7 +254,12 @@
         border-radius: vw-p(4px);
       }
       &__msg {
+        height: vw-p(12px);
         margin-bottom: vw-p(16px);
+      }
+      &__time {
+        top: vw-p(53px);
+        left: vw-p(280px);
       }
       &__btn {
         margin-bottom: vw-p(24px);

@@ -2,13 +2,20 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./MsgPageLayout.scss";
 
-type MsgPageLayoutProps = {
+interface MsgPageLayoutProps {
   title: string;
   subtitle: string;
   imgSrc: string;
-};
+  // eslint-disable-next-line react/require-default-props
+  subButton?: string;
+}
 
-function MsgPageLayout({ title, subtitle, imgSrc }: MsgPageLayoutProps) {
+function MsgPageLayout({
+  title,
+  subtitle,
+  imgSrc,
+  subButton
+}: MsgPageLayoutProps) {
   return (
     <div id="msg-page-layout">
       <header className="header flex justify-center">
@@ -22,13 +29,21 @@ function MsgPageLayout({ title, subtitle, imgSrc }: MsgPageLayoutProps) {
           {subtitle}
         </div>
       </main>
-      <footer className="footer flex justify-center">
+      <footer className="footer flex column align-center">
         <Link
           to="/"
           className="footer__btn flex align-center justify-center notoBold fs-16"
         >
           나혼자 잘살러 가기
         </Link>
+        {subButton && (
+          <Link
+            to="/join/more"
+            className="footer__btn flex align-center justify-center notoBold fs-16"
+          >
+            {subButton}
+          </Link>
+        )}
       </footer>
     </div>
   );
