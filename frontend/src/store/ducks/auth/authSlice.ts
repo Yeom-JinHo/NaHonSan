@@ -31,6 +31,10 @@ export const authSlice = createSlice({
   reducers: {
     setUserId: (state, action) => {
       state.tmpId = action.payload.tmpId;
+    },
+    resetUserInfo: state => {
+      state.userInfo = null;
+      sessionStorage.removeItem("access-token");
     }
   },
   extraReducers: builder => {
@@ -40,6 +44,6 @@ export const authSlice = createSlice({
   }
 });
 
-export const { setUserId } = authSlice.actions;
+export const { setUserId, resetUserInfo } = authSlice.actions;
 
 export default authSlice.reducer;
