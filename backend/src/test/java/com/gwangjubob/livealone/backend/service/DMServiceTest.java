@@ -97,69 +97,7 @@ public class DMServiceTest {
             System.out.println(dmEntityList.get(i).toString());
         }
     }
-    @Test
-    public void 비밀번호_인증_테스트(){
-        //given
-        final String id = "test";
-        final String password = "test";
 
-        //when
-        Optional<UserEntity> user = userRepository.findById(id);
-        boolean res = passwordEncoder.matches(password,user.get().getPassword());
-
-        //thens
-        if(res){
-            System.out.println("OK");
-        }else {
-            System.out.println("FAIL");
-        }
-    }
-    @Test
-    public void 로그인_테스트(){
-        //given
-        final String id = "test";
-        final String password = "test";
-
-        //when
-        Optional<UserEntity> user = userRepository.findById(id);
-        boolean res = passwordEncoder.matches(password,user.get().getPassword());
-
-        //thens
-        if(res){
-            System.out.println("OK");
-        }else {
-            System.out.println("FAIL");
-        }
-    }
-    @Test
-    public void 이메일_전송_테스트(){
-        //given
-        SimpleMailMessage message = new SimpleMailMessage();
-        String authKey = "231456";
-        String toId = "1552419@gmail.com";
-        String fromId = "gwangjubob@gmail.com";
-        String subject = ("[인증테스트] 나 혼자 잘 산다.");
-        //when
-        message.setTo(toId);
-        message.setFrom(fromId);
-        message.setSubject(subject);
-        message.setText("인증번호 : "+ authKey);
-        MailEntity dummyMail = MailEntity.builder()
-                .id(toId)
-                .type(fromId)
-                .number(authKey)
-                .build();
-        mailRepository.saveAndFlush(dummyMail);
-        javaMailSender.send(message); //메일 전송
-        MailEntity mail = MailEntity.builder()
-                .id(toId)
-                .type("0")
-                .number(authKey)
-                .build();
-        mailRepository.saveAndFlush(mail);
-        //thens
-        System.out.println("OK");
-    }
     @Test
     @Disabled
     public void 메시지_전송_존재하지않는사용자_테스트() {
