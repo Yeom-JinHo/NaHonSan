@@ -18,7 +18,10 @@ function News() {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
             quam obcaecati odit, unde facere a voluptatum dignissimos saepe odio
             rem modi cumque cupiditate tempore quos autem provident ab nam
-            porro.
+            porro.Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            Quibusdam quam obcaecati odit, unde facere a voluptatum dignissimos
+            saepe odio rem modi cumque cupiditate tempore quos autem provident
+            ab nam porro.
           </p>
         </div>
       </div>
