@@ -1,13 +1,16 @@
 package com.gwangjubob.livealone.backend.service;
 
 import com.gwangjubob.livealone.backend.domain.entity.DMEntity;
+import com.gwangjubob.livealone.backend.domain.entity.MailEntity;
 import com.gwangjubob.livealone.backend.domain.entity.NoticeEntity;
 import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
 import com.gwangjubob.livealone.backend.domain.repository.DMRepository;
+import com.gwangjubob.livealone.backend.domain.repository.MailRepository;
 import com.gwangjubob.livealone.backend.domain.repository.NoticeRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.dm.DMSendDto;
 import com.gwangjubob.livealone.backend.service.impl.DMServiceImpl;
+import com.gwangjubob.livealone.backend.service.impl.MailService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Disabled;
@@ -16,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,13 +36,17 @@ public class DMServiceTest {
     private DMService dmService;
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
+    private JavaMailSender javaMailSender;
+    private MailRepository mailRepository;
 
     @Autowired
-    DMServiceTest(DMRepository dmRepository, DMService dmService, UserRepository userRepository,PasswordEncoder passwordEncoder) {
+    DMServiceTest(DMRepository dmRepository, DMService dmService,JavaMailSender javaMailSender,MailRepository mailRepository, UserRepository userRepository,PasswordEncoder passwordEncoder) {
         this.dmRepository = dmRepository;
         this.dmService = dmService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.javaMailSender = javaMailSender;
+        this.mailRepository = mailRepository;
     }
 
     @Test
@@ -121,6 +130,35 @@ public class DMServiceTest {
         }else {
             System.out.println("FAIL");
         }
+    }
+    @Test
+    public void 이메일_전송_테스트(){
+        //given
+        SimpleMailMessage message = new SimpleMailMessage();
+        String authKey = "231456";
+        String toId = "1552419@gmail.com";
+        String fromId = "gwangjubob@gmail.com";
+        String subject = ("[인증테스트] 나 혼자 잘 산다.");
+        //when
+        message.setTo(toId);
+        message.setFrom(fromId);
+        message.setSubject(subject);
+        message.setText("인증번호 : "+ authKey);
+        MailEntity dummyMail = MailEntity.builder()
+                .id(toId)
+                .type(fromId)
+                .number(authKey)
+                .build();
+        mailRepository.saveAndFlush(dummyMail);
+        javaMailSender.send(message); //메일 전송
+        MailEntity mail = MailEntity.builder()
+                .id(toId)
+                .type("0")
+                .number(authKey)
+                .build();
+        mailRepository.saveAndFlush(mail);
+        //thens
+        System.out.println("OK");
     }
     @Test
     @Disabled
