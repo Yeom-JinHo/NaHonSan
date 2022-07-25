@@ -18,13 +18,11 @@ import java.util.*;
 public class NoticeServiceImpl implements NoticeService {
 
     private NoticeRepository noticeRepository;
-    private UserRepository userRepository;
     private UserService userService;
 
     @Autowired
-    NoticeServiceImpl(NoticeRepository noticeRepository, UserRepository userRepository, UserService userService){
+    NoticeServiceImpl(NoticeRepository noticeRepository, UserService userService){
         this.noticeRepository = noticeRepository;
-        this.userRepository = userRepository;
         this.userService = userService;
     }
 
@@ -88,6 +86,14 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public long countNotice(String decodeId) {
-        return noticeRepository.findCountNotice(decodeId);
+        List<NoticeViewDto> list = viewNotice(decodeId);
+
+        long count = 0;
+        for(NoticeViewDto n : list){
+            if(n.getRead() == false){
+                count = count + 1;
+            }
+        }
+        return count;
     }
 }
