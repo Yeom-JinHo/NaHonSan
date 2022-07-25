@@ -1,16 +1,16 @@
 package com.gwangjubob.livealone.backend.controller;
 
 import com.gwangjubob.livealone.backend.dto.tip.TipCreateDto;
+import com.gwangjubob.livealone.backend.dto.tip.TipViewDto;
 import com.gwangjubob.livealone.backend.service.JwtService;
 import com.gwangjubob.livealone.backend.service.TipService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,15 +34,33 @@ public class TipController {
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
 
-        if(decodeId != null){
+        if(!decodeId.equals("timeout")){
             try{
-                tipService.createTip(decodeId, tipCreateDto);
+                tipService.createTip(decodeId, tipCreateDto); // 꿀팁 게시글 작성 서비스 호출
                 resultMap.put("message", okay);
                 status = HttpStatus.OK;
             }catch(Exception e){
                 resultMap.put("message", fail);
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
             }
+        }
+
+        return new ResponseEntity<>(resultMap, status);
+    }
+
+    @GetMapping("/HoneyTip/{category}")
+    public ResponseEntity<?> viewTip(@PathVariable String category){
+        resultMap = new HashMap<>();
+
+        System.out.println(category);
+        try{
+            List<TipViewDto> list = tipService.viewTip(category); // 카테고리별 게시글 목록 조회
+            resultMap.put("data", list);
+            resultMap.put("message", okay);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            resultMap.put("message", fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
         return new ResponseEntity<>(resultMap, status);

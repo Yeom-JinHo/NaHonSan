@@ -5,7 +5,8 @@ import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
 import lombok.*;
 
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class TipCreateDto {
 
     private UserEntity user; // 글 작성자 정보

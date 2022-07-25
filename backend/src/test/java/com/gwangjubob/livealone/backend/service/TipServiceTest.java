@@ -4,6 +4,7 @@ import com.gwangjubob.livealone.backend.domain.entity.TipEntity;
 import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
 import com.gwangjubob.livealone.backend.domain.repository.TipRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
+import com.gwangjubob.livealone.backend.dto.tip.TipViewDto;
 import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.mapper.UserInfoMapper;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
@@ -65,10 +68,13 @@ public class TipServiceTest {
     public void 카테고리별_리스트_조회_테스트(){
         // given
         String category = "tip";
-        String testId = "ssafy";
 
         // when
-
+        List<TipViewDto> result = tipService.viewTip(category);
         // then
+
+        for(TipViewDto dto : result){
+            System.out.println(dto.toString());
+        }
     }
 }

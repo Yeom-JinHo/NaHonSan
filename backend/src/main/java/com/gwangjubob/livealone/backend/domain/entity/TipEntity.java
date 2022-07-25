@@ -23,7 +23,7 @@ public class TipEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idx; // 게시글 번호
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user; // 사용자 아이디(FK)
 
