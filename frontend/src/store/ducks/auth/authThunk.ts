@@ -32,7 +32,7 @@ export const loginNaver = async (code: string) => {
 export const getUserInfo = createAsyncThunk("auth/getUserInfo", async () => {
   const accessToken = sessionStorage.getItem("access-token") as string;
   const res = await axios.get(`${BASE_URL}/user`, {
-    headers: { "access-token": accessToken }
+    headers: { Authorization: `${accessToken}` }
   });
   return res.data.data;
 });
