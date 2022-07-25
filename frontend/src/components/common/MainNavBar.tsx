@@ -10,7 +10,7 @@ import AlarmToolTip from "./MainNavBar/AlarmToolTip";
 import ProfileToolTip from "./MainNavBar/ProfileToolTip";
 
 function MainNavBar() {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
   const [alarmVisible, setAlarmVisible] = useState(false);
   const [profileTooltipVisible, setProfileTooltipVisible] = useState(false);
   const activeTabClassName = (active: boolean) => {

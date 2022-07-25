@@ -1,14 +1,51 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import "./Join.scss";
-import KakaoIcon from "@images/Kakao.svg";
-import GoogleIcon from "@images/Google.svg";
-import NaverIcon from "@images/Naver.svg";
 import { Link, useNavigate } from "react-router-dom";
+import { emailReg } from "@constants/reg";
+import { sendAuthCode } from "@apis/auth";
+import { useDispatch } from "react-redux";
+import { setUserId } from "@store/ducks/auth/authSlice";
+import SocialSection from "@components/common/SocialSection";
 
 function Join() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const chkValidate = () => {
-    navigate("chkEmail");
+  const [errMsg, setErrMsg] = useState<string>("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const chkValidate = async () => {
+    if (inputRef.current) {
+      if (inputRef.current?.value === "") {
+        inputRef.current?.focus();
+        setErrMsg("이메일을 입력해주세요.");
+        return;
+      }
+      if (errMsg === "이메일 형식을 확인해주세요.") {
+        inputRef.current?.focus();
+        return;
+      }
+      const userId = inputRef.current?.value;
+      const res = await sendAuthCode(userId, 0);
+      if (res === "FAIL") {
+        setErrMsg("이미 존재하는 아이디입니다.");
+        inputRef.current?.focus();
+      } else if (res === "SUCCESS") {
+        dispatch(setUserId({ userId }));
+        navigate("chkEmail");
+      }
+    }
+  };
+
+  const chkEmailReg = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      chkValidate();
+      return;
+    }
+    if (emailReg.test(e.target.value)) {
+      setErrMsg("");
+    } else {
+      setErrMsg("이메일 형식을 확인해주세요.");
+    }
   };
   return (
     <div className="wrapper">
@@ -19,29 +56,7 @@ function Join() {
             나혼자 잘살아 봐요!
           </p>
         </header>
-        <section className="social">
-          <button
-            type="button"
-            className="social__btn flex align-center justify-center kakao"
-          >
-            <img className="social__img" src={KakaoIcon} alt="카카오" />
-            <p className="social__content notoMid fs-15">카카오로 시작하기</p>
-          </button>
-          <button
-            type="button"
-            className="social__btn flex align-center justify-center naver"
-          >
-            <img className="social__img" src={NaverIcon} alt="네이버" />
-            <p className="social__content notoMid fs-15">네이버로 시작하기</p>
-          </button>
-          <button
-            type="button"
-            className="social__btn flex align-center justify-center google"
-          >
-            <img className="social__img" src={GoogleIcon} alt="구글" />
-            <p className="social__content notoMid fs-15">구글로 시작하기</p>
-          </button>
-        </section>
+        <SocialSection />
         <div className="or flex align-center justify-center">
           <span className="or__line" />
           <p className="or__title notoBold fs-14">또는</p>
@@ -52,9 +67,16 @@ function Join() {
           <input
             className="form__input notoReg fs-15"
             type="text"
-            placeholder="JinHoJJANG@gamil.com"
+            placeholder="이메일을 입력해주세요."
+            onKeyUp={chkEmailReg}
+            ref={inputRef}
           />
-          <p className="form__msg notoMid fs-12">이미 존재하는 아이디입니다.</p>
+          {errMsg === "" ? (
+            <p className="dummy" />
+          ) : (
+            <p className="form__msg notoMid fs-12">{errMsg}</p>
+          )}
+
           <button
             type="button"
             className="form__btn notoMid fs-15 flex align-center justify-center"
