@@ -62,8 +62,8 @@ public class NoticeServiceTest {
         long count = noticeService.countNotice(decodeId);
 
         // then
-//        System.out.println(count);
-        Assertions.assertThat(count).isEqualTo(test);
+        System.out.println(count);
+//        Assertions.assertThat(count).isEqualTo(test);
     }
 
     @Test
@@ -111,9 +111,29 @@ public class NoticeServiceTest {
     @Test
     public void 알림_읽음_테스트() {
         // given
+        String testId = "ssafy";
+        int testIdx = 4;
 
         // when
+        Boolean result = noticeService.readNotice(testId, testIdx);
 
         // then
+        Assertions.assertThat(result).isEqualTo(true);
+    }
+
+    @Test
+    public void 알림_삭제_테스트() {
+        // given
+        String testId = "ssafy";
+        int testIdx = 1;
+
+        // when
+        noticeService.deleteNotice(testId, testIdx);
+
+        // then
+        List<NoticeViewDto> result = noticeService.viewNotice(testId);
+        for(NoticeViewDto notice : result){
+            System.out.println(notice.toString());
+        }
     }
 }
