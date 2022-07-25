@@ -2,8 +2,10 @@ package com.gwangjubob.livealone.backend.service;
 
 import com.gwangjubob.livealone.backend.domain.entity.DMEntity;
 import com.gwangjubob.livealone.backend.domain.entity.NoticeEntity;
+import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
 import com.gwangjubob.livealone.backend.domain.repository.DMRepository;
 import com.gwangjubob.livealone.backend.domain.repository.NoticeRepository;
+import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.dm.DMSendDto;
 import com.gwangjubob.livealone.backend.service.impl.DMServiceImpl;
 import org.assertj.core.api.Assertions;
@@ -14,10 +16,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -25,11 +29,15 @@ import java.util.List;
 public class DMServiceTest {
     private DMRepository dmRepository;
     private DMService dmService;
+    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    DMServiceTest(DMRepository dmRepository, DMService dmService) {
+    DMServiceTest(DMRepository dmRepository, DMService dmService, UserRepository userRepository,PasswordEncoder passwordEncoder) {
         this.dmRepository = dmRepository;
         this.dmService = dmService;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Test
@@ -78,6 +86,23 @@ public class DMServiceTest {
         // thens
         for (int i = 0; i < dmEntityList.size(); i++) {
             System.out.println(dmEntityList.get(i).toString());
+        }
+    }
+    @Test
+    public void 비밀번호_인증_테스트(){
+        //given
+        final String id = "test";
+        final String password = "test";
+
+        //when
+        Optional<UserEntity> user = userRepository.findById(id);
+        boolean res = passwordEncoder.matches(password,user.get().getPassword());
+
+        //thens
+        if(res){
+            System.out.println("OK");
+        }else {
+            System.out.println("FAIL");
         }
     }
     @Test
