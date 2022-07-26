@@ -13,6 +13,8 @@ public class FollowViewDto {
     private String id;
     private String nickname;
     private String profileImg;
+
+
 }
 
 

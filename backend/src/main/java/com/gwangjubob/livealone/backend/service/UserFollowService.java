@@ -12,5 +12,7 @@ public interface UserFollowService {
     boolean registFollow(String toId, String fromId);
     List<FollowViewDto> listFollow(String id);
     List<FollowViewDto> listFollower(String id);
+    List<FollowViewDto> searchFollow(String id,String keyword);
+    List<FollowViewDto> searchFollower(String id,String keyword);
     boolean deleteFollow(String toId, String fromId);
 }

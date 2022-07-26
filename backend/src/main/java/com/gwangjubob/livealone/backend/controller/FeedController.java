@@ -107,6 +107,46 @@ public class FeedController {
         }
         return new ResponseEntity<>(resultMap,status);
     }
+    @GetMapping("/userFeed/follow/search/{id}")
+    public ResponseEntity<?> searchFollow(@PathVariable("id")String fromId, @RequestParam("keyword") String keyword){
+        System.out.println(keyword);
+        resultMap = new HashMap<>();
+        try{
+            UserInfoDto userInfoDto =  userService.infoUser(fromId);
+            if(userInfoDto.getFollowerOpen()){// 대상 id가 팔로워 설정이 되어있다면 조회하기
+                List<FollowViewDto> result = userFollowService.searchFollow(fromId,keyword);
+                resultMap.put("data",result);
+            }else{
+                resultMap.put("data",notAllowed);
+            }
+            resultMap.put("result",okay);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            resultMap.put("result",fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap,status);
+    }
+    @GetMapping("/userFeed/follower/search/{id}")
+    public ResponseEntity<?> searchFollower(@PathVariable("id")String fromId, @RequestParam("keyword") String keyword){
+        System.out.println(keyword);
+        resultMap = new HashMap<>();
+        try{
+            UserInfoDto userInfoDto =  userService.infoUser(fromId);
+            if(userInfoDto.getFollowerOpen()){// 대상 id가 팔로워 설정이 되어있다면 조회하기
+                List<FollowViewDto> result = userFollowService.searchFollower(fromId,keyword);
+                resultMap.put("data",result);
+            }else{
+                resultMap.put("data",notAllowed);
+            }
+            resultMap.put("result",okay);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            resultMap.put("result",fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap,status);
+    }
     public String checkToken(HttpServletRequest request){
         String accessToken = request.getHeader("Authorization");
         String decodeId = jwtService.decodeToken(accessToken);

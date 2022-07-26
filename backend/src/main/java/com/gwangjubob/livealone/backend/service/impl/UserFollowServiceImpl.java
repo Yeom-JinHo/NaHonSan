@@ -35,11 +35,15 @@ public class UserFollowServiceImpl implements UserFollowService {
 
     @Override
     public boolean registFollow(String toId, String fromId) {
-        UserFollowEntity userFollowEntity = UserFollowEntity.builder()
+        Optional<UserEntity> user = userRepository.findById(toId);
+        Optional<UserEntity> follow = userRepository.findById(fromId);
+        if(follow.isPresent() && user.isPresent()){
+                UserFollowEntity userFollowEntity = UserFollowEntity.builder()
                 .userId(toId)
+                .userNickname(user.get().getNickname())
                 .followId(fromId)
+                .followNickname(follow.get().getNickname())
                 .build();
-        if(!userFollowRepository.findByUserIdAndFollowId(toId,fromId).isPresent()){
             userFollowRepository.save(userFollowEntity);
             return true;
         }
@@ -66,6 +70,38 @@ public class UserFollowServiceImpl implements UserFollowService {
     @Override
     public List<FollowViewDto> listFollower(String id) {
         List<UserFollowEntity> userFollowEntitys = userFollowRepository.findByFollowId(id);
+        List<FollowViewDto> res = new ArrayList<>();
+        for(UserFollowEntity userFollowEntity : userFollowEntitys){
+            Optional<UserEntity> userEntity = userRepository.findById(userFollowEntity.getUserId()); //아이디로 회원정보 조회하기
+            if(userEntity.isPresent()) {  // 탈퇴한 회원이 아니라면
+                FollowViewDto followViewDto = new FollowViewDto();
+                followViewDto.setId(userEntity.get().getId());
+                followViewDto.setProfileImg(userEntity.get().getProfileImg());
+                followViewDto.setNickname(userEntity.get().getNickname());
+                res.add(followViewDto);
+            }
+        }
+        return res;
+    }
+    @Override
+    public List<FollowViewDto> searchFollow(String id, String keyword) {
+        List<UserFollowEntity> userFollowEntitys = userFollowRepository.findByUserIdAndFollowNicknameContaining(id,keyword);
+        List<FollowViewDto> res = new ArrayList<>();
+        for(UserFollowEntity userFollowEntity : userFollowEntitys){
+            Optional<UserEntity> userEntity = userRepository.findById(userFollowEntity.getFollowId()); //아이디로 회원정보 조회하기
+            if(userEntity.isPresent()) {  // 탈퇴한 회원이 아니라면
+                FollowViewDto followViewDto = new FollowViewDto();
+                followViewDto.setId(userEntity.get().getId());
+                followViewDto.setProfileImg(userEntity.get().getProfileImg());
+                followViewDto.setNickname(userEntity.get().getNickname());
+                res.add(followViewDto);
+            }
+        }
+        return res;
+    }
+    @Override
+    public List<FollowViewDto> searchFollower(String id, String keyword) {
+        List<UserFollowEntity> userFollowEntitys = userFollowRepository.findByFollowIdAndUserNicknameContaining(id,keyword);
         List<FollowViewDto> res = new ArrayList<>();
         for(UserFollowEntity userFollowEntity : userFollowEntitys){
             Optional<UserEntity> userEntity = userRepository.findById(userFollowEntity.getUserId()); //아이디로 회원정보 조회하기
