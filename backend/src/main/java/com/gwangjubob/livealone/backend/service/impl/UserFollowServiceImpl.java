@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,6 +49,27 @@ public class UserFollowServiceImpl implements UserFollowService {
         }
         return false;
     }
+
+    @Override
+    public List<String> listFollow(String id) {
+        List<UserFollowEntity> userFollowEntitys = userFollowRepository.findByUserId(id);
+        List<String> res = new ArrayList<>();
+        for(UserFollowEntity userFollowEntity : userFollowEntitys){
+            res.add(userFollowEntity.getFollowId());
+        }
+        return res;
+    }
+
+    @Override
+    public List<String> listFollower(String id) {
+        List<UserFollowEntity> userFollowEntitys = userFollowRepository.findByFollowId(id);
+        List<String> res = new ArrayList<>();
+        for(UserFollowEntity userFollowEntity : userFollowEntitys){
+            res.add(userFollowEntity.getUserId());
+        }
+        return res;
+    }
+
     @Override
     @Transactional
     public boolean deleteFollow(String toId, String fromId) {

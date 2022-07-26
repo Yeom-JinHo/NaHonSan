@@ -8,13 +8,11 @@ import com.gwangjubob.livealone.backend.service.impl.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -66,6 +64,34 @@ public class FeedController {
         }
 
 
+        return new ResponseEntity<>(resultMap,status);
+    }
+    @GetMapping("/userFeed/follow/{id}")
+    public ResponseEntity<?> listFollow(@PathVariable("id")String fromId, HttpServletRequest request){
+        resultMap = new HashMap<>();
+        try{
+            List<String> result = userFollowService.listFollow(fromId);
+            resultMap.put("result",okay);
+            resultMap.put("data",result);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            resultMap.put("result",fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap,status);
+    }
+    @GetMapping("/userFeed/follower/{id}")
+    public ResponseEntity<?> listFollower(@PathVariable("id")String fromId, HttpServletRequest request){
+        resultMap = new HashMap<>();
+        try{
+            List<String> result = userFollowService.listFollower(fromId);
+            resultMap.put("result",okay);
+            resultMap.put("data",result);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            resultMap.put("result",fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
         return new ResponseEntity<>(resultMap,status);
     }
     public String checkToken(HttpServletRequest request){
