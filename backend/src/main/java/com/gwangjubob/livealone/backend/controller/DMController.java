@@ -62,6 +62,7 @@ public class DMController {
         String decodeId = checkToken(request);
         try {
             if(decodeId != null){
+                System.out.println(decodeId);
                 List<DMViewDto> dmViewDtoList =dmService.listDM(decodeId);
                 resultMap.put("message",okay);
                 resultMap.put("data",dmViewDtoList);

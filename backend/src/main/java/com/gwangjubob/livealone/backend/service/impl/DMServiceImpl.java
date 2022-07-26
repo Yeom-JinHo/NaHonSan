@@ -3,6 +3,7 @@ package com.gwangjubob.livealone.backend.service.impl;
 import com.gwangjubob.livealone.backend.domain.entity.DMEntity;
 import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
 import com.gwangjubob.livealone.backend.domain.repository.DMRepository;
+import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.dm.DMSendDto;
 import com.gwangjubob.livealone.backend.dto.dm.DMViewDto;
 import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
@@ -17,11 +18,13 @@ import java.util.List;
 @Service
 public class DMServiceImpl implements DMService {
 	private final DMRepository dmRepository;
+	private final UserRepository userRepository;
 	private final UserServiceImpl userService;
 	@Autowired
-	DMServiceImpl(DMRepository dmRepository,UserServiceImpl userService){
+	DMServiceImpl(DMRepository dmRepository,UserServiceImpl userService,UserRepository userRepository){
 		this.dmRepository = dmRepository;
 		this.userService = userService;
+		this.userRepository = userRepository;
 	}
 
 	@Override
@@ -40,19 +43,21 @@ public class DMServiceImpl implements DMService {
 	public List<DMViewDto> listDM(String id){
 		List<DMViewDto> dmViewDtoList = new ArrayList<>();
 		List<DMEntity> dmEntityList = dmRepository.findListViews(id);
-
 		for(DMEntity dmEntity : dmEntityList){
-			UserInfoDto user = userService.infoUser(dmEntity.getFromUserId());
+			System.out.println("=====start=====");
+			System.out.println(dmEntity.getToUserId().getId());
+			System.out.println(dmEntity.getFromUserId().getId());
+//			UserInfoDto user = userService.infoUser(dmEntity.getFromUserId());
 			DMViewDto dmViewDto = new DMViewDto();
 			dmViewDto.setIdx(dmEntity.getIdx());
-			dmViewDto.setFromId(dmEntity.getFromUserId());
-			dmViewDto.setNickname(user.getNickname());
-			dmViewDto.setToId(dmEntity.getToUserId());
+			dmViewDto.setFromId(dmEntity.getFromUserId().getId());
+			dmViewDto.setNickname(dmEntity.getFromUserId().getNickname());
+			dmViewDto.setToId(dmEntity.getToUserId().getId());
 			dmViewDto.setTime(dmEntity.getTime());
 			dmViewDto.setRead(dmEntity.getRead());
 			dmViewDto.setContent(dmEntity.getContent());
 			dmViewDto.setImage((dmEntity.getImage()));
-			int count = dmRepository.findCount(id,dmEntity.getFromUserId());
+			int count = dmRepository.findCount(id,dmEntity.getFromUserId().getId());
 			dmViewDto.setCount(count);
 			dmViewDtoList.add(dmViewDto);
 		}
@@ -61,7 +66,9 @@ public class DMServiceImpl implements DMService {
 	@Override
 	public List<DMViewDto> listDetailDM(String id, String fromId){
 		List<DMViewDto> dmViewDtoList = new ArrayList<>();
-		List<DMEntity> dmEntityList = dmRepository.findByToUserIdAndFromUserId(id,fromId);
+		UserEntity toUserEntity = userRepository.findById(id).get();
+		UserEntity fromUserEntity = userRepository.findById("ssafy").get();
+		List<DMEntity> dmEntityList = dmRepository.findByToUserIdAndFromUserId(toUserEntity,fromUserEntity);
 
 		for(DMEntity dmEntity : dmEntityList){
 			dmEntity.setRead(true);
@@ -69,21 +76,23 @@ public class DMServiceImpl implements DMService {
 			DMViewDto dmViewDto = new DMViewDto();
 			dmViewDto.setType("from");
 			dmViewDto.setIdx(dmEntity.getIdx());
-			dmViewDto.setFromId(dmEntity.getFromUserId());
-			dmViewDto.setToId(dmEntity.getToUserId());
+			dmViewDto.setFromId(dmEntity.getFromUserId().getId());
+			dmViewDto.setToId(dmEntity.getToUserId().getId());
 			dmViewDto.setTime(dmEntity.getTime());
 			dmViewDto.setRead(dmEntity.getRead());
+			dmViewDto.setNickname(dmEntity.getFromUserId().getNickname());
 			dmViewDto.setContent(dmEntity.getContent());
 			dmViewDto.setImage((dmEntity.getImage()));
 			dmViewDtoList.add(dmViewDto);
 		}
-		dmEntityList = dmRepository.findByToUserIdAndFromUserId(fromId,id);
+		dmEntityList = dmRepository.findByToUserIdAndFromUserId(fromUserEntity,toUserEntity);
 		for(DMEntity dmEntity : dmEntityList){
 			DMViewDto dmViewDto = new DMViewDto();
 			dmViewDto.setType("to");
 			dmViewDto.setIdx(dmEntity.getIdx());
-			dmViewDto.setFromId(dmEntity.getFromUserId());
-			dmViewDto.setToId(dmEntity.getToUserId());
+			dmViewDto.setFromId(dmEntity.getFromUserId().getId());
+			dmViewDto.setToId(dmEntity.getToUserId().getId());
+			dmViewDto.setNickname(dmEntity.getFromUserId().getNickname());
 			dmViewDto.setTime(dmEntity.getTime());
 			dmViewDto.setRead(dmEntity.getRead());
 			dmViewDto.setContent(dmEntity.getContent());
