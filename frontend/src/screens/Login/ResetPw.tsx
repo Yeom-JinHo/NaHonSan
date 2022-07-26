@@ -2,14 +2,17 @@ import React, { useState, useRef } from "react";
 import "./ResetPw.scss";
 import { passwordReg } from "@constants/reg";
 import { useNavigate } from "react-router-dom";
+import { resetPassword } from "@apis/auth";
+import { useAppSelector } from "@store/hooks";
 
 function ResetPw() {
-  const [validPassword, setValidPassword] = useState(false);
-  const [samePassword, setSamePassword] = useState(false);
-  const [password, setPassword] = useState("");
+  const [validPassword, setValidPassword] = useState<boolean>(true);
+  const [samePassword, setSamePassword] = useState<boolean>(true);
 
   const passwordRef = useRef<HTMLInputElement>(null);
   const chkPasswordRef = useRef<HTMLInputElement>(null);
+
+  const id = useAppSelector(state => state.auth.tmpId);
 
   const navigate = useNavigate();
   const chkValidPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,8 +26,17 @@ function ResetPw() {
       );
   };
 
-  const resetPassword = () => {
-    navigate("/login");
+  const onResetPassword = async () => {
+    if (!passwordRef.current?.value) {
+      passwordRef.current?.focus();
+    } else if (!chkPasswordRef.current?.value) {
+      chkPasswordRef.current?.focus();
+    } else if (validPassword && samePassword) {
+      const res = await resetPassword(id, passwordRef.current.value);
+      if (res === "SUCCESS") {
+        navigate("/login");
+      }
+    }
   };
   return (
     <div className="wrapper">
@@ -39,10 +51,7 @@ function ResetPw() {
           <input
             type="password"
             className="form__input fs-15 notoReg password"
-            onChange={e => {
-              chkValidPassword(e);
-              setPassword(e.target.value);
-            }}
+            onChange={chkValidPassword}
             onBlur={chkSamePassword}
             ref={passwordRef}
             placeholder="비밀번호를 입력해주세요."
@@ -73,7 +82,7 @@ function ResetPw() {
           <button
             type="button"
             className="form__btn notoMid fs-16"
-            onClick={resetPassword}
+            onClick={onResetPassword}
           >
             비밀번호 재설정
           </button>

@@ -16,30 +16,10 @@
       line-height: (35px);
     }
   }
-  .social {
-    &__btn {
-      @include btn();
-      & + .social__btn {
-        margin-top: (12px);
-      }
-    }
-    &__img {
-      width: (16px);
-      height: (16px);
-      margin-right: (8px);
-    }
-    .kakao {
-      background-color: $KAKAO_YELLOW;
-    }
-    .naver {
-      background-color: $NAVER;
-      color: $WHITE;
-    }
-    .google {
-      border: 1px solid $GRAY_CB;
-    }
-  }
   .or {
+    width: 329px;
+    overflow: hidden;
+    white-space: nowrap;
     margin: (32px) 0 (20px) 0;
     height: (20px);
     &__line {
@@ -67,6 +47,10 @@
     &__msg {
       margin-bottom: (40px);
       color: $RED;
+    }
+    .dummy {
+      margin-bottom: 40px;
+      height: 12px;
     }
     &__btn {
       margin-bottom: (24px);
@@ -101,30 +85,8 @@
         line-height: vw(35px);
       }
     }
-    .social {
-      &__btn {
-        @include btn();
-        & + .social__btn {
-          margin-top: vw(12px);
-        }
-      }
-      &__img {
-        width: vw(16px);
-        height: vw(16px);
-        margin-right: vw(8px);
-      }
-      .kakao {
-        background-color: $KAKAO_YELLOW;
-      }
-      .naver {
-        background-color: $NAVER;
-        color: $WHITE;
-      }
-      .google {
-        border: 1px solid $GRAY_CB;
-      }
-    }
     .or {
+      width: vw(329px);
       margin: vw(32px) 0 vw(20px) 0;
       height: vw(20px);
       &__line {
@@ -153,6 +115,11 @@
         margin-bottom: vw(40px);
         color: $RED;
       }
+      .dummy {
+        margin-bottom: vw(40px);
+        height: vw(12px);
+      }
+
       &__btn {
         margin-bottom: vw(24px);
         @include btn();
@@ -186,20 +153,8 @@
         line-height: vw-t(35px);
       }
     }
-    .social {
-      &__btn {
-        @include btn();
-        & + .social__btn {
-          margin-top: vw-t(12px);
-        }
-      }
-      &__img {
-        width: vw-t(16px);
-        height: vw-t(16px);
-        margin-right: vw-t(8px);
-      }
-    }
     .or {
+      width: vw-t(329px);
       margin: vw-t(32px) 0 vw-t(20px) 0;
       height: vw-t(20px);
       &__line {
@@ -223,6 +178,10 @@
       }
       &__msg {
         margin-bottom: vw-t(40px);
+      }
+      .dummy {
+        margin-bottom: vw-t(40px);
+        height: vw-t(12px);
       }
       &__btn {
         margin-bottom: vw-t(24px);
@@ -255,20 +214,8 @@
         line-height: vw-p(35px);
       }
     }
-    .social {
-      &__btn {
-        @include btn();
-        & + .social__btn {
-          margin-top: vw-p(12px);
-        }
-      }
-      &__img {
-        width: vw-p(16px);
-        height: vw-p(16px);
-        margin-right: vw-p(8px);
-      }
-    }
     .or {
+      width: vw-p(329px);
       margin: vw-p(32px) 0 vw-p(20px) 0;
       height: vw-p(20px);
       &__line {
@@ -292,6 +239,10 @@
       }
       &__msg {
         margin-bottom: vw-p(40px);
+      }
+      .dummy {
+        margin-bottom: vw-p(40px);
+        height: vw-p(12px);
       }
       &__btn {
         margin-bottom: vw-p(24px);

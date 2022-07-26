@@ -16,7 +16,6 @@ function JoinMore() {
     "기타"
   ];
   const navigate = useNavigate();
-
   const [address, setAddress] = useState("");
   const scriptUrl =
     "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
@@ -74,7 +73,7 @@ function JoinMore() {
           <ul className="categorys-ul flex">
             {categorys.map(category => (
               <li
-                className="categorys-ul__li flex align-center justify-center notoReg fs-11"
+                className="categorys-ul__li flex align-center justify-center notoReg fs-11 ellipsis"
                 key={v4()}
               >
                 {category}
