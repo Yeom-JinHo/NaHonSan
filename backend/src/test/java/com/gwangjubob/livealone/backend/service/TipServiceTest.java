@@ -9,6 +9,7 @@ import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.tip.TipCreateDto;
 import com.gwangjubob.livealone.backend.dto.tip.TipViewDto;
 import com.gwangjubob.livealone.backend.dto.tipcomment.TipCommentCreateDto;
+import com.gwangjubob.livealone.backend.dto.tipcomment.TipCommentUpdateDto;
 import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.mapper.UserInfoMapper;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -90,23 +92,59 @@ public class TipServiceTest {
         String nickname = "비밀번호는 test 입니다.";
         UserEntity user = userRepository.findByNickname(nickname).get();
 
-        TipEntity tip = tipRepository.findByIdx(12).get(); // 게시글
-        Integer upIdx = 3; // 댓글 번호
-        String content = "별말씀을";
+        TipEntity tip = tipRepository.findByIdx(6).get(); // 게시글
+        //Integer upIdx = 3; // 댓글 번호
+        String content = "댓글테스트입니다.";
 
         // when
         TipCommentCreateDto dto = new TipCommentCreateDto();
         dto.setPostIdx(tip.getIdx());
         dto.setContent(content);
-        dto.setUpIdx(upIdx);
 
-        tipCommentService.createTipComment("ssafy", dto);
+        tipCommentService.createTipComment(user.getId(), dto);
 
         // then
-        List<TipCommentEntity> result = tipCommentRepository.findAll();
+//        TipCommentEntity result = tipCommentRepository.findByIdx(13);
 
-        for(TipCommentEntity t : result){
-            System.out.println(t.toString());
+//        System.out.println(result.toString());
+    }
+
+    @Test
+    public void 댓글_대댓글_수정_테스트(){
+        // given
+        String nickname = "비밀번호는 ssafy 입니다.";
+        String content = "댓글 수정 테스트 입니다.222";
+        String bannerImg = "이미지형식";
+        Integer idx = 15;
+        Integer postIdx = 6;
+        Integer upIdx = 0;
+
+        UserEntity user = userRepository.findByNickname(nickname).get();
+        TipEntity tip = tipRepository.findByIdx(postIdx).get();
+        TipCommentEntity tipComment = tipCommentRepository.findByIdx(idx);
+
+
+        // when
+        if(nickname.equals(tipComment.getUser().getNickname())){
+            TipCommentUpdateDto dto = new TipCommentUpdateDto();
+            dto.setContent(content);
+            dto.setBannerImg(bannerImg);
+//            dto.setTime(LocalDate.now());
+            tipComment = TipCommentEntity.builder()
+                    .idx(15)
+                    .user(user)
+                    .tip(tip)
+                    .content(dto.getContent())
+                    .bannerImg(dto.getBannerImg())
+                    .time(tipComment.getTime())
+                    .upIdx(tipComment.getUpIdx())
+                    .build();
+
+            tipCommentRepository.saveAndFlush(tipComment);
         }
+
+        // then
+//        TipCommentEntity result = tipCommentRepository.findByIdx(13);
+//        System.out.println(result.toString());
     }
 }
