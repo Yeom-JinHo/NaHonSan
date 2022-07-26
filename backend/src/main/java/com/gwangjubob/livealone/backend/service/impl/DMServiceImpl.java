@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DMServiceImpl implements DMService {
@@ -29,9 +30,12 @@ public class DMServiceImpl implements DMService {
 
 	@Override
 	public boolean sendDM(DMSendDto dmSendDto) {
+		//2개의 데이터 toId, fromId
+		UserEntity toId = userRepository.findById(dmSendDto.getToId()).get();
+		UserEntity fromId = userRepository.findById(dmSendDto.getFromId()).get();
 		DMEntity dmEntity = DMEntity.builder()
-				.fromUserId(dmSendDto.getFromId())
-				.toUserId(dmSendDto.getToId())
+				.toUserId(toId)
+				.fromUserId(fromId)
 				.content(dmSendDto.getContent())
 				.image(dmSendDto.getImage())
 				.build();
@@ -44,10 +48,6 @@ public class DMServiceImpl implements DMService {
 		List<DMViewDto> dmViewDtoList = new ArrayList<>();
 		List<DMEntity> dmEntityList = dmRepository.findListViews(id);
 		for(DMEntity dmEntity : dmEntityList){
-			System.out.println("=====start=====");
-			System.out.println(dmEntity.getToUserId().getId());
-			System.out.println(dmEntity.getFromUserId().getId());
-//			UserInfoDto user = userService.infoUser(dmEntity.getFromUserId());
 			DMViewDto dmViewDto = new DMViewDto();
 			dmViewDto.setIdx(dmEntity.getIdx());
 			dmViewDto.setFromId(dmEntity.getFromUserId().getId());
