@@ -52,7 +52,6 @@ public class TipController {
     public ResponseEntity<?> viewTip(@PathVariable String category){
         resultMap = new HashMap<>();
 
-        System.out.println(category);
         try{
             List<TipViewDto> list = tipService.viewTip(category); // 카테고리별 게시글 목록 조회
             resultMap.put("data", list);

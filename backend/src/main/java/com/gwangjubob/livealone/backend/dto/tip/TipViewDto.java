@@ -9,8 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 public class TipViewDto {
     private Integer idx;
-    private UserEntity user;
-    private String userId;
+    private String userNickname;
+    private String userProfileImg;
     private String title;
     private String bannerImg;
 

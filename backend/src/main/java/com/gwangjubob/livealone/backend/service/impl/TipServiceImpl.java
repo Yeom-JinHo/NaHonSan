@@ -50,14 +50,14 @@ public class TipServiceImpl implements TipService {
         for(TipEntity t : tipEntity){
             TipViewDto tmp = new TipViewDto();
             tmp.setIdx(t.getIdx());
-            tmp.setUser(t.getUser());
-            tmp.setUserId(t.getUser().getId());
+            tmp.setUserNickname(t.getUser().getNickname());
+            tmp.setUserProfileImg(t.getUser().getProfileImg());
             tmp.setTitle(t.getTitle());
             tmp.setBannerImg(t.getBannerImg());
 
-            tmp.setLikeCnt(0);
-            tmp.setCommentCnt(0);
-            tmp.setViewCnt(0);
+            tmp.setLikeCnt(0); // 좋아요 수 카운트 서비스 또 호출
+            tmp.setCommentCnt(0); // 댓글,대댓글 수 카운트
+            tmp.setViewCnt(0); // 조회 수 카운트
             result.add(tmp);
         }
         return result;
