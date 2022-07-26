@@ -1,5 +1,6 @@
 package com.gwangjubob.livealone.backend.service;
 
+import com.gwangjubob.livealone.backend.dto.feed.FollowViewDto;
 import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
 import com.gwangjubob.livealone.backend.dto.user.UserMoreDTO;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface UserFollowService {
     boolean registFollow(String toId, String fromId);
-    List<String> listFollow(String id);
-    List<String> listFollower(String id);
+    List<FollowViewDto> listFollow(String id);
+    List<FollowViewDto> listFollower(String id);
     boolean deleteFollow(String toId, String fromId);
 }

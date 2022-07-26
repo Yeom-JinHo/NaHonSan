@@ -9,10 +9,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FollowListDto {
-    private String to;
-    private String type;
-    private String number;
+public class FollowViewDto {
+    private String id;
+    private String nickname;
+    private String profileImg;
 }
 
 

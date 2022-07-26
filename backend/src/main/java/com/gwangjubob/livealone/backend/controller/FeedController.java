@@ -1,6 +1,7 @@
 package com.gwangjubob.livealone.backend.controller;
 
 
+import com.gwangjubob.livealone.backend.dto.feed.FollowViewDto;
 import com.gwangjubob.livealone.backend.service.JwtService;
 import com.gwangjubob.livealone.backend.service.UserFollowService;
 import com.gwangjubob.livealone.backend.service.UserService;
@@ -67,10 +68,10 @@ public class FeedController {
         return new ResponseEntity<>(resultMap,status);
     }
     @GetMapping("/userFeed/follow/{id}")
-    public ResponseEntity<?> listFollow(@PathVariable("id")String fromId, HttpServletRequest request){
+    public ResponseEntity<?> listFollow(@PathVariable("id")String fromId){
         resultMap = new HashMap<>();
         try{
-            List<String> result = userFollowService.listFollow(fromId);
+            List<FollowViewDto> result = userFollowService.listFollow(fromId);
             resultMap.put("result",okay);
             resultMap.put("data",result);
             status = HttpStatus.OK;
@@ -81,10 +82,10 @@ public class FeedController {
         return new ResponseEntity<>(resultMap,status);
     }
     @GetMapping("/userFeed/follower/{id}")
-    public ResponseEntity<?> listFollower(@PathVariable("id")String fromId, HttpServletRequest request){
+    public ResponseEntity<?> listFollower(@PathVariable("id")String fromId){
         resultMap = new HashMap<>();
         try{
-            List<String> result = userFollowService.listFollower(fromId);
+            List<FollowViewDto> result = userFollowService.listFollower(fromId);
             resultMap.put("result",okay);
             resultMap.put("data",result);
             status = HttpStatus.OK;
