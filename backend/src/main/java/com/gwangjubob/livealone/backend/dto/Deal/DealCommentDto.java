@@ -10,12 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class DealCommentDto {
-    private String userId;
+    private String userNickname;
     private Integer postIdx;
     private String content;
-    private String category;
     private String bannerImg;
-    private String state;
-    private String area;
-    private Integer view;
 }

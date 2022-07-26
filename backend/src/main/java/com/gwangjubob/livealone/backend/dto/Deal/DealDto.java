@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @AllArgsConstructor
 @Builder
 public class DealDto {
-    private String userId;
+    private String userNickname;
     private String title;
     private String content;
     private String category;

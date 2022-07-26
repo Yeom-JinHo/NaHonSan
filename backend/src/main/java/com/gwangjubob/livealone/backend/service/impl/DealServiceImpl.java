@@ -31,7 +31,7 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public DealDto registDeal(DealDto dealDto) {
-        Optional<UserEntity> optionalUser = userRepository.findById(dealDto.getUserId());
+        Optional<UserEntity> optionalUser = userRepository.findByNickname(dealDto.getUserNickname());
         DealDto data = new DealDto();
         if(optionalUser.isPresent()){
             UserEntity user = optionalUser.get();
@@ -39,7 +39,7 @@ public class DealServiceImpl implements DealService {
             deal.setUser(user);
             dealRepository.save(deal);
             data = dealMapper.toDto(deal);
-            data.setUserId(deal.getUser().getId());
+            data.setUserNickname(deal.getUser().getNickname());
         } else{
             data = null;
         }
