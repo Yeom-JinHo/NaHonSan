@@ -2,6 +2,7 @@ package com.gwangjubob.livealone.backend.controller;
 
 
 import com.gwangjubob.livealone.backend.dto.feed.FollowViewDto;
+import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.service.JwtService;
 import com.gwangjubob.livealone.backend.service.UserFollowService;
 import com.gwangjubob.livealone.backend.service.UserService;
@@ -21,6 +22,7 @@ public class FeedController {
     private static final String okay = "SUCCESS";
     private static final String fail = "FAIL";
     private static final String timeOut = "access-token timeout";
+    private static final String notAllowed = "notAllowed";
     private final UserService userService;
     private final JwtService jwtService;
     private final MailService mailService;
@@ -71,9 +73,14 @@ public class FeedController {
     public ResponseEntity<?> listFollow(@PathVariable("id")String fromId){
         resultMap = new HashMap<>();
         try{
-            List<FollowViewDto> result = userFollowService.listFollow(fromId);
+            UserInfoDto userInfoDto =  userService.infoUser(fromId);
+            if(userInfoDto.getFollowOpen()) {// 대상 id가 팔로우 설정이 되어있다면 조회하기
+                List<FollowViewDto> result = userFollowService.listFollow(fromId);
+                resultMap.put("data",result);
+            }else{
+                resultMap.put("data",notAllowed);
+            }
             resultMap.put("result",okay);
-            resultMap.put("data",result);
             status = HttpStatus.OK;
         }catch (Exception e){
             resultMap.put("result",fail);
@@ -85,9 +92,14 @@ public class FeedController {
     public ResponseEntity<?> listFollower(@PathVariable("id")String fromId){
         resultMap = new HashMap<>();
         try{
-            List<FollowViewDto> result = userFollowService.listFollower(fromId);
+            UserInfoDto userInfoDto =  userService.infoUser(fromId);
+            if(userInfoDto.getFollowerOpen()){// 대상 id가 팔로워 설정이 되어있다면 조회하기
+                List<FollowViewDto> result = userFollowService.listFollower(fromId);
+                resultMap.put("data",result);
+            }else{
+                resultMap.put("data",notAllowed);
+            }
             resultMap.put("result",okay);
-            resultMap.put("data",result);
             status = HttpStatus.OK;
         }catch (Exception e){
             resultMap.put("result",fail);

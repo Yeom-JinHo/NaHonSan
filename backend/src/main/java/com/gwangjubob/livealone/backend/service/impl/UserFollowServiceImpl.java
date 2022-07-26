@@ -60,7 +60,6 @@ public class UserFollowServiceImpl implements UserFollowService {
                 res.add(followViewDto);
             }
         }
-
         return res;
     }
 
