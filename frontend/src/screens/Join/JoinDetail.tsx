@@ -3,14 +3,16 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./JoinDetail.scss";
 import { passwordReg } from "@constants/reg";
-import { useAppSelector } from "@store/hooks";
-import { chkNickNameExist, join } from "@apis/auth";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { chkNickNameExist, join, login } from "@apis/auth";
+import { getUserInfo } from "@store/ducks/auth/authThunk";
 
 type nickNameDupliType = "" | "err" | "success";
 
 function JoinDetail() {
   const userId = useAppSelector(state => state.auth.tmpId);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [validPassword, setValidPassword] = useState(true);
   const [samePassword, setSamePassword] = useState(true);
   const [nickNameDupli, setNickNameDupli] = useState<nickNameDupliType>("");
@@ -40,7 +42,11 @@ function JoinDetail() {
 
     const res = await join(userId, form.password, form.nickName);
     if (res === "SUCCESS") {
-      navigate("/join/welcome");
+      const loginRes = await login(userId, form.password);
+      if (loginRes === "SUCCESS") {
+        dispatch(getUserInfo());
+        navigate("/join/welcome");
+      }
     }
   };
 
