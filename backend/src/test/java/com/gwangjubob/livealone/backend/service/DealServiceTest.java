@@ -7,6 +7,7 @@ import com.gwangjubob.livealone.backend.domain.repository.DealRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.Deal.DealDto;
 import com.gwangjubob.livealone.backend.mapper.DealMapper;
+import jdk.jfr.Category;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,6 +37,7 @@ public class DealServiceTest {
 
     @Test
     public void 꿀딜_게시글_작성(){
+        Map<String, Object> resultMap = new HashMap<>();
         String userId = "test";
         String title = "제목이다.";
         String content = "내용입니다.";
@@ -61,11 +63,12 @@ public class DealServiceTest {
             DealEntity dealEntity =dealRepository.save(deal);
             DealDto dealDto = dealMapper.toDto(dealEntity);
             dealDto.setUserId(deal.getUser().getId());
-            System.out.println(dealDto);
-            System.out.println(okay);
+            resultMap.put("data", dealDto);
+            resultMap.put("message", okay);
         } else{
-            System.out.println(fail);
+            resultMap.put("message", fail);
         }
+        System.out.println(resultMap);
     }
 
     @Test
@@ -75,13 +78,60 @@ public class DealServiceTest {
         Optional<DealEntity> optionalDeal = dealRepository.findById(idx);
         if(optionalDeal.isPresent()){
             DealEntity dealEntity = optionalDeal.get();
-            DealDto deal = dealMapper.toDto(dealEntity);
-            deal.setUserId(dealEntity.getUser().getId());
-            resultMap.put("deal", deal);
-            System.out.println(resultMap);
+            DealDto data = dealMapper.toDto(dealEntity);
+            data.setUserId(dealEntity.getUser().getId());
+            resultMap.put("data", data);
+            resultMap.put("message", okay);
             System.out.println(okay);
         } else{
-            System.out.println(fail);
+            resultMap.put("message", fail);
         }
+        System.out.println(resultMap);
+    }
+
+    @Test
+    public void 꿀딜_게시글_수정(){
+        Map<String, Object> resultMap = new HashMap<>();
+        Integer idx = 10;
+        String title = "update";
+        String content = "update";
+        String category = "update";
+        String bannerImg = "update";
+        String state = "거래중";
+        DealDto dealDto = new DealDto()
+                .builder()
+                .title(title)
+                .content(content)
+                .category(category)
+                .bannerImg(bannerImg)
+                .state(state)
+                .build();
+        Optional<DealEntity> optionalDeal = dealRepository.findById(idx);
+        if(optionalDeal.isPresent()){
+            DealEntity dealEntity = optionalDeal.get();
+            dealMapper.updateFromDto(dealDto, dealEntity);
+            DealEntity deal = dealRepository.save(dealEntity);
+            DealDto data = dealMapper.toDto(deal);
+            resultMap.put("data", data);
+            resultMap.put("message", okay);
+        }else{
+            resultMap.put("message", fail);
+        }
+        System.out.println(resultMap);
+    }
+
+    @Test
+    public void 꿀딜_게시글_삭제(){
+        Map<String, Object> resultMap = new HashMap<>();
+        Integer idx = 10;
+        Optional<DealEntity> optionalDeal = dealRepository.findById(idx);
+        if(optionalDeal.isPresent()) {
+            DealEntity dealEntity = optionalDeal.get();
+            dealRepository.delete(dealEntity);
+            resultMap.put("message", okay);
+        } else{
+            resultMap.put("message", fail);
+        }
+        System.out.println(resultMap);
     }
 }
