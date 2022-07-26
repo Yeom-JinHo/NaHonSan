@@ -67,7 +67,7 @@ public class DMServiceImpl implements DMService {
 	public List<DMViewDto> listDetailDM(String id, String fromId){
 		List<DMViewDto> dmViewDtoList = new ArrayList<>();
 		UserEntity toUserEntity = userRepository.findById(id).get();
-		UserEntity fromUserEntity = userRepository.findById("ssafy").get();
+		UserEntity fromUserEntity = userRepository.findById(fromId).get();
 		List<DMEntity> dmEntityList = dmRepository.findByToUserIdAndFromUserId(toUserEntity,fromUserEntity);
 
 		for(DMEntity dmEntity : dmEntityList){
