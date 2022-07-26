@@ -44,7 +44,7 @@ function JoinDetail() {
     if (res === "SUCCESS") {
       const loginRes = await login(userId, form.password);
       if (loginRes === "SUCCESS") {
-        dispatch(getUserInfo());
+        await dispatch(getUserInfo());
         navigate("/join/welcome");
       }
     }
