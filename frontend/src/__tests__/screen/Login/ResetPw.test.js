@@ -20,7 +20,7 @@ jest.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate
 }));
 
-describe("로그인페이지", () => {
+describe("비밀번호 수정 페이지", () => {
   let passwordInput;
   let chkPasswordInput;
   let resetBtn;
