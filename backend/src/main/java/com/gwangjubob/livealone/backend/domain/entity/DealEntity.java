@@ -26,7 +26,10 @@ public class DealEntity {
     private Integer idx;
 
     @ManyToOne
-    @JoinColumn(name = "user_nickname")
+    @JoinColumns({
+            @JoinColumn(name = "user_nickname", referencedColumnName = "nickname"),
+            @JoinColumn(name = "user_id", referencedColumnName = "id")
+    })
     private UserEntity user;
 
     LocalDateTime time;

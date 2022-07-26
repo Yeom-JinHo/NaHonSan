@@ -21,6 +21,7 @@ public class UserEntity {
     @Id
     private String id;
     private String password;
+    @Column(unique = true)
     private String nickname;
     private String area;
     @Column(name="follow_open")
@@ -53,5 +54,23 @@ public class UserEntity {
         this.nickname = nickname;
     }
 
-
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id='" + id + '\'' +
+                ", password='" + password + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", area='" + area + '\'' +
+                ", followOpen=" + followOpen +
+                ", followerOpen=" + followerOpen +
+                ", likeNotice=" + likeNotice +
+                ", followNotice=" + followNotice +
+                ", commentNotice=" + commentNotice +
+                ", replyNotice=" + replyNotice +
+                ", profileMsg='" + profileMsg + '\'' +
+                ", profileImg='" + profileImg + '\'' +
+                ", social='" + social + '\'' +
+                ", backgroundImg='" + backgroundImg + '\'' +
+                '}';
+    }
 }

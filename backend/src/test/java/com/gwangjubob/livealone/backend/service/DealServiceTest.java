@@ -47,7 +47,7 @@ public class DealServiceTest {
     @Test
     public void 꿀딜_게시글_작성(){
         Map<String, Object> resultMap = new HashMap<>();
-        String userNickname = "test";
+        String userNickname = "비밀번호는 test 입니다.";
         String title = "제목이다.";
         String content = "내용입니다.";
         String category = "주방용품";
@@ -69,7 +69,7 @@ public class DealServiceTest {
                     .view(view).build();
             DealEntity deal = dealMapper.toEntity(input);
             deal.setUser(user);
-            DealEntity dealEntity =dealRepository.save(deal);
+            DealEntity dealEntity = dealRepository.save(deal);
             DealDto dealDto = dealMapper.toDto(dealEntity);
             dealDto.setUserNickname(deal.getUser().getNickname());
             resultMap.put("data", dealDto);
@@ -83,7 +83,7 @@ public class DealServiceTest {
     @Test
     public void 꿀딜_게시글_상세조회(){
         Map<String, Object> resultMap = new HashMap<>();
-        Integer idx = 10;
+        Integer idx = 13;
         Optional<DealEntity> optionalDeal = dealRepository.findById(idx);
         if(optionalDeal.isPresent()){
             DealEntity dealEntity = optionalDeal.get();
@@ -91,7 +91,6 @@ public class DealServiceTest {
             data.setUserNickname(dealEntity.getUser().getNickname());
             resultMap.put("data", data);
             resultMap.put("message", okay);
-            System.out.println(okay);
         } else{
             resultMap.put("message", fail);
         }
@@ -132,7 +131,7 @@ public class DealServiceTest {
     @Test
     public void 꿀딜_게시글_삭제(){
         Map<String, Object> resultMap = new HashMap<>();
-        Integer idx = 10;
+        Integer idx = 13;
         Optional<DealEntity> optionalDeal = dealRepository.findById(idx);
         if(optionalDeal.isPresent()) {
             DealEntity dealEntity = optionalDeal.get();
@@ -158,14 +157,16 @@ public class DealServiceTest {
             UserEntity user = optionalUser.get();
             DealEntity deal = optionalDeal.get();
             DealCommentDto input = DealCommentDto.builder()
-                    .userNickname(userNickname)
                     .content(content)
                     .bannerImg(bannerImg)
                     .build();
             DealCommentEntity inputEntity = dealCommentMapper.toEntity(input);
             inputEntity.setDeal(deal);
+            inputEntity.setUser(user);
             DealCommentEntity dealCommentEntity  = dealCommentRepository.save(inputEntity);
             DealCommentDto data = dealCommentMapper.toDto(dealCommentEntity);
+            data.setPostIdx(deal.getIdx());
+            data.setUserNickname(user.getNickname());
             resultMap.put("data", data);
             resultMap.put("message", okay);
         } else{
@@ -174,5 +175,44 @@ public class DealServiceTest {
         System.out.println(resultMap);
     }
 
+    @Test
+    public void 꿀딜_댓글_수정(){
+        Map<String, Object> resultMap = new HashMap<>();
+        Integer idx = 11;
+        String content = "update";
+        String bannerImg = "update";
+        DealCommentDto dealCommentDto = DealCommentDto
+                .builder()
+                .content(content)
+                .bannerImg(bannerImg)
+                .build();
+        Optional<DealCommentEntity> optionalDealComment = dealCommentRepository.findById(idx);
+        if(optionalDealComment.isPresent()){
+            DealCommentEntity dealCommentEntity = optionalDealComment.get();
+            dealCommentMapper.updateFromDto(dealCommentDto, dealCommentEntity);
+            DealCommentEntity updateDeal = dealCommentRepository.save(dealCommentEntity);
+            DealCommentDto data = dealCommentMapper.toDto(updateDeal);
+            resultMap.put("data", data);
+            resultMap.put("message", okay);
+        }else{
+            resultMap.put("message", fail);
+        }
+        System.out.println(resultMap);
+    }
+
+    @Test
+    public void 꿀딜_댓글_삭제(){
+        Map<String, Object> resultMap = new HashMap<>();
+        Integer idx = 11;
+        Optional<DealCommentEntity> optionalDealComment = dealCommentRepository.findById(idx);
+        if(optionalDealComment.isPresent()){
+            DealCommentEntity dealCommentEntity = optionalDealComment.get();
+            dealCommentRepository.delete(dealCommentEntity);
+            resultMap.put("message", okay);
+        } else{
+            resultMap.put("message", fail);
+        }
+        System.out.println(resultMap);
+    }
 
 }
