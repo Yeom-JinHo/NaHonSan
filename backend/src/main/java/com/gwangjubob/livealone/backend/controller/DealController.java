@@ -92,6 +92,23 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
+    @DeleteMapping("/honeyDeal/{idx}")
+    public ResponseEntity<?> deleteDeal(@PathVariable Integer idx){
+        resultMap = new HashMap<>();
+        try {
+            if(dealService.deleteDeal(idx)){
+                resultMap.put("message", okay);
+            } else{
+                resultMap.put("message", fail);
+            }
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            resultMap.put("message", fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
+
     public String checkToken(HttpServletRequest request){
         String accessToken = request.getHeader("Authorization");
         String decodeId = jwtService.decodeToken(accessToken);

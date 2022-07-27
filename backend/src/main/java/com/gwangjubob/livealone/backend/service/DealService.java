@@ -8,4 +8,6 @@ public interface DealService {
     DealDto viewDetailDeal(Integer idx);
 
     DealDto updateDeal(Integer idx, DealDto DealDto);
+
+    boolean deleteDeal(Integer idx);
 }

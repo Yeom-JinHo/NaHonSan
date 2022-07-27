@@ -73,4 +73,16 @@ public class DealServiceImpl implements DealService {
             return null;
         }
     }
+
+    @Override
+    public boolean deleteDeal(Integer idx) {
+        Optional<DealEntity> optionalDeal = dealRepository.findById(idx);
+        if(optionalDeal.isPresent()){
+            DealEntity deal = optionalDeal.get();
+            dealRepository.delete(deal);
+            return true;
+        } else{
+            return false;
+        }
+    }
 }
