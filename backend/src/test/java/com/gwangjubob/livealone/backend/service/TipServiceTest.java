@@ -341,10 +341,13 @@ public class TipServiceTest {
                 if(tipComment.getUpIdx() != 0){ // 0이 아니면 대댓글이므로 그냥 삭제 가능
                     tipCommentRepository.delete(tipComment);
                 }else{ // 댓글이랑 엮인 대댓글까지 삭제해야함
-                    Optional<TipCommentEntity> upTipComment = tipCommentRepository.findByUpIdx(idx); // 대댓글 조회
-                    TipCommentEntity upTipCommentEntity = upTipComment.get();
+                    Optional<TipCommentEntity> optionalReplyComment = tipCommentRepository.findByUpIdx(idx); // 대댓글 조회
 
-                    tipCommentRepository.delete(upTipCommentEntity); // 대댓글 삭제
+                    if(optionalReplyComment.isPresent()){
+                        TipCommentEntity replyComment = optionalReplyComment.get();
+
+                        tipCommentRepository.delete(replyComment); // 대댓글 삭제
+                    }
                     tipCommentRepository.delete(tipComment); // 댓글 삭제
 
                 }

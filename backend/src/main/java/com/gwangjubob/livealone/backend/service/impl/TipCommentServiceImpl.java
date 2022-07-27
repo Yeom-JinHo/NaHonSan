@@ -94,4 +94,29 @@ public class TipCommentServiceImpl implements TipCommentService {
 
         return result;
     }
+
+    @Override
+    public void deleteTipComment(String decodeId, Integer idx) {
+        UserEntity user = userRepository.findById(decodeId).get();
+        Optional<TipCommentEntity> optionalTipCommentEntity = tipCommentRepository.findByIdx(idx);
+
+        if(optionalTipCommentEntity.isPresent()){
+            TipCommentEntity tipComment = optionalTipCommentEntity.get();
+
+            if(user.getNickname().equals(tipComment.getUser().getNickname())){
+                if(tipComment.getUpIdx() != 0){
+                    tipCommentRepository.delete(tipComment);
+                }else{
+                    Optional<TipCommentEntity> optionalReplyComment = tipCommentRepository.findByUpIdx(idx);
+
+                    if(optionalReplyComment.isPresent()){
+                        TipCommentEntity replyComment = optionalReplyComment.get();
+                        tipCommentRepository.delete(replyComment);
+                    }
+                    tipCommentRepository.delete(tipComment);
+
+                }
+            }
+        }
+    }
 }
