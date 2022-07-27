@@ -1,13 +1,102 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./AccountSettingPage.scss";
 import { Link, useNavigate } from "react-router-dom";
-import ThumDummy from "@images/ThumnailDummy.jpg";
 import UserDummyIcon from "@images/UserDummy.svg";
 import { v4 } from "uuid";
+import ImgResizer from "@components/common/ImgUploader/ImgResizer";
+import { useAppSelector, useAppDispatch } from "@store/hooks";
+import { chkNickNameExist } from "@apis/auth";
+import { setAccount } from "@apis/setAccount";
+import { getUserInfo } from "@store/ducks/auth/authThunk";
 
 function AccountSettingPage() {
-  const [errMsg] = useState(true);
+  // 프로필 설정
+  const imgInput = useRef<HTMLInputElement>(null);
+  const nickNameInput = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [errMsg, setErrMsg] = useState(false);
+  const [isChk, setIsChk] = useState(false);
+  const [sendFile, setSendFile] = useState<File | null>(null);
+  const userInfo = useAppSelector(state => state.auth.userInfo);
+  const [userImg, setUserImg] = useState(UserDummyIcon);
+  const payload: any = {
+    profileImg: userInfo?.profileImg,
+    profileMsg: userInfo?.profileMsg,
+    nickname: userInfo?.nickname,
+    likeNotice: userInfo?.likeNotice,
+    followNotice: userInfo?.followNotice,
+    commentNotice: userInfo?.commentNotice,
+    replyNotice: userInfo?.replyNotice,
+    followOpen: userInfo?.followOpen,
+    followerOpen: userInfo?.followerOpen
+  };
+
+  useEffect(() => {
+    if (userInfo?.profileImg) {
+      setUserImg(`data:image/jpeg;base64,${userInfo?.profileImg}`);
+    }
+  }, []);
+
+  const clickInput = () => {
+    if (imgInput.current) {
+      imgInput.current.click();
+    }
+  };
+
+  const fileread = () => {
+    if (imgInput.current?.files) {
+      const file = imgInput.current.files[0];
+      if (file) {
+        setSendFile(file);
+      }
+    }
+  };
+
+  // function dataURItoBlob(dataURI: string) {
+  //   const byteString = atob(dataURI.split(",")[1]);
+  //   const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+
+  //   const ab = new ArrayBuffer(byteString.length);
+  //   const ia = new Uint8Array(ab);
+
+  //   for (let i = 0; i < byteString.length; i += 1) {
+  //     ia[i] = byteString.charCodeAt(i);
+  //   }
+  //   const blob = new Blob([ab], { type: mimeString });
+
+  //   return blob;
+  // }
+
+  const receiveFile = (data: string) => {
+    if (userInfo) {
+      setUserImg(data);
+      // userInfo.profileImg = data;
+      // console.log(data.replace("data:image/;base64,", ""));
+      // payload.profileImg = dataURItoBlob(data);
+      const incData = data.replace("data:image/jpeg;base64,", "");
+      payload.profileImg = incData;
+    }
+  };
+
+  // 계정 설정
+
+  const nickNameChk = async () => {
+    if (nickNameInput.current?.value === "") {
+      nickNameInput.current.focus();
+      return;
+    }
+
+    const res = await chkNickNameExist(nickNameInput.current?.value as string);
+    if (res === "SUCCESS") {
+      setErrMsg(true);
+      payload.nickname = nickNameInput.current?.value;
+    } else {
+      setErrMsg(false);
+    }
+    setIsChk(true);
+  };
+
   const noti = ["좋아요", "팔로잉", "댓글", "대댓글"];
   const followState = ["팔로우", "팔로잉"];
   const goBack = () => {
@@ -17,34 +106,65 @@ function AccountSettingPage() {
     navigate("/account/withdrawal", { replace: true });
   };
   const [notiList, setNotiList] = useState([
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
+    userInfo?.likeNotice,
+    userInfo?.followNotice,
+    userInfo?.commentNotice,
+    userInfo?.replyNotice,
+    userInfo?.followerOpen,
+    userInfo?.followOpen
   ]);
+
+  const changeSet = async () => {
+    const getInfo = () => {
+      [
+        payload.likeNotice,
+        payload.followNotice,
+        payload.commentNotice,
+        payload.replyNotice,
+        payload.followerOpen,
+        payload.followNotice
+      ] = [
+        notiList[0],
+        notiList[1],
+        notiList[2],
+        notiList[3],
+        notiList[4],
+        notiList[5]
+      ];
+    };
+    await getInfo();
+    const res = await setAccount(payload);
+    if (res === "SUCCESS") {
+      dispatch(getUserInfo());
+      navigate("/userfeed/123");
+    }
+  };
 
   return (
     <div id="accountSetting-page">
+      <input type="file" ref={imgInput} accept="image/*" onChange={fileread} />
       <div className="setprofile notoMid fs-36">
         <div className="setprofile__title">프로필 설정</div>
         <div className="img-container flex column">
-          <div className="back-container flex">
-            <img className="img-container__back" src={ThumDummy} alt="dum" />
-            <p className="img-container__back-add">+</p>
-          </div>
-          <div className="user-container flex">
-            <img
-              className="img-container__user"
-              src={UserDummyIcon}
-              alt="dumm"
+          <button
+            type="button"
+            className="user-container flex"
+            onClick={clickInput}
+          >
+            <img className="img-container__user" src={userImg} alt="dumm" />
+            <p className="img-container__user-add fs-48">+</p>
+          </button>
+          {sendFile ? (
+            <ImgResizer
+              imgfile={sendFile}
+              newImgfile={receiveFile}
+              imgW={300}
+              imgH={300}
             />
-            <p className="img-container__user-add">+</p>
-          </div>
+          ) : null}
         </div>
         <div className="text-wrapper flex column">
-          <p>UserName</p>
+          <p>{userInfo?.nickname}</p>
           <textarea
             className="state notoReg"
             maxLength={100}
@@ -69,12 +189,22 @@ function AccountSettingPage() {
             <div className="main-account__nickname flex">
               <p className="fs-16 notoReg">닉네임</p>
               <div>
-                <input type="text" />
-                {errMsg ? (
-                  <p className="notoReg">중복된 닉네임 입니다.</p>
+                <input type="text" ref={nickNameInput} />
+                {isChk ? (
+                  <p className="notoReg">
+                    {errMsg ? (
+                      <span className="success">사용 가능한 닉네임입니다.</span>
+                    ) : (
+                      <span className="err">중복 된 닉네임입니다.</span>
+                    )}
+                  </p>
                 ) : null}
               </div>
-              <button className="notoMid fs-12" type="button">
+              <button
+                className="notoMid fs-12"
+                type="button"
+                onClick={nickNameChk}
+              >
                 중복확인
               </button>
             </div>
@@ -101,14 +231,11 @@ function AccountSettingPage() {
                   <p className="notoReg fs-14">{title}</p>
                   <button
                     onClick={() => {
-                      setNotiList(
-                        notiList.map((state, num) => {
-                          if (num === idx) {
-                            return !state;
-                          }
-                          return state;
-                        })
-                      );
+                      setNotiList(cur => {
+                        const newArr = [...cur];
+                        newArr[idx] = !newArr[idx];
+                        return newArr;
+                      });
                     }}
                     type="button"
                     className={`main-noti__toggle-btn flex ${
@@ -143,14 +270,11 @@ function AccountSettingPage() {
                   <p className="notoReg fs-14">{title}</p>
                   <button
                     onClick={() => {
-                      setNotiList(
-                        notiList.map((state, num) => {
-                          if (num === idxx) {
-                            return !state;
-                          }
-                          return state;
-                        })
-                      );
+                      setNotiList(cur => {
+                        const newArr = [...cur];
+                        newArr[idxx] = !newArr[idxx];
+                        return newArr;
+                      });
                     }}
                     type="button"
                     className={`main-noti__toggle-btn flex ${
@@ -181,7 +305,11 @@ function AccountSettingPage() {
         </div>
       </div>
       <div className="setaccount-submit flex fs-24 notoMid">
-        <button className="setaccount-submit__submit" type="button">
+        <button
+          className="setaccount-submit__submit"
+          type="button"
+          onClick={changeSet}
+        >
           설정
         </button>
         <button

@@ -1,17 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./UserFeedPage.scss";
-import ThumDummy from "@images/ThumnailDummy.jpg";
 import UserDummyIcon from "@images/UserDummy.svg";
 import SetIcon from "@images/SetIcon.svg";
 import FeedList from "@components/common/UserFeed/FeedList";
 import FollowList from "@components/common/UserFeed/FollowList";
 import getCounts from "@utils/getCounts";
+import BackImgSkeleton from "@components/common/FeedPage/BackImgSkeleton";
 import { Link } from "react-router-dom";
 
 function UserFeedPage() {
   const [tagSwitch, setTagSwitch] = useState(true);
   const [followClick, setFollowClick] = useState(false);
   const [followModal, setFollowModal] = useState("");
+  const [randomBack, setRandomBack] = useState("");
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch("https://picsum.photos/520/200")
+      .then(res => {
+        setRandomBack(res.url);
+      })
+      .then(() => setLoading(false));
+  }, []);
 
   const tagChange = (str: string) => {
     if (str === "tip") {
@@ -32,7 +43,15 @@ function UserFeedPage() {
     <div id="userfeed-page">
       <div className="profile">
         <div className="profile-background flex column">
-          <img src={ThumDummy} alt="Thum" className="profile-background__img" />
+          {isLoading ? (
+            <BackImgSkeleton />
+          ) : (
+            <img
+              src={randomBack}
+              alt="Thum"
+              className="profile-background__img"
+            />
+          )}
         </div>
         <div className="profile-user">
           <img src={UserDummyIcon} alt="User" className="profile-user__img" />
