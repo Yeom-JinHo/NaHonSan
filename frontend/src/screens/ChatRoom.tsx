@@ -5,31 +5,56 @@ import { v4 } from "uuid";
 import "./ChatRoom.scss";
 import UserDummyIcon from "@images/UserDummy.svg";
 import ImgIcon from "@images/ImgIcon.svg";
-import { getDmDetailList } from "@apis/dm";
+import { getDmDetailList, sendDm } from "@apis/dm";
 import loadingSpinner from "@images/LoadingSpinner.svg";
 
 function ChatRoom() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const withId = searchParams.get("with");
+  const withId = searchParams.get("with") as string;
   const [dmList, setDmList] = useState<Array<ChatProps>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [firstLoading, setFirstLoading] = useState(false);
   const [page, setPage] = useState(0);
   const observerTarget = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const getDmList = async () => {
     setIsLoading(true);
     const res = await getDmDetailList(withId as string);
     if (res.message === "SUCCESS") {
-      setFirstLoading(true);
       const dummyTest = res.data.map((dm: ChatProps) => ({
         ...dm,
         content: dm.content + page
       }));
-      setDmList([...dmList, ...dummyTest]);
+      if (!firstLoading) {
+        setFirstLoading(true);
+        setDmList([...dummyTest.reverse()]);
+      } else {
+        setDmList([...dmList, ...dummyTest.reverse()]);
+      }
     }
     setIsLoading(false);
+  };
+
+  const onIntersect = (entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry: IntersectionObserverEntry) => {
+      if (entry.isIntersecting && !isLoading) {
+        setPage(prev => prev + 1);
+      }
+    });
+  };
+
+  const submitDm = async (content: string, image?: string) => {
+    setDmList([{ type: "to", content }, ...dmList]);
+    const res = await sendDm(withId, content, image);
+  };
+
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      submitDm(e.target.value);
+      e.target.value = "";
+    }
   };
   useEffect(() => {
     if (!withId) {
@@ -40,14 +65,6 @@ function ChatRoom() {
   useEffect(() => {
     getDmList();
   }, [page]);
-
-  const onIntersect = (entries: IntersectionObserverEntry[]) => {
-    entries.forEach((entry: IntersectionObserverEntry) => {
-      if (entry.isIntersecting && !isLoading) {
-        setPage(prev => prev + 1);
-      }
-    });
-  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(onIntersect, { threshold: 0.1 });
@@ -106,6 +123,7 @@ function ChatRoom() {
           type="text"
           placeholder="채팅을 입력해주세요."
           className="chat-input notoReg fs-15"
+          onKeyUp={handleKeyUp}
         />
         <footer className="chat-footer">
           <button type="button" className="chat-btn">

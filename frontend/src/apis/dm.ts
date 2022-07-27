@@ -23,3 +23,19 @@ export const getDmDetailList = async (withId: string) => {
   });
   return res.data;
 };
+
+export const sendDm = async (
+  toId: string,
+  content: string | null = null,
+  image: string | null = null
+) => {
+  const accessToken = sessionStorage.getItem("access-token");
+  const res = await API.post(
+    "/dm",
+    { toId, content, image },
+    {
+      headers: { Authorization: `${accessToken}` }
+    }
+  );
+  return res.data;
+};
