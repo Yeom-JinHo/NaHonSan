@@ -11,6 +11,7 @@ import com.gwangjubob.livealone.backend.service.TipCommentService;
 import com.gwangjubob.livealone.backend.service.TipService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;

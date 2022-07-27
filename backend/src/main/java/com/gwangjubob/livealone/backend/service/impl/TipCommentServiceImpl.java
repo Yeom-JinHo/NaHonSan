@@ -34,15 +34,15 @@ public class TipCommentServiceImpl implements TipCommentService {
         UserEntity user = userRepository.findById(decodeId).get();
         TipEntity tip = tipRepository.findByIdx(requestDto.getPostIdx()).get(); // 게시글 정보
 
-//        TipCommentEntity entity = TipCommentEntity.builder()
-//                .user(user)
-//                .tip(tip)
-//                .upIdx(requestDto.getUpIdx())
-//                .content(requestDto.getContent())
-//                .bannerImg(requestDto.getBannerImg())
-//                .build();
-//
-//        tipCommentRepository.save(entity);
+        TipCommentEntity entity = TipCommentEntity.builder()
+                .user(user)
+                .tip(tip)
+                .upIdx(requestDto.getUpIdx())
+                .content(requestDto.getContent())
+                .bannerImg(requestDto.getBannerImg())
+                .build();
+
+        tipCommentRepository.save(entity);
     }
 
     @Override

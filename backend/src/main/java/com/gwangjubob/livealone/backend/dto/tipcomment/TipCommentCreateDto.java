@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 public class TipCommentCreateDto {
     private String userNickname;
     private Integer postIdx;
+    private Integer upIdx;
     private String content;
     private byte[] bannerImg;
 }
