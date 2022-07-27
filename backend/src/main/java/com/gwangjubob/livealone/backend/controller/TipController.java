@@ -73,6 +73,25 @@ public class TipController {
          return new ResponseEntity<>(resultMap, status);
     }
 
+    @DeleteMapping("/honeyTip/{idx}")
+    public ResponseEntity<?> daleteTip(HttpServletRequest request, @PathVariable Integer idx){
+        resultMap = new HashMap<>();
+        String decodeId = checkToken(request);
+
+        if(!decodeId.equals("timeout")){
+            try{
+                tipService.deleteTip(decodeId, idx); // 게시글 삭제 서비스 호출
+                resultMap.put("message", okay);
+                status = HttpStatus.OK;
+            }catch (Exception e){
+                resultMap.put("message",fail);
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+        }
+
+        return new ResponseEntity<>(resultMap, status);
+    }
+
     @PostMapping("/honeyTip/comment")
     public ResponseEntity<?> createTipComment(HttpServletRequest request, @RequestBody TipCommentCreateDto tipCommentCreateDto){
         resultMap = new HashMap<>();

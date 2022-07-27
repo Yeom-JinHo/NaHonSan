@@ -10,4 +10,5 @@ public interface TipService {
     void createTip(String decodeId, TipCreateDto tipCreateDto);
     List<TipViewDto> viewTip(String category);
     void updateTip(String decodeId, TipUpdateDto tipUpdateDto, Integer idx);
+    void deleteTip(String decodeId, Integer idx);
 }

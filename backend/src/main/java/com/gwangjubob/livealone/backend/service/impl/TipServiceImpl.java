@@ -100,4 +100,13 @@ public class TipServiceImpl implements TipService {
             tipRepository.save(updateEntity);
         }
     }
+
+    @Override
+    public void deleteTip(String decodeId, Integer idx) {
+        TipEntity tip = tipRepository.findByIdx(idx).get();
+        UserEntity user = userRepository.findById(decodeId).get();
+        if(user.getNickname().equals(tip.getUser().getNickname())){
+            tipRepository.delete(tip);
+        }
+    }
 }
