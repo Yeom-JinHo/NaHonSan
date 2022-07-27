@@ -12,6 +12,7 @@ import com.gwangjubob.livealone.backend.dto.tip.TipUpdateDto;
 import com.gwangjubob.livealone.backend.dto.tip.TipViewDto;
 import com.gwangjubob.livealone.backend.dto.tipcomment.TipCommentCreateDto;
 import com.gwangjubob.livealone.backend.dto.tipcomment.TipCommentUpdateDto;
+import com.gwangjubob.livealone.backend.dto.tipcomment.TipCommentViewDto;
 import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.mapper.TipCreateMapper;
 import com.gwangjubob.livealone.backend.mapper.TipDetailViewMapper;
@@ -120,7 +121,7 @@ public class TipServiceTest {
     @Test
     public void 게시글_상세_조회_테스트() {
         // given
-        Integer idx = 36;
+        Integer idx = 33;
 
         Optional<TipEntity> testTip = tipRepository.findByIdx(idx);
 
@@ -132,6 +133,27 @@ public class TipServiceTest {
 
             // then
             System.out.println(tipDto.toString());
+
+            // 게시글 관련된 댓글 조회
+            List<TipCommentEntity> tipCommentEntity = tipCommentRepository.findByTip(tipEntity);
+            List<TipCommentViewDto> result = new ArrayList<>();
+
+            for(TipCommentEntity t : tipCommentEntity){
+                TipCommentViewDto dto = TipCommentViewDto.builder()
+                        .idx(t.getIdx())
+                        .userProfileImg(t.getUser().getProfileImg())
+                        .userNickname(t.getUser().getNickname())
+                        .content(t.getContent())
+                        .bannerImg(t.getBannerImg())
+                        .time(t.getTime())
+                        .build();
+
+                result.add(dto);
+            }
+
+            for(TipCommentViewDto t : result){
+                System.out.println(t.toString());
+            }
         }
 
     }

@@ -18,7 +18,6 @@ import java.time.LocalDate;
 public class TipCommentServiceImpl implements TipCommentService {
 
     private UserRepository userRepository;
-
     private TipCommentRepository tipCommentRepository;
     private TipRepository tipRepository;
 
