@@ -146,6 +146,14 @@ public class UserFeedServiceTest {
 
         //when
         UserInfoDto userInfoDto = userService.infoUser(id);
+        int followerCnt = userFeedRepository.countByFollowId(id);
+        int followCnt = userFeedRepository.countByUserId(id);
+
+        //then
+        System.out.println(userInfoDto.toString());
+        System.out.println("followCnt : "+ followCnt);
+        System.out.println("followerCnt : "+ followerCnt);
+
 
 
     }

@@ -2,6 +2,7 @@ package com.gwangjubob.livealone.backend.controller;
 
 
 import com.gwangjubob.livealone.backend.dto.feed.FollowViewDto;
+import com.gwangjubob.livealone.backend.dto.feed.ProfileViewDto;
 import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.service.JwtService;
 import com.gwangjubob.livealone.backend.service.UserFeedService;
@@ -129,7 +130,6 @@ public class FeedController {
     }
     @GetMapping("/userFeed/follower/search/{id}")
     public ResponseEntity<?> searchFollower(@PathVariable("id")String fromId, @RequestParam("keyword") String keyword){
-        System.out.println(keyword);
         resultMap = new HashMap<>();
         try{
             UserInfoDto userInfoDto =  userService.infoUser(fromId);
@@ -141,6 +141,20 @@ public class FeedController {
             }
             resultMap.put("result",okay);
             status = HttpStatus.OK;
+        }catch (Exception e){
+            resultMap.put("result",fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap,status);
+    }
+    @GetMapping("/userFeed/profile/{id}")
+    public ResponseEntity<?> feedProfile(@PathVariable("id")String fromId){
+        resultMap = new HashMap<>();
+        try{
+                ProfileViewDto result = userFeedService.feedProfile(fromId);
+                resultMap.put("data",result);
+                resultMap.put("result",okay);
+                status = HttpStatus.OK;
         }catch (Exception e){
             resultMap.put("result",fail);
             status = HttpStatus.INTERNAL_SERVER_ERROR;

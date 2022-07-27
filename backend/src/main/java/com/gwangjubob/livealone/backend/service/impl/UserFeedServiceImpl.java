@@ -6,6 +6,7 @@ import com.gwangjubob.livealone.backend.domain.repository.UserCategoryRepository
 import com.gwangjubob.livealone.backend.domain.repository.UserFeedRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.feed.FollowViewDto;
+import com.gwangjubob.livealone.backend.dto.feed.ProfileViewDto;
 import com.gwangjubob.livealone.backend.mapper.UserInfoMapper;
 import com.gwangjubob.livealone.backend.service.UserFeedService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,6 +115,23 @@ public class UserFeedServiceImpl implements UserFeedService {
             }
         }
         return res;
+    }
+
+    @Override
+    public ProfileViewDto feedProfile(String id) {
+        ProfileViewDto profileViewDto = new ProfileViewDto();
+        Optional<UserEntity> userInfo = userRepository.findById(id);
+        int followerCnt = userFeedRepository.countByFollowId(id);
+        int followCnt = userFeedRepository.countByUserId(id);
+        if(userInfo.isPresent()){
+            profileViewDto.setId(userInfo.get().getId());
+            profileViewDto.setNickname(userInfo.get().getNickname());
+            profileViewDto.setProfileImg(userInfo.get().getProfileImg());
+            profileViewDto.setProfileMsg(userInfo.get().getProfileMsg());
+            profileViewDto.setFollowCount(followCnt);
+            profileViewDto.setFollowerCount(followerCnt);
+        }
+        return profileViewDto;
     }
 
     @Override
