@@ -16,9 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class DealServiceImpl implements DealService {
@@ -61,7 +60,10 @@ public class DealServiceImpl implements DealService {
         DealDto data = new DealDto();
         if(optionalDeal.isPresent()){
             DealEntity deal = optionalDeal.get();
+            List<DealCommentEntity> comments = dealCommentRepository.findByDeal(deal);
+            List<DealCommentDto> commentDto = dealCommentMapper.toDtoList(comments);
             data = dealMapper.toDto(deal);
+            data.setComments(commentDto);
             return data;
         } else{
             data = null;
@@ -76,6 +78,7 @@ public class DealServiceImpl implements DealService {
         if(optionalDeal.isPresent()){
             DealEntity deal = optionalDeal.get();
             dealMapper.updateFromDto(dealDto, deal);
+            deal.setUpdateTime(LocalDateTime.now());
             DealEntity res =dealRepository.save(deal);
             data = dealMapper.toDto(res);
             return data;

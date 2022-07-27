@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class DealCommentDto {
     private String userNickname;
     private Integer postIdx;
+    private Integer upIdx;
     private String content;
     private byte[] bannerImg;
+
 }
