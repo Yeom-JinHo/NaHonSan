@@ -9,10 +9,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FollowViewDto {
+public class ProfileViewDto {
     private String id;
     private String nickname;
+    private String profileMsg;
     private byte[] profileImg;
+    private int followCount;
+    private int followerCount;
 
 
 }

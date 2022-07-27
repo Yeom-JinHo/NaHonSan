@@ -132,7 +132,6 @@ public class UserServiceTest {
         Boolean replyNotice = true;
         String profileMsg = "test";
         byte[] profileImg = null;
-        String backgroundImg = "test";
         UserInfoDto userInfoDto = UserInfoDto.builder()
                 .id(id)
                 .nickname(nickname)
