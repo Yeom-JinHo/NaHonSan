@@ -58,4 +58,19 @@ public class DealServiceImpl implements DealService {
             return null;
         }
     }
+
+    @Override
+    public DealDto updateDeal(Integer idx, DealDto dealDto) {
+        Optional<DealEntity> optionalDeal = dealRepository.findById(idx);
+        DealDto data = new DealDto();
+        if(optionalDeal.isPresent()){
+            DealEntity deal = optionalDeal.get();
+            dealMapper.updateFromDto(dealDto, deal);
+            DealEntity res =dealRepository.save(deal);
+            data = dealMapper.toDto(res);
+            return data;
+        } else {
+            return null;
+        }
+    }
 }

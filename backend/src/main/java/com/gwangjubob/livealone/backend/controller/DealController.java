@@ -54,7 +54,7 @@ public class DealController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
-    @GetMapping
+    @GetMapping("/honeyDeal/{idx}")
     public ResponseEntity<?> viewDetailDeal(@PathVariable Integer idx){
         resultMap = new HashMap<>();
         try {
@@ -72,6 +72,26 @@ public class DealController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
+
+    @PutMapping("/honeyDeal/{idx}")
+    public ResponseEntity<?> updateDeal(@PathVariable Integer idx, @RequestBody DealDto dealDto){
+        resultMap = new HashMap<>();
+        try {
+            DealDto data = dealService.updateDeal(idx, dealDto);
+            if(data != null){
+                resultMap.put("data", data);
+                resultMap.put("message", okay);
+            } else{
+                resultMap.put("message", okay);
+            }
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            resultMap.put("message", okay);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
+
     public String checkToken(HttpServletRequest request){
         String accessToken = request.getHeader("Authorization");
         String decodeId = jwtService.decodeToken(accessToken);
