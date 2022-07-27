@@ -22,5 +22,4 @@ public class UserInfoDto {
     private Boolean replyNotice;
     private String profileMsg;
     private byte[] profileImg;
-    private String backgroundImg;
 }
