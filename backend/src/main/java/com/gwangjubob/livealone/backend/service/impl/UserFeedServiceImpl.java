@@ -187,8 +187,12 @@ public class UserFeedServiceImpl implements UserFeedService {
     public List<PopularFollowDto> popularFollower() {
         List<PopularFollowEntity> userFollowEntities = userFeedRepository.popularFollowerList();//조회
         List<PopularFollowDto> popularFollowDtoList = new ArrayList<>();
+        int maxCnt = 0;
         //when
         for (PopularFollowEntity userFollowEntity : userFollowEntities){
+            if(maxCnt++ == 20){
+                break;
+            }
             UserEntity userEntity = userRepository.findById(userFollowEntity.getFollowId()).get();
             PopularFollowDto popularFollowDto = new PopularFollowDto();
             popularFollowDto.setFollow_id(userEntity.getId());
@@ -196,6 +200,7 @@ public class UserFeedServiceImpl implements UserFeedService {
             popularFollowDto.setCnt(userFollowEntity.getCnt());
             popularFollowDto.setProfileImg(userEntity.getProfileImg());
             popularFollowDtoList.add(popularFollowDto);
+
         }
         return popularFollowDtoList;
     }
