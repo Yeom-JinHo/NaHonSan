@@ -117,11 +117,18 @@
 //     }
 //   }
 // }
-
+.read {
+  color: $SKELETON;
+  .letter__count {
+    visibility: hidden;
+  }
+}
 #letter {
   width: (329px);
   height: (100px);
   border-bottom: 1px solid $GRAY_9E;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
 
   .letter {

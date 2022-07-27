@@ -26,6 +26,7 @@ function Letters() {
           {dmList.length !== 0 ? (
             dmList.map((dm: LetterProps) => (
               <Letter
+                toId={dm.toId}
                 fromId={dm.fromId}
                 content={dm.content}
                 read={dm.read}

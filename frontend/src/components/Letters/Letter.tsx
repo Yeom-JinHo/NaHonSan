@@ -3,8 +3,10 @@ import "./Letter.scss";
 import UserDummyIcon from "@images/UserDummy.svg";
 import { Link } from "react-router-dom";
 import elapsedTime from "@utils/elapsedTime";
+import { useAppSelector } from "@store/hooks";
 
 export type LetterProps = {
+  toId: string;
   fromId: string;
   content: string;
   read: boolean;
@@ -13,16 +15,28 @@ export type LetterProps = {
   nickname: string;
 };
 
-function Letter({ fromId, content, read, count, time, nickname }: LetterProps) {
+function Letter({
+  fromId,
+  content,
+  toId,
+  read,
+  count,
+  time,
+  nickname
+}: LetterProps) {
   const getCount = (value: number) => {
     if (value > 9) {
       return "9+";
     }
     return value;
   };
+  const userId = useAppSelector(state => state.auth.userInfo?.id);
+
+  const withId = userId === fromId ? toId : fromId;
+
   return (
-    <Link to={`detail?from=${fromId}`}>
-      <div id="letter" className="flex align-center">
+    <Link to={`detail?with=${withId}`}>
+      <div id="letter" className={read ? "read" : ""}>
         <img src={UserDummyIcon} alt="유저더미" className="letter__user-img" />
         <div className="flex column main-content ellipsis">
           <p className="letter__user-nick-name notoReg fs-12">{nickname}</p>
