@@ -280,6 +280,7 @@ public class UserServiceTest {
             }
             UserMoreDTO data = UserMoreDTO
                     .builder()
+                    .userId(user.getId())
                     .area(user.getArea())
                     .categorys(categorys)
                     .build();
