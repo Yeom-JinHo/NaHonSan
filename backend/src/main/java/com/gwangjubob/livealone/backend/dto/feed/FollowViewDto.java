@@ -12,7 +12,7 @@ import lombok.Setter;
 public class FollowViewDto {
     private String id;
     private String nickname;
-    private String profileImg;
+    private byte[] profileImg;
 
 
 }

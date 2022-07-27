@@ -128,11 +128,11 @@ public class TipServiceTest {
     public void 게시글_수정_테스트() {
         // given
         String testNickname = "비밀번호는 ssafy 입니다.";
-        Integer testIdx = 22;
+        Integer testIdx = 26;
 
         // 수정할 수 있는데이터
-        String category = "item";
-        String title = "꿀템수우ㅜ우우우정제목만";
+        String category = null;
+        String title = "꿀템수정제목만";
         String content = null;
         String bannerImg = null;
 

@@ -130,7 +130,7 @@ public class UserServiceTest {
         Boolean commentNotice = true;
         Boolean replyNotice = true;
         String profileMsg = "test";
-        String profileImg = "test";
+        byte[] profileImg = null;
         String backgroundImg = "test";
         UserInfoDto userInfoDto = UserInfoDto.builder()
                 .id(id)
