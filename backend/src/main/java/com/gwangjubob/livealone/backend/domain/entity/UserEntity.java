@@ -41,11 +41,11 @@ public class UserEntity implements Serializable {
     private Boolean replyNotice;
     @Column(name="profile_msg")
     private String profileMsg;
+
+    @Lob
     @Column(name="profile_img")
-    private String profileImg;
+    private byte[] profileImg;
     private String social;
-    @Column(name="background_img")
-    private String backgroundImg;
 
 //    @OneToMany(mappedBy = "user")
 //    private List<NoticeEntity> notices = new ArrayList<>();
@@ -73,7 +73,6 @@ public class UserEntity implements Serializable {
                 ", profileMsg='" + profileMsg + '\'' +
                 ", profileImg='" + profileImg + '\'' +
                 ", social='" + social + '\'' +
-                ", backgroundImg='" + backgroundImg + '\'' +
                 '}';
     }
 }

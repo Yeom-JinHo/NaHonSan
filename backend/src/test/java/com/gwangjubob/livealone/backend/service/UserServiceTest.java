@@ -131,7 +131,7 @@ public class UserServiceTest {
         Boolean commentNotice = true;
         Boolean replyNotice = true;
         String profileMsg = "test";
-        String profileImg = "test";
+        byte[] profileImg = null;
         String backgroundImg = "test";
         UserInfoDto userInfoDto = UserInfoDto.builder()
                 .id(id)
@@ -145,7 +145,6 @@ public class UserServiceTest {
                 .replyNotice(replyNotice)
                 .profileMsg(profileMsg)
                 .profileImg(profileImg)
-                .backgroundImg(backgroundImg)
                 .build();
         Optional<UserEntity> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()){
