@@ -8,10 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TipCommentRepository extends JpaRepository<TipCommentEntity, Integer> {
+
     Optional<TipCommentEntity> findByIdx(Integer idx);
     void deleteByIdx(Integer idx);
 
     List<TipCommentEntity> findByTip(TipEntity tipEntity);
 
-    Optional<TipCommentEntity> findByUpIdx(Integer idx);
+    List<TipCommentEntity> findByUpIdx(Integer idx);
 }

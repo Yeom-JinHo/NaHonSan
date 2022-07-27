@@ -107,11 +107,12 @@ public class TipCommentServiceImpl implements TipCommentService {
                 if(tipComment.getUpIdx() != 0){
                     tipCommentRepository.delete(tipComment);
                 }else{
-                    Optional<TipCommentEntity> optionalReplyComment = tipCommentRepository.findByUpIdx(idx);
+                    List<TipCommentEntity> replyCommentList = tipCommentRepository.findByUpIdx(idx);
 
-                    if(optionalReplyComment.isPresent()){
-                        TipCommentEntity replyComment = optionalReplyComment.get();
-                        tipCommentRepository.delete(replyComment);
+                    if(!replyCommentList.isEmpty()){
+                        for(TipCommentEntity replyComment : replyCommentList){
+                            tipCommentRepository.delete(replyComment);
+                        }
                     }
                     tipCommentRepository.delete(tipComment);
 
