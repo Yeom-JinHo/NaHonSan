@@ -39,13 +39,11 @@ public class TipCommentEntity {
     @Column(name = "banner_img")
     @Lob
     private byte[] bannerImg;
-    private Integer like;
-    private Integer comment;
 
     private LocalDateTime time;
 
     @Column(name = "update_time")
-    private LocalDateTime updatetime;
+    private LocalDateTime updateTime;
 
 
 }
