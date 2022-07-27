@@ -49,24 +49,24 @@ public class DMServiceTest {
         this.mailRepository = mailRepository;
     }
 
-    @Test
-    public void 메시지_전송_성공_테스트() {
-        // given
-        final DMEntity dmEntity = DMEntity.builder()
-                .fromUserId("test")
-                .toUserId("ssafy")
-                .content("test")
-                .build();
-
-        // when
-        final DMEntity res = dmRepository.save(dmEntity);
-
-        // then
-        Assertions.assertThat(res.getIdx()).isNotNull();
-        Assertions.assertThat(res.getFromUserId()).isEqualTo(dmEntity.getFromUserId());
-        Assertions.assertThat(res.getToUserId()).isEqualTo(dmEntity.getToUserId());
-        Assertions.assertThat(res.getContent()).isEqualTo(dmEntity.getContent());
-    }
+//    @Test
+//    public void 메시지_전송_성공_테스트() {
+//        // given
+//        final DMEntity dmEntity = DMEntity.builder()
+//                .fromUserId("test")
+//                .toUserId("ssafy")
+//                .content("test")
+//                .build();
+//
+//        // when
+//        final DMEntity res = dmRepository.save(dmEntity);
+//
+//        // then
+//        Assertions.assertThat(res.getIdx()).isNotNull();
+//        Assertions.assertThat(res.getFromUserId()).isEqualTo(dmEntity.getFromUserId());
+//        Assertions.assertThat(res.getToUserId()).isEqualTo(dmEntity.getToUserId());
+//        Assertions.assertThat(res.getContent()).isEqualTo(dmEntity.getContent());
+//    }
     @Test
     public void 메시지_리스트_조회_테스트(){
         // given

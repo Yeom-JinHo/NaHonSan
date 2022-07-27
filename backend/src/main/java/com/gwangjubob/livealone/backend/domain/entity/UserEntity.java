@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -42,10 +43,9 @@ public class UserEntity implements Serializable {
     @Column(name="profile_msg")
     private String profileMsg;
     @Column(name="profile_img")
-    private String profileImg;
+    @Lob
+    private byte[] profileImg;
     private String social;
-    @Column(name="background_img")
-    private String backgroundImg;
 
 //    @OneToMany(mappedBy = "user")
 //    private List<NoticeEntity> notices = new ArrayList<>();
@@ -71,9 +71,8 @@ public class UserEntity implements Serializable {
                 ", commentNotice=" + commentNotice +
                 ", replyNotice=" + replyNotice +
                 ", profileMsg='" + profileMsg + '\'' +
-                ", profileImg='" + profileImg + '\'' +
+                ", profileImg=" + Arrays.toString(profileImg) +
                 ", social='" + social + '\'' +
-                ", backgroundImg='" + backgroundImg + '\'' +
                 '}';
     }
 }
