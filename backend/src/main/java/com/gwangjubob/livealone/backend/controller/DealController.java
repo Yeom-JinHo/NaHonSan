@@ -7,10 +7,9 @@ import com.gwangjubob.livealone.backend.service.impl.DealServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +54,24 @@ public class DealController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
-
+    @GetMapping
+    public ResponseEntity<?> viewDetailDeal(@PathVariable Integer idx){
+        resultMap = new HashMap<>();
+        try {
+            DealDto data = dealService.viewDetailDeal(idx);
+            if(data != null){
+                resultMap.put("data", data);
+                resultMap.put("message", okay);
+            } else{
+                resultMap.put("message", fail);
+            }
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            resultMap.put("message", fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
     public String checkToken(HttpServletRequest request){
         String accessToken = request.getHeader("Authorization");
         String decodeId = jwtService.decodeToken(accessToken);

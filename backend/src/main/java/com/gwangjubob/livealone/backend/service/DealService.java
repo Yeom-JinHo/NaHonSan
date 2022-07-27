@@ -5,4 +5,5 @@ import com.gwangjubob.livealone.backend.dto.Deal.DealDto;
 
 public interface DealService {
     DealDto registDeal(DealDto dealDto);
+    DealDto viewDetailDeal(Integer idx);
 }
