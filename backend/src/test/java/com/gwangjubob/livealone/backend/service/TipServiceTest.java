@@ -201,27 +201,68 @@ public class TipServiceTest {
     }
 
     @Test
-    public void 댓글_대댓글_등록_테스트(){
+    public void 댓글_등록_테스트(){
         // given
-        String nickname = "비밀번호는 ssafy 입니다.";
+        String nickname = "비밀번호는 test 입니다.";
         UserEntity user = userRepository.findByNickname(nickname).get();
 
-        TipEntity tip = tipRepository.findByIdx(22).get(); // 게시글
-        Integer upIdx = 19; // 댓글 번호
-        String content = "대댓글테스트.";
+        String content = "댓글 테스트222";
+        byte[] bannerImg = null;
 
-        // when
-        TipCommentCreateDto dto = new TipCommentCreateDto();
-        dto.setUpIdx(upIdx);
-        dto.setPostIdx(tip.getIdx());
-        dto.setContent(content);
+        Integer postIdx = 33;
+        Optional<TipEntity> optionalTipEntity = tipRepository.findByIdx(postIdx);
 
-        tipCommentService.createTipComment(user.getId(), dto);
+        if(optionalTipEntity.isPresent()){
+            TipEntity tip = optionalTipEntity.get(); // 게시글
 
-        // then
-//        TipCommentEntity result = tipCommentRepository.findByIdx(13);
+            TipCommentCreateDto dto = TipCommentCreateDto.builder()
+                    .content(content)
+                    .bannerImg(bannerImg)
+                    .build();
 
-//        System.out.println(result.toString());
+            TipCommentEntity entity = TipCommentEntity.builder()
+                    .user(user)
+                    .tip(tip)
+                    .content(dto.getContent())
+                    .bannerImg(dto.getBannerImg())
+                    .build();
+
+            tipCommentRepository.save(entity);
+        }
+    }
+
+    @Test
+    public void 대댓글_등록_테스트(){
+        // given
+        int upIdx = 23;
+
+        String testNickname = "비밀번호는 ssafy 입니다.";
+        UserEntity user = userRepository.findByNickname(testNickname).get();
+
+        String content = "대댓글테스트";
+        byte[] bannerImg = null;
+
+        int postIdx = 33;
+        Optional<TipEntity> optionalTipEntity = tipRepository.findByIdx(postIdx);
+
+        if(optionalTipEntity.isPresent()){
+            TipEntity tip = optionalTipEntity.get();
+
+            TipCommentCreateDto dto = TipCommentCreateDto.builder()
+                    .content(content)
+                    .bannerImg(bannerImg)
+                    .build();
+
+            TipCommentEntity entity = TipCommentEntity.builder()
+                    .user(user)
+                    .upIdx(upIdx)
+                    .tip(tip)
+                    .content(dto.getContent())
+                    .bannerImg(dto.getBannerImg())
+                    .build();
+
+            tipCommentRepository.save(entity);
+        }
     }
 
     @Test
