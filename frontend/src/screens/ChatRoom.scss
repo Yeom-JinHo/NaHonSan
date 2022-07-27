@@ -168,6 +168,24 @@
 
   border: 1px solid $GRAY_DB;
   border-radius: (20px);
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  .spinner-wrrapper {
+    width: 100%;
+    justify-content: center;
+  }
+  .loading-spinner {
+    width: (28px);
+    height: (28px);
+    animation: spin 1s linear infinite;
+  }
   .chat-room {
     &__user-img {
       margin-right: (8px);
@@ -218,6 +236,12 @@
     padding: vw(48px) vw(72px);
 
     border-radius: vw(20px);
+
+    .loading-spinner {
+      width: vw(28px);
+      height: vw(28px);
+    }
+
     .chat-room {
       &__user-img {
         margin-right: vw(8px);
@@ -255,6 +279,12 @@
     padding: vw-t(48px) vw-t(72px);
 
     border-radius: vw-t(20px);
+
+    .loading-spinner {
+      width: vw-t(28px);
+      height: vw-t(28px);
+    }
+
     .chat-room {
       &__user-img {
         margin-right: vw-t(8px);
@@ -290,6 +320,11 @@
     margin-top: vw-p(22px);
     padding: 0;
     border: none;
+
+    .loading-spinner {
+      width: vw-p(28px);
+      height: vw-p(28px);
+    }
 
     .chat-room {
       &__user-img {
