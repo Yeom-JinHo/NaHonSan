@@ -13,12 +13,15 @@ function AccountSettingPage() {
   // 프로필 설정
   const imgInput = useRef<HTMLInputElement>(null);
   const nickNameInput = useRef<HTMLInputElement>(null);
+  const textRef = useRef<HTMLTextAreaElement>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [errMsg, setErrMsg] = useState(false);
   const [isChk, setIsChk] = useState(false);
-  const [sendFile, setSendFile] = useState<File | null>(null);
   const userInfo = useAppSelector(state => state.auth.userInfo);
+  const [tmpNickName, setTmpNickName] = useState(userInfo?.nickname);
+  const [tmpText, setTmpText] = useState(userInfo?.profileMsg);
+  const [sendFile, setSendFile] = useState<File | null>(null);
   const [userImg, setUserImg] = useState(UserDummyIcon);
   const payload: any = {
     profileImg: userInfo?.profileImg,
@@ -79,6 +82,10 @@ function AccountSettingPage() {
     }
   };
 
+  const handleText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTmpText(e.target.value);
+  };
+
   // 계정 설정
 
   const nickNameChk = async () => {
@@ -88,13 +95,14 @@ function AccountSettingPage() {
     }
 
     const res = await chkNickNameExist(nickNameInput.current?.value as string);
+    await setIsChk(true);
     if (res === "SUCCESS") {
-      setErrMsg(true);
-      payload.nickname = nickNameInput.current?.value;
+      await setErrMsg(true);
     } else {
       setErrMsg(false);
+      return;
     }
-    setIsChk(true);
+    setTmpNickName(nickNameInput.current?.value);
   };
 
   const noti = ["좋아요", "팔로잉", "댓글", "대댓글"];
@@ -115,28 +123,28 @@ function AccountSettingPage() {
   ]);
 
   const changeSet = async () => {
-    const getInfo = () => {
-      [
-        payload.likeNotice,
-        payload.followNotice,
-        payload.commentNotice,
-        payload.replyNotice,
-        payload.followerOpen,
-        payload.followNotice
-      ] = [
-        notiList[0],
-        notiList[1],
-        notiList[2],
-        notiList[3],
-        notiList[4],
-        notiList[5]
-      ];
-    };
-    await getInfo();
+    [
+      payload.likeNotice,
+      payload.followNotice,
+      payload.commentNotice,
+      payload.replyNotice,
+      payload.followerOpen,
+      payload.followOpen
+    ] = [
+      notiList[0],
+      notiList[1],
+      notiList[2],
+      notiList[3],
+      notiList[4],
+      notiList[5]
+    ];
+    payload.nickname = tmpNickName;
+    payload.profileMsg = tmpText;
     const res = await setAccount(payload);
+
     if (res === "SUCCESS") {
-      dispatch(getUserInfo());
-      navigate("/userfeed/123");
+      await dispatch(getUserInfo());
+      navigate(`/userfeed/${payload.nickname}`);
     }
   };
 
@@ -167,13 +175,10 @@ function AccountSettingPage() {
           <p>{userInfo?.nickname}</p>
           <textarea
             className="state notoReg"
-            maxLength={100}
-            readOnly
-            value="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente
-              eos mollitia qui dolores sed facilis quidem voluptate"
-          >
-            s
-          </textarea>
+            value={tmpText as string}
+            onChange={e => handleText(e)}
+          />
+          <p className="text-info fs-12">최대 100자까지 입력 가능합니다.</p>
         </div>
       </div>
       <div className="setaccount">

@@ -7,6 +7,7 @@ import FollowList from "@components/common/UserFeed/FollowList";
 import getCounts from "@utils/getCounts";
 import BackImgSkeleton from "@components/common/FeedPage/BackImgSkeleton";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "@store/hooks";
 
 function UserFeedPage() {
   const [tagSwitch, setTagSwitch] = useState(true);
@@ -14,6 +15,7 @@ function UserFeedPage() {
   const [followModal, setFollowModal] = useState("");
   const [randomBack, setRandomBack] = useState("");
   const [isLoading, setLoading] = useState(true);
+  const userInfo = useAppSelector(state => state.auth.userInfo);
 
   useEffect(() => {
     setLoading(true);
@@ -54,12 +56,16 @@ function UserFeedPage() {
           )}
         </div>
         <div className="profile-user">
-          <img src={UserDummyIcon} alt="User" className="profile-user__img" />
+          <img
+            src={`data:image/jpeg;base64,${userInfo?.profileImg}`}
+            alt="User"
+            className="profile-user__img"
+          />
         </div>
       </div>
       <div className="info">
         <div className="info__nickname notoBold">
-          <p>UserName</p>
+          <p>{userInfo?.nickname}</p>
           <Link to="/account">
             <img src={SetIcon} alt="set" />
           </Link>
@@ -91,10 +97,11 @@ function UserFeedPage() {
           <button type="button">DM</button>
         </div>
         <div className="info__state notoReg">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente
-            eos mollitia qui dolores sed facilis quidem voluptate
-          </p>
+          <textarea
+            className="notoReg"
+            value={userInfo?.profileMsg as string}
+            readOnly
+          />
         </div>
       </div>
       <div className="feed">

@@ -7,6 +7,7 @@ export const setAccount = async (data: any) => {
       Authorization: `${accessToken}`
     }
   });
+  console.log(res);
   return res.data.message;
 };
 
