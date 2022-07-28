@@ -161,13 +161,13 @@ public class TipServiceTest {
     @Test
     public void 게시글_수정_테스트() {
         // given
-        String testNickname = "비밀번호는 ssafy 입니다.";
-        Integer testIdx = 33;
+        String testNickname = "비밀번호는 test 입니다.";
+        Integer testIdx = 23;
 
         // 수정할 수 있는데이터
-        String category = "recipe";
-        String title = "꿀시피 제목 테스트 수정22";
-        String content = "꿀씨피 내용 테스트 수정22";
+        String category = "tip";
+        String title = "꿀팁 게시글 수정";
+        String content = "꿀팁 내용 테스트 수정22";
         byte[] bannerImg = null;
 
         Optional<TipEntity> testTip = tipRepository.findByIdx(testIdx);
@@ -179,7 +179,6 @@ public class TipServiceTest {
             if(testNickname.equals(tip.getUser().getNickname())){
                 // 로그인 한 닉네임과 글 작성자가 같으면 수정 가능
                 TipUpdateDto updateDto = TipUpdateDto.builder()
-                        .idx(testIdx)
                         .category(category)
                         .title(title)
                         .content(content)
@@ -189,6 +188,7 @@ public class TipServiceTest {
                 TipEntity updateEntity = tipUpdateMapper.toEntity(updateDto);
 
                 updateEntity.setUser(user);
+                updateEntity.setIdx(testIdx);
                 updateEntity.setTime(tip.getTime());
                 updateEntity.setUpdateTime(LocalDateTime.now());
 

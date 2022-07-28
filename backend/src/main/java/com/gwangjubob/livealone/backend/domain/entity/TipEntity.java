@@ -17,6 +17,8 @@ import java.util.List;
 @Data
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -50,8 +52,8 @@ public class TipEntity{
     @Column(name = "update_time")
     private LocalDateTime updateTime;
 
-//    @OneToMany(mappedBy = "tip", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-//    @OrderBy("time desc") // 댓글 정렬
-//    private List<TipCommentEntity> tipComments;
+    @OneToMany(mappedBy = "tip", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OrderBy("time desc") // 댓글 정렬
+    private List<TipCommentEntity> tipComments;
 
 }
