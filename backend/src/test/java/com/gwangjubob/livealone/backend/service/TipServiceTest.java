@@ -330,8 +330,8 @@ public class TipServiceTest {
     @Test
     public void 댓글_대댓글_삭제_테스트() {
         // given
-        Integer idx = 33; // 게시글 번호
-        String testNickname = "비밀번호는 ssafy 입니다.";
+        Integer idx = 22; // 댓글 번호
+        String testNickname = "비밀번호는 test 입니다.";
         Optional<TipCommentEntity> optionalTipComment = tipCommentRepository.findByIdx(idx);
 
         if(optionalTipComment.isPresent()){
@@ -344,9 +344,7 @@ public class TipServiceTest {
                     List<TipCommentEntity> replyCommentList = tipCommentRepository.findByUpIdx(idx); // 대댓글 리스트 조회
 
                     if(!replyCommentList.isEmpty()){
-                        for(TipCommentEntity replyComment : replyCommentList){
-                            tipCommentRepository.delete(replyComment);
-                        }
+                        tipCommentRepository.deleteAllInBatch(replyCommentList);
                     }
                     tipCommentRepository.delete(tipComment); // 댓글 삭제
 

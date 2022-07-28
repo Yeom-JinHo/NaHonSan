@@ -110,9 +110,7 @@ public class TipCommentServiceImpl implements TipCommentService {
                     List<TipCommentEntity> replyCommentList = tipCommentRepository.findByUpIdx(idx);
 
                     if(!replyCommentList.isEmpty()){
-                        for(TipCommentEntity replyComment : replyCommentList){
-                            tipCommentRepository.delete(replyComment);
-                        }
+                        tipCommentRepository.deleteAllInBatch(replyCommentList);
                     }
                     tipCommentRepository.delete(tipComment);
 
