@@ -52,8 +52,10 @@ function ChatRoom() {
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      submitDm(e.target.value);
-      e.target.value = "";
+      if (e.target.value !== "" && firstLoading) {
+        submitDm(e.target.value);
+        e.target.value = "";
+      }
     }
   };
   useEffect(() => {
