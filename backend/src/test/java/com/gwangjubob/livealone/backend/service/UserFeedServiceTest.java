@@ -9,7 +9,6 @@ import com.gwangjubob.livealone.backend.mapper.DealMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -39,10 +38,11 @@ public class UserFeedServiceTest {
     private UserFeedRepository userFeedRepository;
     private UserService userService;
     private TipRepository tipRepository;
+    private UserLikeRepository userLikeRepository;
     private DealRepository dealRepository;
 
     @Autowired
-    UserFeedServiceTest(DMRepository dmRepository,UserCategoryRepository userCategoryRepository, DealMapper dealMapper,TipRepository tipRepository, DealRepository dealRepository,UserService userService, UserFeedRepository userFeedRepository, DMService dmService, JavaMailSender javaMailSender, MailRepository mailRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    UserFeedServiceTest(DMRepository dmRepository,UserLikeRepository userLikeRepository,UserCategoryRepository userCategoryRepository, DealMapper dealMapper,TipRepository tipRepository, DealRepository dealRepository,UserService userService, UserFeedRepository userFeedRepository, DMService dmService, JavaMailSender javaMailSender, MailRepository mailRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.dmRepository = dmRepository;
         this.dmService = dmService;
         this.userRepository = userRepository;
@@ -55,6 +55,7 @@ public class UserFeedServiceTest {
         this.dealRepository = dealRepository;
         this.userCategoryRepository = userCategoryRepository;
         this.dealMapper = dealMapper;
+        this.userLikeRepository = userLikeRepository;
     }
 
     @Test
@@ -260,5 +261,16 @@ public class UserFeedServiceTest {
             System.out.println(dealDto.toString());
         }
     }
+    @Test
+    public void 팔로우_한_꿀팁_게시글_조회_테스트(){
+        Optional<UserEntity> user = userRepository.findById("test");
 
+        //given
+        List<UserLikeEntity> userLikeEntityList = userLikeRepository.findByUserId(user.get().getId());
+
+        //then
+        for(UserLikeEntity userLikeEntity : userLikeEntityList){
+            System.out.println(userLikeEntity.toString());
+        }
+    }
 }

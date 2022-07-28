@@ -214,7 +214,7 @@ public class UserFeedServiceImpl implements UserFeedService {
     @Override
     public List<DealDto> popularHoneyDeal(String decodeId) {
         Optional<UserEntity> user = userRepository.findById(decodeId);
-        List<UserCategoryEntity> userCategoryEntityList = userCategoryRepository.findByUser(user.get());;
+        List<UserCategoryEntity> userCategoryEntityList = userCategoryRepository.findByUser(user.get());//[IT,욕실,가정]
 
 
         List<DealEntity> dealEntityList = new ArrayList<>();
@@ -228,7 +228,7 @@ public class UserFeedServiceImpl implements UserFeedService {
         HashMap<Integer,Boolean> map = new HashMap<>();//
         int cnt = 0;
         while(cnt < 6){
-            int rand = (int)(Math.random() * dealEntityList.size());
+            int rand = (int)(Math.random() * dealEntityList.size()); // 0-17 6개 숫자 중복안됨,
             if(!map.containsKey(rand)){ // 뽑은 숫자가 아니라면 result에
                 cnt++;
                 map.put(rand,true);
