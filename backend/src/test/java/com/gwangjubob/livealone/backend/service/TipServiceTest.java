@@ -162,12 +162,12 @@ public class TipServiceTest {
     public void 게시글_수정_테스트() {
         // given
         String testNickname = "비밀번호는 ssafy 입니다.";
-        Integer testIdx = 26;
+        Integer testIdx = 33;
 
         // 수정할 수 있는데이터
-        String category = null;
-        String title = "꿀템수정제목만";
-        String content = null;
+        String category = "recipe";
+        String title = "꿀시피 제목 테스트 수정22";
+        String content = "꿀씨피 내용 테스트 수정22";
         byte[] bannerImg = null;
 
         Optional<TipEntity> testTip = tipRepository.findByIdx(testIdx);
@@ -187,10 +187,12 @@ public class TipServiceTest {
                         .build();
 
                 TipEntity updateEntity = tipUpdateMapper.toEntity(updateDto);
+
                 updateEntity.setUser(user);
+                updateEntity.setTime(tip.getTime());
                 updateEntity.setUpdateTime(LocalDateTime.now());
 
-                tipRepository.save(updateEntity);
+                tipRepository.saveAndFlush(updateEntity);
             }
         }
 
@@ -291,40 +293,39 @@ public class TipServiceTest {
     public void 댓글_대댓글_수정_테스트(){
         // given
         String nickname = "비밀번호는 ssafy 입니다.";
-        String content = "대댓글 테스트";
+        String content = "댓글 수정 테스트";
         byte[] bannerImg = null;
-        Integer idx = 19;
-        Integer postIdx = 22;
-        Integer upIdx = 19;
+        Integer idx = 43;
+        Integer postIdx = 38;
+        Integer upIdx = 0; // 댓글수정이면 0, 대댓글수정이면 댓글 글번호
 
         UserEntity user = userRepository.findByNickname(nickname).get();
         TipEntity tip = tipRepository.findByIdx(postIdx).get();
-        Optional<TipCommentEntity> tipComment = tipCommentRepository.findByIdx(idx);
+        Optional<TipCommentEntity> optionalTipComment = tipCommentRepository.findByIdx(idx);
 
+        if(optionalTipComment.isPresent()){ // 댓글이 있다면 수정
+            TipCommentEntity testTipComment = optionalTipComment.get();
 
-//        // when
-//        if(nickname.equals(tipComment.getUser().getNickname())){
-//            TipCommentUpdateDto dto = new TipCommentUpdateDto();
-//            dto.setContent(content);
-//            dto.setBannerImg(bannerImg);
-////            dto.setTime(LocalDate.now());
-//            tipComment = TipCommentEntity.builder()
-//                    .idx(idx)
-//                    .user(user)
-//                    .tip(tip)
-//                    .content(dto.getContent())
-//                    .bannerImg(dto.getBannerImg())
-//                    .time(LocalDate.now())
-//                    .upIdx(tipComment.getUpIdx())
-//                    .build();
-//
-//            tipCommentRepository.saveAndFlush(tipComment);
-//        }
+            TipCommentEntity tipComment = TipCommentEntity.builder()
+                    .idx(idx)
+                    .user(user)
+                    .tip(tip)
+                    .upIdx(upIdx)
+                    .content(content)
+                    .time(testTipComment.getTime())
+                    .updateTime(LocalDateTime.now())
+                    .bannerImg(bannerImg)
+                    .build();
+
+            tipCommentRepository.saveAndFlush(tipComment);
+        }
 
         // then
-//        TipCommentEntity result = tipCommentRepository.findByIdx(13);
-//        System.out.println(result.toString());
-        System.out.println(LocalDateTime.now());
+        Optional<TipCommentEntity> result = tipCommentRepository.findByIdx(idx);
+        if(result.isPresent()){
+            System.out.println(result.get().toString());
+        }
+
     }
 
     @Test

@@ -1,5 +1,7 @@
 package com.gwangjubob.livealone.backend.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -48,8 +50,8 @@ public class TipEntity{
     @Column(name = "update_time")
     private LocalDateTime updateTime;
 
-    @OneToMany(mappedBy = "tip", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @OrderBy("time desc") // 댓글 정렬
-    private List<TipCommentEntity> tipComments;
+//    @OneToMany(mappedBy = "tip", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+//    @OrderBy("time desc") // 댓글 정렬
+//    private List<TipCommentEntity> tipComments;
 
 }
