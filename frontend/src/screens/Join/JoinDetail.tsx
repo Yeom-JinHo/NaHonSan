@@ -107,6 +107,7 @@ function JoinDetail() {
             placeholder="닉네임을 입력해주세요."
             autoComplete="nickname"
             ref={nickNameRef}
+            maxLength={10}
           />
           <button
             type="button"
