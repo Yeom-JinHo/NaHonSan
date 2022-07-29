@@ -1,5 +1,7 @@
 package com.gwangjubob.livealone.backend.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -15,6 +17,8 @@ import java.util.List;
 @Data
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @DynamicInsert
 @DynamicUpdate
 @Entity
@@ -39,6 +43,7 @@ public class TipEntity{
     private byte[] bannerImg;
 
     private Integer view;
+    @Column(name = "likes")
     private Integer like;
     private Integer comment;
 

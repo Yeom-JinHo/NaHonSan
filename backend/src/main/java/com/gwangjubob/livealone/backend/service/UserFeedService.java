@@ -1,6 +1,8 @@
 package com.gwangjubob.livealone.backend.service;
 
+import com.gwangjubob.livealone.backend.dto.Deal.DealDto;
 import com.gwangjubob.livealone.backend.dto.feed.FollowViewDto;
+import com.gwangjubob.livealone.backend.dto.feed.PopularFollowDto;
 import com.gwangjubob.livealone.backend.dto.feed.PostViewDto;
 import com.gwangjubob.livealone.backend.dto.feed.ProfileViewDto;
 
@@ -15,4 +17,8 @@ public interface UserFeedService {
     ProfileViewDto feedProfile(String id);
     List<PostViewDto> feedPosts(String id, int category);
     boolean deleteFollow(String toId, String fromId);
+
+    List<PopularFollowDto> popularFollower();
+
+    List<DealDto> popularHoneyDeal(String decodeId);
 }
