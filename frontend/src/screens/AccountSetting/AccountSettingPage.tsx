@@ -8,22 +8,35 @@ import { useAppSelector, useAppDispatch } from "@store/hooks";
 import { chkNickNameExist } from "@apis/auth";
 import { setAccount } from "@apis/setAccount";
 import { getUserInfo } from "@store/ducks/auth/authThunk";
+import LoadingSpinner from "@images/LoadingSpinner.svg";
 
 function AccountSettingPage() {
-  // 프로필 설정
+  interface userInfo {
+    profileImg: null | string | undefined;
+    profileMsg: null | string | undefined;
+    nickname: string | undefined;
+    likeNotice: boolean | undefined;
+    followNotice: boolean | undefined;
+    commentNotice: boolean | undefined;
+    replyNotice: boolean | undefined;
+    followOpen: boolean | undefined;
+    followerOpen: boolean | undefined;
+  }
+
   const imgInput = useRef<HTMLInputElement>(null);
   const nickNameInput = useRef<HTMLInputElement>(null);
-  const textRef = useRef<HTMLTextAreaElement>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [errMsg, setErrMsg] = useState(false);
+  const [errText, setErrText] = useState("");
   const [isChk, setIsChk] = useState(false);
   const userInfo = useAppSelector(state => state.auth.userInfo);
   const [tmpNickName, setTmpNickName] = useState(userInfo?.nickname);
   const [tmpText, setTmpText] = useState(userInfo?.profileMsg);
   const [sendFile, setSendFile] = useState<File | null>(null);
   const [userImg, setUserImg] = useState(UserDummyIcon);
-  const payload: any = {
+  const [spinner, setSpinner] = useState(false);
+  const payload: userInfo = {
     profileImg: userInfo?.profileImg,
     profileMsg: userInfo?.profileMsg,
     nickname: userInfo?.nickname,
@@ -41,6 +54,7 @@ function AccountSettingPage() {
     }
   }, []);
 
+  // 프로필 이미지 설정 부분
   const clickInput = () => {
     if (imgInput.current) {
       imgInput.current.click();
@@ -56,38 +70,40 @@ function AccountSettingPage() {
     }
   };
 
-  // function dataURItoBlob(dataURI: string) {
-  //   const byteString = atob(dataURI.split(",")[1]);
-  //   const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
-
-  //   const ab = new ArrayBuffer(byteString.length);
-  //   const ia = new Uint8Array(ab);
-
-  //   for (let i = 0; i < byteString.length; i += 1) {
-  //     ia[i] = byteString.charCodeAt(i);
-  //   }
-  //   const blob = new Blob([ab], { type: mimeString });
-
-  //   return blob;
-  // }
-
   const receiveFile = (data: string) => {
     if (userInfo) {
       setUserImg(data);
-      // userInfo.profileImg = data;
-      // console.log(data.replace("data:image/;base64,", ""));
-      // payload.profileImg = dataURItoBlob(data);
       const incData = data.replace("data:image/jpeg;base64,", "");
       payload.profileImg = incData;
     }
   };
 
+  // 상태 메세지 설정 부분
   const handleText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTmpText(e.target.value);
   };
 
-  // 계정 설정
+  const chkLength = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const state = e.target.value;
+    if (state.length > 100) {
+      const txt = state.substring(0, 100);
+      e.target.value = txt;
+      e.target.focus();
+      return;
+    }
+    const rows = state.split("\n");
+    if (rows.length > 5) {
+      const txt = rows.splice(0, 5);
 
+      e.target.value = txt.join("\n");
+
+      e.target.focus();
+    }
+    e.target.style.height = "1px";
+    e.target.style.height = `${12 + e.target.scrollHeight}px`;
+  };
+
+  // 닉네임 중복 체크
   const nickNameChk = async () => {
     if (nickNameInput.current?.value === "") {
       nickNameInput.current.focus();
@@ -96,23 +112,30 @@ function AccountSettingPage() {
 
     const res = await chkNickNameExist(nickNameInput.current?.value as string);
     await setIsChk(true);
-    if (res === "SUCCESS") {
+
+    if ((nickNameInput.current?.value.length as number) > 10) {
+      setErrMsg(false);
+      setErrText("닉네임은 10자 이하입니다.");
+    } else if (res === "SUCCESS") {
       await setErrMsg(true);
+      setTmpNickName(nickNameInput.current?.value);
     } else {
       setErrMsg(false);
-      return;
+      setErrText("중복된 닉네임입니다.");
     }
-    setTmpNickName(nickNameInput.current?.value);
   };
 
-  const noti = ["좋아요", "팔로잉", "댓글", "대댓글"];
-  const followState = ["팔로우", "팔로잉"];
+  // 버튼 라우팅
   const goBack = () => {
     navigate(-1);
   };
   const goWithdrawal = () => {
     navigate("/account/withdrawal", { replace: true });
   };
+
+  // 알람 토글 부분
+  const noti = ["좋아요", "팔로잉", "댓글", "대댓글"];
+  const followState = ["팔로우", "팔로잉"];
   const [notiList, setNotiList] = useState([
     userInfo?.likeNotice,
     userInfo?.followNotice,
@@ -122,6 +145,7 @@ function AccountSettingPage() {
     userInfo?.followOpen
   ]);
 
+  // 전송 부분
   const changeSet = async () => {
     [
       payload.likeNotice,
@@ -138,6 +162,7 @@ function AccountSettingPage() {
       notiList[4],
       notiList[5]
     ];
+    setSpinner(true);
     payload.nickname = tmpNickName;
     payload.profileMsg = tmpText;
     const res = await setAccount(payload);
@@ -159,7 +184,12 @@ function AccountSettingPage() {
             className="user-container flex"
             onClick={clickInput}
           >
-            <img className="img-container__user" src={userImg} alt="dumm" />
+            <img
+              className="img-container__user"
+              src={userImg}
+              alt="userImg"
+              title="userImg"
+            />
             <p className="img-container__user-add fs-48">+</p>
           </button>
           {sendFile ? (
@@ -175,10 +205,13 @@ function AccountSettingPage() {
           <p>{userInfo?.nickname}</p>
           <textarea
             className="state notoReg"
-            value={tmpText as string}
+            defaultValue={tmpText as string}
             onChange={e => handleText(e)}
+            onKeyDown={e => chkLength(e)}
           />
-          <p className="text-info fs-12">최대 100자까지 입력 가능합니다.</p>
+          <p className="text-info fs-12">
+            최대 100자 줄바꿈은 5번까지 가능합니다.
+          </p>
         </div>
       </div>
       <div className="setaccount">
@@ -194,13 +227,17 @@ function AccountSettingPage() {
             <div className="main-account__nickname flex">
               <p className="fs-16 notoReg">닉네임</p>
               <div>
-                <input type="text" ref={nickNameInput} />
+                <input
+                  type="text"
+                  ref={nickNameInput}
+                  defaultValue={userInfo?.nickname}
+                />
                 {isChk ? (
                   <p className="notoReg">
                     {errMsg ? (
                       <span className="success">사용 가능한 닉네임입니다.</span>
                     ) : (
-                      <span className="err">중복 된 닉네임입니다.</span>
+                      <span className="err">{errText}</span>
                     )}
                   </p>
                 ) : null}
@@ -309,22 +346,32 @@ function AccountSettingPage() {
           </div>
         </div>
       </div>
-      <div className="setaccount-submit flex fs-24 notoMid">
-        <button
-          className="setaccount-submit__submit"
-          type="button"
-          onClick={changeSet}
-        >
-          설정
-        </button>
-        <button
-          onClick={goBack}
-          className="setaccount-submit__cancle"
-          type="button"
-        >
-          취소
-        </button>
-      </div>
+      {spinner ? (
+        <div className="spinner-container">
+          <img
+            src={LoadingSpinner}
+            className="loading-spinner"
+            alt="로딩스피너"
+          />
+        </div>
+      ) : (
+        <div className="setaccount-submit flex fs-24 notoMid">
+          <button
+            className="setaccount-submit__submit"
+            type="button"
+            onClick={changeSet}
+          >
+            설정
+          </button>
+          <button
+            onClick={goBack}
+            className="setaccount-submit__cancle"
+            type="button"
+          >
+            취소
+          </button>
+        </div>
+      )}
     </div>
   );
 }

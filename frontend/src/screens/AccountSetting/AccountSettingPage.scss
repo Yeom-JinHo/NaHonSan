@@ -1,3 +1,7 @@
+.spinner-container {
+  margin-bottom: (60px);
+}
+
 input[type="file"] {
   position: absolute;
   overflow: hidden;
@@ -47,7 +51,7 @@ input[type="file"] {
       }
     }
     .text-wrapper {
-      margin-top: (200px);
+      margin-top: (160px);
       width: 100%;
       justify-content: center;
       align-items: center;
@@ -60,6 +64,7 @@ input[type="file"] {
         outline-color: $MAIN_YELLOW;
         border-radius: (12px);
         border: solid 1px #666;
+        overflow: hidden;
       }
       & .text-info {
         margin-top: (12px);
@@ -271,7 +276,7 @@ input[type="file"] {
         }
       }
       .text-wrapper {
-        margin-top: vw(200px);
+        margin-top: vw(160px);
         width: 100%;
         justify-content: center;
         align-items: center;
@@ -728,6 +733,9 @@ input[type="file"] {
           border-radius: vw-p(12px);
           border: solid 1px #666;
           line-height: vw-p(20px);
+        }
+        & .text-info {
+          font-size: vw-p(10px);
         }
       }
     }

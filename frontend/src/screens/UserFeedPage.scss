@@ -65,7 +65,8 @@
       }
     }
     &__state {
-      margin-top: (24px);
+      justify-content: center;
+      width: 100%;
       & textarea {
         margin-top: (20px);
         padding: (12px);
@@ -74,8 +75,6 @@
         resize: none;
         border: none;
         outline: none;
-        & :focus {
-        }
       }
     }
   }
@@ -160,12 +159,12 @@
         }
       }
       &__state {
-        margin-top: vw(24px);
-        text-align: start;
-        font-size: vw(16px);
-        padding-left: vw(12px);
-        padding-right: vw(12px);
-        line-height: vw(24px);
+        & textarea {
+          margin-top: (20px);
+          padding: (12px);
+          width: (320px);
+          height: (120px);
+        }
       }
     }
     .feed {
@@ -176,10 +175,10 @@
         justify-content: space-evenly;
         margin-bottom: vw(40px);
         & > button {
-          font-size: vw(24px);
-          height: vw(48px);
+          font-size: (24px);
+          height: (48px);
           & > span {
-            margin-left: vw(8px);
+            margin-left: (8px);
           }
         }
       }
@@ -250,7 +249,6 @@
         }
       }
       &__state {
-        margin-top: vw-t(24px);
         text-align: start;
         font-size: vw-t(16px);
         padding-left: vw-t(24px);
@@ -343,9 +341,8 @@
         }
       }
       &__state {
-        margin-top: vw-p(24px);
         text-align: start;
-        font-size: vw-p(12px);
+        font-size: vw-p(10px);
         padding-left: vw-p(36px);
         padding-right: vw-p(12px);
         line-height: vw-p(20px);

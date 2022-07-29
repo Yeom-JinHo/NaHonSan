@@ -33,4 +33,4 @@ function ImgResizer({ imgfile, newImgfile, imgW, imgH }: ImgResizerProps) {
   );
 }
 
-export default ImgResizer;
+export default React.memo(ImgResizer);

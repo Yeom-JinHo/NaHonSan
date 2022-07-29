@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./UserFeedPage.scss";
 import UserDummyIcon from "@images/UserDummy.svg";
 import SetIcon from "@images/SetIcon.svg";
@@ -16,8 +16,13 @@ function UserFeedPage() {
   const [randomBack, setRandomBack] = useState("");
   const [isLoading, setLoading] = useState(true);
   const userInfo = useAppSelector(state => state.auth.userInfo);
+  const txtArea = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
+    if (txtArea.current) {
+      txtArea.current.style.height = "1px";
+      txtArea.current.style.height = `${12 + txtArea.current.scrollHeight}px`;
+    }
     setLoading(true);
     fetch("https://picsum.photos/520/200")
       .then(res => {
@@ -52,14 +57,20 @@ function UserFeedPage() {
               src={randomBack}
               alt="Thum"
               className="profile-background__img"
+              title="background"
             />
           )}
         </div>
         <div className="profile-user">
           <img
-            src={`data:image/jpeg;base64,${userInfo?.profileImg}`}
+            src={
+              userInfo?.profileImg
+                ? `data:image/jpeg;base64,${userInfo?.profileImg}`
+                : UserDummyIcon
+            }
             alt="User"
             className="profile-user__img"
+            title="User"
           />
         </div>
       </div>
@@ -96,13 +107,14 @@ function UserFeedPage() {
           <button type="button">팔로우</button>
           <button type="button">DM</button>
         </div>
-        <div className="info__state notoReg">
-          <textarea
-            className="notoReg"
-            value={userInfo?.profileMsg as string}
-            readOnly
-          />
-        </div>
+      </div>
+      <div className="info__state notoReg flex ">
+        <textarea
+          className="notoReg"
+          value={userInfo?.profileMsg ? (userInfo.profileMsg as string) : ""}
+          ref={txtArea}
+          readOnly
+        />
       </div>
       <div className="feed">
         <div className="feed-tag flex">
