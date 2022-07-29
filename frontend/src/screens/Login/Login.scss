@@ -53,6 +53,11 @@
       margin-bottom: (24px);
       background-color: $MAIN_YELLOW;
     }
+
+    .loading-spinner {
+      height: (32px);
+      width: (32px);
+    }
   }
   .footer {
     color: $GRAY_76;
@@ -120,6 +125,11 @@
         margin-bottom: vw(24px);
         background-color: $MAIN_YELLOW;
       }
+
+      .loading-spinner {
+        height: vw(32px);
+        width: vw(32px);
+      }
     }
     .footer {
       color: $GRAY_76;
@@ -182,6 +192,11 @@
         @include box();
         margin-bottom: vw-t(24px);
       }
+
+      .loading-spinner {
+        height: vw-t(32px);
+        width: vw-t(32px);
+      }
     }
     .footer {
       &__container + .footer__container {
@@ -241,6 +256,10 @@
       &__btn {
         @include box();
         margin-bottom: vw-p(24px);
+      }
+      .loading-spinner {
+        height: vw-p(32px);
+        width: vw-p(32px);
       }
     }
     .footer {
