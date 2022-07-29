@@ -1,7 +1,5 @@
 import API from "./index";
 
-const accessToken = sessionStorage.getItem("access-token") as string;
-
 interface userInfo {
   profileImg: null | string | undefined;
   profileMsg: null | string | undefined;
@@ -15,6 +13,7 @@ interface userInfo {
 }
 
 export const setAccount = async (data: userInfo) => {
+  const accessToken = sessionStorage.getItem("access-token") as string;
   const res = await API.put("/user", data, {
     headers: {
       Authorization: accessToken
@@ -24,6 +23,7 @@ export const setAccount = async (data: userInfo) => {
 };
 
 export const withdrawal = async () => {
+  const accessToken = sessionStorage.getItem("access-token") as string;
   const res = await API.delete("/user", {
     headers: {
       Authorization: accessToken
@@ -33,6 +33,7 @@ export const withdrawal = async () => {
 };
 
 export const passwordChk = async (password: string) => {
+  const accessToken = sessionStorage.getItem("access-token") as string;
   const res = await API.post(
     "/user/password",
     { password },
