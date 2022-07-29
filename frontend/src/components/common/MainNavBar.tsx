@@ -71,16 +71,19 @@ function MainNavBar() {
           <nav className="right-nav notoReg flex align-center">
             {userInfo ? (
               <>
-                <button
-                  type="button"
-                  className="right-nav__link alarm"
-                  onClick={() => setAlarmVisible(!alarmVisible)}
-                >
+                <button type="button" className="right-nav__link alarm">
                   <p className="alarm__cnt fs-8 flex align-center justify-center">
                     {noticeCount}
                   </p>
-                  <img className="alarm__icon" src={AlarmIcon} alt="알림" />
-                  {alarmVisible && <AlarmToolTip />}
+                  <button
+                    type="button"
+                    onClick={() => setAlarmVisible(!alarmVisible)}
+                  >
+                    <img className="alarm__icon" src={AlarmIcon} alt="알림" />
+                  </button>
+                  {alarmVisible && (
+                    <AlarmToolTip closeTooltip={() => setAlarmVisible(false)} />
+                  )}
                 </button>
                 <Link className="right-nav__link alarm" to="/letters">
                   <p className="alarm__cnt fs-8 flex align-center justify-center">
@@ -98,7 +101,12 @@ function MainNavBar() {
                   <img className="user" src={UserDummyIcon} alt="더미유저" />
                 </button>
                 <div className="profile">
-                  {profileTooltipVisible && <ProfileToolTip userId="123" />}
+                  {profileTooltipVisible && (
+                    <ProfileToolTip
+                      closeTooltip={() => setProfileTooltipVisible(false)}
+                      userNickname={userInfo.nickname}
+                    />
+                  )}
                 </div>
               </>
             ) : (
