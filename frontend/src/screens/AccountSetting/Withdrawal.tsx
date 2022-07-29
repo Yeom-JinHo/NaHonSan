@@ -29,7 +29,7 @@ function FindPw() {
       const res = await withdrawal();
       if (res === "SUCCESS") {
         dispatch(resetUserInfo());
-        navigate("/userfeed/set");
+        navigate("/");
       }
       return;
     }

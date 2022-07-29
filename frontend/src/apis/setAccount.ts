@@ -1,18 +1,7 @@
+import { UserInfoType } from "@store/ducks/auth/authSlice";
 import API from "./index";
 
-interface userInfo {
-  profileImg: null | string | undefined;
-  profileMsg: null | string | undefined;
-  nickname: string | undefined;
-  likeNotice: boolean | undefined;
-  followNotice: boolean | undefined;
-  commentNotice: boolean | undefined;
-  replyNotice: boolean | undefined;
-  followOpen: boolean | undefined;
-  followerOpen: boolean | undefined;
-}
-
-export const setAccount = async (data: userInfo) => {
+export const setAccount = async (data: UserInfoType) => {
   const accessToken = sessionStorage.getItem("access-token") as string;
   const res = await API.put("/user", data, {
     headers: {

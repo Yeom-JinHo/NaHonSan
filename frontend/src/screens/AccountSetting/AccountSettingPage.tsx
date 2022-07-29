@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import "./AccountSettingPage.scss";
 import { Link, useNavigate } from "react-router-dom";
 import UserDummyIcon from "@images/UserDummy.svg";
@@ -8,51 +8,38 @@ import { useAppSelector, useAppDispatch } from "@store/hooks";
 import { chkNickNameExist } from "@apis/auth";
 import { setAccount } from "@apis/setAccount";
 import { getUserInfo } from "@store/ducks/auth/authThunk";
+import { UserInfoType } from "@store/ducks/auth/authSlice";
 import LoadingSpinner from "@images/LoadingSpinner.svg";
 
 function AccountSettingPage() {
-  interface userInfo {
-    profileImg: null | string | undefined;
-    profileMsg: null | string | undefined;
-    nickname: string | undefined;
-    likeNotice: boolean | undefined;
-    followNotice: boolean | undefined;
-    commentNotice: boolean | undefined;
-    replyNotice: boolean | undefined;
-    followOpen: boolean | undefined;
-    followerOpen: boolean | undefined;
+  interface setType extends Omit<UserInfoType, "backgroundImg" | "area"> {
+    area?: string;
+    backgroundImg?: string;
   }
-
+  const tmpUserInfo = useAppSelector(state => state.auth.userInfo);
   const imgInput = useRef<HTMLInputElement>(null);
   const nickNameInput = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  if (!tmpUserInfo) {
+    navigate("/");
+    return <div />;
+  }
+  const userInfo = { ...tmpUserInfo } as setType;
   const [errMsg, setErrMsg] = useState(false);
   const [errText, setErrText] = useState("");
   const [isChk, setIsChk] = useState(false);
-  const userInfo = useAppSelector(state => state.auth.userInfo);
-  const [tmpNickName, setTmpNickName] = useState(userInfo?.nickname);
-  const [tmpText, setTmpText] = useState(userInfo?.profileMsg);
+  const [tmpNickName, setTmpNickName] = useState(userInfo.nickname);
+  const [tmpText, setTmpText] = useState(
+    userInfo.profileMsg ? userInfo.profileMsg : null
+  );
   const [sendFile, setSendFile] = useState<File | null>(null);
-  const [userImg, setUserImg] = useState(UserDummyIcon);
+  const [userImg, setUserImg] = useState(
+    userInfo.profileImg
+      ? `data:image/jpeg;base64,${userInfo.profileImg}`
+      : UserDummyIcon
+  );
   const [spinner, setSpinner] = useState(false);
-  const payload: userInfo = {
-    profileImg: userInfo?.profileImg,
-    profileMsg: userInfo?.profileMsg,
-    nickname: userInfo?.nickname,
-    likeNotice: userInfo?.likeNotice,
-    followNotice: userInfo?.followNotice,
-    commentNotice: userInfo?.commentNotice,
-    replyNotice: userInfo?.replyNotice,
-    followOpen: userInfo?.followOpen,
-    followerOpen: userInfo?.followerOpen
-  };
-
-  useEffect(() => {
-    if (userInfo?.profileImg) {
-      setUserImg(`data:image/jpeg;base64,${userInfo?.profileImg}`);
-    }
-  }, []);
 
   // 프로필 이미지 설정 부분
   const clickInput = () => {
@@ -74,7 +61,7 @@ function AccountSettingPage() {
     if (userInfo) {
       setUserImg(data);
       const incData = data.replace("data:image/jpeg;base64,", "");
-      payload.profileImg = incData;
+      userInfo.profileImg = incData;
     }
   };
 
@@ -111,14 +98,14 @@ function AccountSettingPage() {
     }
 
     const res = await chkNickNameExist(nickNameInput.current?.value as string);
-    await setIsChk(true);
+    setIsChk(true);
 
     if ((nickNameInput.current?.value.length as number) > 10) {
       setErrMsg(false);
       setErrText("닉네임은 10자 이하입니다.");
-    } else if (res === "SUCCESS") {
-      await setErrMsg(true);
-      setTmpNickName(nickNameInput.current?.value);
+    } else if (res === "SUCCESS" && nickNameInput.current) {
+      setErrMsg(true);
+      setTmpNickName(nickNameInput.current.value);
     } else {
       setErrMsg(false);
       setErrText("중복된 닉네임입니다.");
@@ -137,23 +124,23 @@ function AccountSettingPage() {
   const noti = ["좋아요", "팔로잉", "댓글", "대댓글"];
   const followState = ["팔로우", "팔로잉"];
   const [notiList, setNotiList] = useState([
-    userInfo?.likeNotice,
-    userInfo?.followNotice,
-    userInfo?.commentNotice,
-    userInfo?.replyNotice,
-    userInfo?.followerOpen,
-    userInfo?.followOpen
+    userInfo.likeNotice,
+    userInfo.followNotice,
+    userInfo.commentNotice,
+    userInfo.replyNotice,
+    userInfo.followerOpen,
+    userInfo.followOpen
   ]);
 
   // 전송 부분
   const changeSet = async () => {
     [
-      payload.likeNotice,
-      payload.followNotice,
-      payload.commentNotice,
-      payload.replyNotice,
-      payload.followerOpen,
-      payload.followOpen
+      userInfo.likeNotice,
+      userInfo.followNotice,
+      userInfo.commentNotice,
+      userInfo.replyNotice,
+      userInfo.followerOpen,
+      userInfo.followOpen
     ] = [
       notiList[0],
       notiList[1],
@@ -162,14 +149,18 @@ function AccountSettingPage() {
       notiList[4],
       notiList[5]
     ];
+    if (tmpNickName && tmpText) {
+      userInfo.nickname = tmpNickName;
+      userInfo.profileMsg = tmpText;
+    }
     setSpinner(true);
-    payload.nickname = tmpNickName;
-    payload.profileMsg = tmpText;
-    const res = await setAccount(payload);
+    delete userInfo.area;
+    delete userInfo.backgroundImg;
+    const res = await setAccount(userInfo as UserInfoType);
 
     if (res === "SUCCESS") {
       await dispatch(getUserInfo());
-      navigate(`/userfeed/${payload.nickname}`);
+      navigate(`/userfeed/${tmpNickName}`);
     }
   };
 
@@ -202,7 +193,7 @@ function AccountSettingPage() {
           ) : null}
         </div>
         <div className="text-wrapper flex column">
-          <p>{userInfo?.nickname}</p>
+          <p>{userInfo.nickname}</p>
           <textarea
             className="state notoReg"
             defaultValue={tmpText as string}
@@ -230,7 +221,7 @@ function AccountSettingPage() {
                 <input
                   type="text"
                   ref={nickNameInput}
-                  defaultValue={userInfo?.nickname}
+                  defaultValue={userInfo.nickname}
                 />
                 {isChk ? (
                   <p className="notoReg">
