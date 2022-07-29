@@ -4,6 +4,7 @@ import com.gwangjubob.livealone.backend.domain.entity.*;
 import com.gwangjubob.livealone.backend.domain.repository.*;
 import com.gwangjubob.livealone.backend.dto.Deal.DealDto;
 import com.gwangjubob.livealone.backend.dto.feed.PopularFollowDto;
+import com.gwangjubob.livealone.backend.dto.tip.TipViewDto;
 import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.mapper.DealMapper;
 import org.assertj.core.api.Assertions;
@@ -31,6 +32,7 @@ public class UserFeedServiceTest {
     private DMService dmService;
     private UserRepository userRepository;
     private UserCategoryRepository userCategoryRepository;
+    private UserFollowTipsRepository userFollowTipsRepository;
     private DealMapper dealMapper;
     private PasswordEncoder passwordEncoder;
     private JavaMailSender javaMailSender;
@@ -38,15 +40,20 @@ public class UserFeedServiceTest {
     private UserFeedRepository userFeedRepository;
     private UserService userService;
     private TipRepository tipRepository;
-    private UserLikeRepository userLikeRepository;
+    private UserLikeDealsRepository userLikeDealsRepository;
+    private UserLikeTipsRepository userLikeTipsRepository;
+    private UserFollowsRepository userFollowsRepository;
     private DealRepository dealRepository;
 
     @Autowired
-    UserFeedServiceTest(DMRepository dmRepository,UserLikeRepository userLikeRepository,UserCategoryRepository userCategoryRepository, DealMapper dealMapper,TipRepository tipRepository, DealRepository dealRepository,UserService userService, UserFeedRepository userFeedRepository, DMService dmService, JavaMailSender javaMailSender, MailRepository mailRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    UserFeedServiceTest(DMRepository dmRepository,UserFollowTipsRepository userFollowTipsRepository,UserFollowsRepository userFollowsRepository,UserLikeDealsRepository userLikeDealsRepository, UserLikeTipsRepository userLikeTipsRepository, UserCategoryRepository userCategoryRepository, DealMapper dealMapper,TipRepository tipRepository, DealRepository dealRepository,UserService userService, UserFeedRepository userFeedRepository, DMService dmService, JavaMailSender javaMailSender, MailRepository mailRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.dmRepository = dmRepository;
         this.dmService = dmService;
+        this.userLikeDealsRepository = userLikeDealsRepository;
+        this.userLikeTipsRepository = userLikeTipsRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userFollowTipsRepository = userFollowTipsRepository;
         this.javaMailSender = javaMailSender;
         this.mailRepository = mailRepository;
         this.userFeedRepository = userFeedRepository;
@@ -55,7 +62,6 @@ public class UserFeedServiceTest {
         this.dealRepository = dealRepository;
         this.userCategoryRepository = userCategoryRepository;
         this.dealMapper = dealMapper;
-        this.userLikeRepository = userLikeRepository;
     }
 
     @Test
@@ -263,17 +269,28 @@ public class UserFeedServiceTest {
     }
     @Test
     public void 팔로우_한_꿀팁_게시글_조회_테스트(){
-        Optional<UserEntity> user = userRepository.findById("test");
-
         //given
-        List<UserLikeEntity> userLikeEntityList = userLikeRepository.findByUserId(user.get().getId()); //회원 ID로 어떤 게시글을 좋아요 눌렀는지 조회하기
-        for(UserLikeEntity userLikeEntity : userLikeEntityList){
-            userLikeEntity.get
-        }
-
+        Optional<UserEntity> user = userRepository.findById("test");
+        List<TipViewDto> result = new ArrayList<>();
+        //when
+        List<UserFollowTipsEntity> tipEntityList = userFollowTipsRepository.findTips(user.get().getId()); //내가 팔로우 한 유저 목록
         //then
-        for(UserLikeEntity userLikeEntity : userLikeEntityList){
-            System.out.println(userLikeEntity.toString());
+        for(UserFollowTipsEntity tipEntity : tipEntityList){
+                TipViewDto dto = TipViewDto.builder()
+                        .idx(tipEntity.getIdx())
+                        .userNickname(tipEntity.getUser().getNickname())
+                        .userProfileImg(tipEntity.getUser().getProfileImg())
+                        .title(tipEntity.getTitle())
+                        .bannerImg(tipEntity.getBannerImg())
+                        .view(tipEntity.getView())
+                        .like(tipEntity.getLike())
+                        .comment(tipEntity.getComment())
+                        .build();
+
+                result.add(dto);
+            }
+        for (int i = 0; i < result.size(); i++) {
+            System.out.println(result.get(i).toString());
         }
     }
 }

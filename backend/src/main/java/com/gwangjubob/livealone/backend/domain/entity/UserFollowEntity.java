@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,7 +20,9 @@ import java.time.LocalDateTime;
 @DynamicInsert
 @DynamicUpdate
 public class UserFollowEntity {
-
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<TipEntity> tips;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idx;
