@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -30,6 +31,8 @@ public class UserFollowEntity {
     private String followNickname;
     @Column(name="user_nickname")
     private String userNickname;
+
+    private LocalDateTime time;
     @Builder
     public UserFollowEntity(String userId, String followId, String followNickname,String userNickname){ //팔로우 등록 빌더
         this.userId = userId;

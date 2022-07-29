@@ -266,7 +266,10 @@ public class UserFeedServiceTest {
         Optional<UserEntity> user = userRepository.findById("test");
 
         //given
-        List<UserLikeEntity> userLikeEntityList = userLikeRepository.findByUserId(user.get().getId());
+        List<UserLikeEntity> userLikeEntityList = userLikeRepository.findByUserId(user.get().getId()); //회원 ID로 어떤 게시글을 좋아요 눌렀는지 조회하기
+        for(UserLikeEntity userLikeEntity : userLikeEntityList){
+            userLikeEntity.get
+        }
 
         //then
         for(UserLikeEntity userLikeEntity : userLikeEntityList){

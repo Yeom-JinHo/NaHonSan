@@ -7,6 +7,7 @@ import com.gwangjubob.livealone.backend.dto.feed.FollowViewDto;
 import com.gwangjubob.livealone.backend.dto.feed.PopularFollowDto;
 import com.gwangjubob.livealone.backend.dto.feed.PostViewDto;
 import com.gwangjubob.livealone.backend.dto.feed.ProfileViewDto;
+import com.gwangjubob.livealone.backend.dto.tip.TipViewDto;
 import com.gwangjubob.livealone.backend.mapper.DealMapper;
 import com.gwangjubob.livealone.backend.mapper.UserInfoMapper;
 import com.gwangjubob.livealone.backend.service.UserFeedService;
@@ -248,5 +249,11 @@ public class UserFeedServiceImpl implements UserFeedService {
             }
         }
         return result;
+    }
+
+    @Override
+    public List<TipViewDto> userFollowHoneyTip(String decodeId) {
+
+        return null;
     }
 }
