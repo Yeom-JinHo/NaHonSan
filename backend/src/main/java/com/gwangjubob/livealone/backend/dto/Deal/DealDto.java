@@ -18,6 +18,7 @@ import java.util.List;
 @Builder
 public class DealDto {
     private String userNickname;
+    private String userId;
     private String title;
     private String content;
     private String category;

@@ -1,5 +1,6 @@
 package com.gwangjubob.livealone.backend.controller;
 
+import com.gwangjubob.livealone.backend.dto.Deal.DealCommentDto;
 import com.gwangjubob.livealone.backend.dto.Deal.DealDto;
 import com.gwangjubob.livealone.backend.service.DealService;
 import com.gwangjubob.livealone.backend.service.JwtService;
@@ -39,6 +40,7 @@ public class DealController {
         String decodeId = checkToken(request);
         if (decodeId != null){
             try {
+                dealDto.setUserId(decodeId);
                 DealDto data = dealService.registDeal(dealDto);
                 if(data != null){
                     resultMap.put("data", data);
@@ -82,11 +84,11 @@ public class DealController {
                 resultMap.put("data", data);
                 resultMap.put("message", okay);
             } else{
-                resultMap.put("message", okay);
+                resultMap.put("message", fail);
             }
             status = HttpStatus.OK;
         } catch (Exception e){
-            resultMap.put("message", okay);
+            resultMap.put("message", fail);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity<>(resultMap, status);
@@ -97,6 +99,63 @@ public class DealController {
         resultMap = new HashMap<>();
         try {
             if(dealService.deleteDeal(idx)){
+                resultMap.put("message", okay);
+            } else{
+                resultMap.put("message", fail);
+            }
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            resultMap.put("message", fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
+
+    @PostMapping("/honeyDeal/comment")
+    public ResponseEntity<?> registDealComment(@RequestBody DealCommentDto dealCommentDto, HttpServletRequest request){
+        resultMap = new HashMap<>();
+        String decodeId = checkToken(request);
+        if(decodeId != null){
+            try {
+                DealCommentDto data = dealService.registDealComment(dealCommentDto);
+                if(data != null){
+                    resultMap.put("data", data);
+                    resultMap.put("message", okay);
+                } else{
+                    resultMap.put("message", fail);
+                }
+                status = HttpStatus.OK;
+            } catch (Exception e){
+                resultMap.put("message", fail);
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
+
+    @PutMapping("/honeyDeal/comment/{idx}")
+    public ResponseEntity<?> updateDealComment(@PathVariable Integer idx, @RequestBody DealCommentDto dealCommentDto){
+        resultMap = new HashMap<>();
+        try {
+            DealCommentDto data = dealService.updateDealComment(idx, dealCommentDto);
+            if(data != null){
+                resultMap.put("data", data);
+                resultMap.put("message", okay);
+            } else{
+                resultMap.put("message", fail);
+            }
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            resultMap.put("message", fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
+    @DeleteMapping("/honeyDeal/comment/{idx}")
+    public ResponseEntity<?> deleteDealComment(@PathVariable Integer idx){
+        resultMap = new HashMap<>();
+        try {
+            if(dealService.deleteDealComment(idx)){
                 resultMap.put("message", okay);
             } else{
                 resultMap.put("message", fail);

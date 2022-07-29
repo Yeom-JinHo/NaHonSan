@@ -39,7 +39,7 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public DealDto registDeal(DealDto dealDto) {
-        Optional<UserEntity> optionalUser = userRepository.findByNickname(dealDto.getUserNickname());
+        Optional<UserEntity> optionalUser = userRepository.findById(dealDto.getUserId());
         DealDto data = new DealDto();
         if(optionalUser.isPresent()){
             UserEntity user = optionalUser.get();
@@ -48,6 +48,7 @@ public class DealServiceImpl implements DealService {
             dealRepository.save(deal);
             data = dealMapper.toDto(deal);
             data.setUserNickname(deal.getUser().getNickname());
+            data.setUserId(deal.getUser().getId());
         } else{
             data = null;
         }
@@ -106,11 +107,11 @@ public class DealServiceImpl implements DealService {
         DealCommentDto data = new DealCommentDto();
         if(optionalUser.isPresent()){
             UserEntity user = optionalUser.get();
-            DealCommentEntity deal = dealCommentMapper.toEntity(dealCommentDto);
-            deal.setUser(user);
-            dealCommentRepository.save(deal);
-            data = dealCommentMapper.toDto(deal);
-            data.setUserNickname(deal.getUser().getNickname());
+            DealCommentEntity dealComment = dealCommentMapper.toEntity(dealCommentDto);
+            dealComment.setUser(user);
+            dealCommentRepository.save(dealComment);
+            data = dealCommentMapper.toDto(dealComment);
+            data.setUserNickname(dealComment.getUser().getNickname());
         } else{
             data = null;
         }
@@ -119,11 +120,29 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public DealCommentDto updateDealComment(Integer idx, DealCommentDto dealCommentDto) {
-        return null;
+        Optional<DealCommentEntity> optionalDealComment = dealCommentRepository.findById(idx);
+        DealCommentDto data = new DealCommentDto();
+        if(optionalDealComment.isPresent()){
+            DealCommentEntity dealComment = optionalDealComment.get();
+            dealCommentMapper.updateFromDto(dealCommentDto, dealComment);
+            dealCommentRepository.save(dealComment);
+            data = dealCommentMapper.toDto(dealComment);
+            data.setUserNickname(dealComment.getUser().getNickname());
+        } else{
+            data = null;
+        }
+        return data;
     }
 
     @Override
     public boolean deleteDealComment(Integer idx) {
-        return false;
+        Optional<DealCommentEntity> optionalDealComment = dealCommentRepository.findById(idx);
+        if(optionalDealComment.isPresent()){
+            DealCommentEntity dealComment = optionalDealComment.get();
+            dealCommentRepository.delete(dealComment);
+            return true;
+        } else{
+            return false;
+        }
     }
 }
