@@ -117,6 +117,7 @@ public class DealController {
         String decodeId = checkToken(request);
         if(decodeId != null){
             try {
+                dealCommentDto.setUserId(decodeId);
                 DealCommentDto data = dealService.registDealComment(dealCommentDto);
                 if(data != null){
                     resultMap.put("data", data);

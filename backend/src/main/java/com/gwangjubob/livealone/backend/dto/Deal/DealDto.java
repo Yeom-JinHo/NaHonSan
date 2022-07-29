@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class DealDto {
+    private Integer idx;
     private String userNickname;
     private String userId;
     private String title;
@@ -29,4 +31,6 @@ public class DealDto {
     private Integer likes;
     private Integer comment;
     private List<DealCommentDto> comments;
+    LocalDateTime time;
+    LocalDateTime updateTime;
 }

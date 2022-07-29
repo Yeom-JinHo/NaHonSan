@@ -65,6 +65,8 @@ public class DealServiceImpl implements DealService {
             List<DealCommentDto> commentDto = dealCommentMapper.toDtoList(comments);
             data = dealMapper.toDto(deal);
             data.setComments(commentDto);
+            data.setUserNickname(deal.getUser().getNickname());
+            data.setUserId(deal.getUser().getId());
             return data;
         } else{
             data = null;
@@ -103,15 +105,20 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public DealCommentDto registDealComment(DealCommentDto dealCommentDto) {
-        Optional<UserEntity> optionalUser = userRepository.findByNickname(dealCommentDto.getUserNickname());
+        Optional<UserEntity> optionalUser = userRepository.findById(dealCommentDto.getUserId());
+        Optional<DealEntity> optionalDeal = dealRepository.findById(dealCommentDto.getPostIdx());
         DealCommentDto data = new DealCommentDto();
-        if(optionalUser.isPresent()){
+        if(optionalUser.isPresent() && optionalDeal.isPresent()){
             UserEntity user = optionalUser.get();
+            DealEntity deal = optionalDeal.get();
             DealCommentEntity dealComment = dealCommentMapper.toEntity(dealCommentDto);
             dealComment.setUser(user);
+            dealComment.setDeal(deal);
             dealCommentRepository.save(dealComment);
             data = dealCommentMapper.toDto(dealComment);
             data.setUserNickname(dealComment.getUser().getNickname());
+            data.setUserId(dealComment.getUser().getId());
+            data.setPostIdx(dealComment.getDeal().getIdx());
         } else{
             data = null;
         }
