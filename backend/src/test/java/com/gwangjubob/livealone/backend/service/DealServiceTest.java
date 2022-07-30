@@ -234,6 +234,8 @@ public class DealServiceTest {
             if(optionalUserLikeDeals.isPresent()){
                 UserLikeDealsEntity userLikeDeals = optionalUserLikeDeals.get();
                 userLikeDealsRepository.delete(userLikeDeals);
+                deal.setLikes(deal.getLikes() - 1);
+                dealRepository.save(deal);
                 resultMap.put("message", okay);
                 resultMap.put("data", "좋아요 취소");
             } else{
@@ -243,6 +245,8 @@ public class DealServiceTest {
                         .user(user)
                         .build();
                userLikeDealsRepository.save(userLikeDeals);
+               deal.setLikes(deal.getLikes() + 1);
+               dealRepository.save(deal);
                resultMap.put("message", "좋아요");
             }
         } else{

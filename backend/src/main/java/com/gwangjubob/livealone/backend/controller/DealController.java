@@ -169,6 +169,24 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
+    @GetMapping("/honeyDeal/like/{idx}")
+    public ResponseEntity<?> likeDeal(@PathVariable Integer idx, HttpServletRequest request){
+        resultMap = new HashMap<>();
+        String decodeId = checkToken(request);
+        try {
+            if(dealService.likeDeal(idx, decodeId)){
+                resultMap.put("message", okay);
+            } else{
+                resultMap.put("message", fail);
+            }
+             status = HttpStatus.OK;
+        } catch (Exception e){
+            resultMap.put("message", fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
+
     public String checkToken(HttpServletRequest request){
         String accessToken = request.getHeader("Authorization");
         String decodeId = jwtService.decodeToken(accessToken);
