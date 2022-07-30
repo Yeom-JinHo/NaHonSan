@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -249,6 +250,21 @@ public class DealServiceTest {
                dealRepository.save(deal);
                resultMap.put("message", "좋아요");
             }
+        } else{
+            resultMap.put("message", fail);
+        }
+        System.out.println(resultMap);
+    }
+
+    @Test
+    public void 꿀딜_게시글_조회(){
+        Map<String, Object> resultMap = new HashMap<>();
+        String category = "의류";
+        List<DealEntity> deals = dealRepository.findByCategory(category);
+        if(deals != null){
+            List<DealDto> result = dealMapper.toDtoList(deals);
+            resultMap.put("message", okay);
+            resultMap.put("data", result);
         } else{
             resultMap.put("message", fail);
         }

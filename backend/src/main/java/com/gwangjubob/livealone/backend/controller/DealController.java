@@ -56,7 +56,7 @@ public class DealController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
-    @GetMapping("/honeyDeal/{idx}")
+    @GetMapping("/honeyDeal/detail/{idx}")
     public ResponseEntity<?> viewDetailDeal(@PathVariable Integer idx){
         resultMap = new HashMap<>();
         try {
