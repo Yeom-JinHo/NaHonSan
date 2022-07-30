@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -53,6 +54,24 @@ public class DealController {
                 resultMap.put("message", fail);
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
             }
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
+    @GetMapping("/honeyDeal/{category}")
+    public ResponseEntity<?> viewDeal(@PathVariable String category){
+        resultMap = new HashMap<>();
+        try {
+            List<DealDto> data = dealService.viewDeal(category);
+            if (data != null){
+                resultMap.put("data", data);
+                resultMap.put("message", okay);
+            } else{
+                resultMap.put("message", fail);
+            }
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            resultMap.put("message", fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity<>(resultMap, status);
     }

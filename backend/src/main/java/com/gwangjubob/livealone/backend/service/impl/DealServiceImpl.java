@@ -71,7 +71,18 @@ public class DealServiceImpl implements DealService {
             data.setComments(commentDto);
             data.setUserNickname(deal.getUser().getNickname());
             data.setUserId(deal.getUser().getId());
-            return data;
+        } else{
+            data = null;
+        }
+        return data;
+    }
+
+    @Override
+    public List<DealDto> viewDeal(String category) {
+        List<DealEntity> deals = dealRepository.findByCategory(category);
+        List<DealDto> data = new ArrayList<>();
+        if(deals != null){
+            data = dealMapper.toDtoList(deals);
         } else{
             data = null;
         }
@@ -88,7 +99,6 @@ public class DealServiceImpl implements DealService {
             deal.setUpdateTime(LocalDateTime.now());
             DealEntity res =dealRepository.save(deal);
             data = dealMapper.toDto(res);
-            return data;
         } else {
             data = null;
         }
