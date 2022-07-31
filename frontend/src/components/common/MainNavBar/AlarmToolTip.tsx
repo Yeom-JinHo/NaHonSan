@@ -1,5 +1,7 @@
 import LoadingSpinner from "@images/LoadingSpinner.svg";
-import { getAlarmList } from "@apis/alarm";
+import { AlramType } from "@store/ducks/alarm/alarm.type";
+import { getAlarmList } from "@store/ducks/alarm/alarmThunk";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
 import React, { useEffect, useState } from "react";
 import { v4 } from "uuid";
 import Alarm, { AlarmProps } from "./Alarm";
@@ -10,15 +12,13 @@ type AlarmToolTipProps = {
 };
 
 function AlarmToolTip({ closeTooltip }: AlarmToolTipProps) {
-  const [alramList, setAlarmList] = useState([]);
+  const alramList = useAppSelector(state => state.alarm.list);
   const [firstLoading, setFirstLoading] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
   useEffect(() => {
     (async () => {
-      const res = await getAlarmList();
-      if (res.message === "SUCCESS") {
-        setFirstLoading(true);
-        setAlarmList(res.data);
-      }
+      await dispatch(getAlarmList());
+      setFirstLoading(true);
     })();
   }, []);
   return (
@@ -37,7 +37,7 @@ function AlarmToolTip({ closeTooltip }: AlarmToolTipProps) {
             )}
           </p>
         ) : (
-          alramList.map((alarm: AlarmProps) => (
+          alramList.map((alarm: AlramType) => (
             <Alarm
               idx={alarm.idx}
               noticeType={alarm.noticeType}

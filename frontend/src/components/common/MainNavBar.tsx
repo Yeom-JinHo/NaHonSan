@@ -20,8 +20,8 @@ function MainNavBar() {
   };
   const { userInfo, dmCount, noticeCount } = useAppSelector(state => ({
     userInfo: state.auth.userInfo,
-    dmCount: state.dm.dmCount,
-    noticeCount: state.dm.noticeCount
+    dmCount: state.dm.count,
+    noticeCount: state.alarm.count
   }));
   const params = useSearchParams();
   const dispatch = useAppDispatch();
@@ -71,7 +71,7 @@ function MainNavBar() {
           <nav className="right-nav notoReg flex align-center">
             {userInfo ? (
               <>
-                <button type="button" className="right-nav__link alarm">
+                <div className="right-nav__link alarm">
                   <p className="alarm__cnt fs-8 flex align-center justify-center">
                     {noticeCount}
                   </p>
@@ -84,7 +84,7 @@ function MainNavBar() {
                   {alarmVisible && (
                     <AlarmToolTip closeTooltip={() => setAlarmVisible(false)} />
                   )}
-                </button>
+                </div>
                 <Link className="right-nav__link alarm" to="/letters">
                   <p className="alarm__cnt fs-8 flex align-center justify-center">
                     {dmCount}

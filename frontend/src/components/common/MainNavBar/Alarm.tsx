@@ -4,7 +4,9 @@ import CloseIcon from "@images/X.svg";
 import "./Alarm.scss";
 import elapsedTime from "@utils/elapsedTime";
 import { Link } from "react-router-dom";
-import { deleteNotice, readNotice } from "@apis/alarm";
+import { readAlarm, reqDeleteAlarm } from "@apis/alarm";
+import { useAppDispatch } from "@store/hooks";
+import { deleteAlarm } from "@store/ducks/alarm/alarmSlice";
 
 export type AlarmProps = {
   idx: number;
@@ -29,12 +31,14 @@ function Alarm({
 }: AlarmProps) {
   const onClickAlarm = () => {
     if (!read) {
-      readNotice(idx);
+      readAlarm(idx);
     }
     closeTooltip();
   };
+  const dispatch = useAppDispatch();
   const handleDeleteBtn = () => {
-    deleteNotice(idx);
+    reqDeleteAlarm(idx);
+    dispatch(deleteAlarm(idx));
   };
   const getContent = (name: string, type: string) => {
     if (type === "like") {
