@@ -19,9 +19,4 @@ public interface TipRepository extends JpaRepository<TipEntity, Integer> {
     @Modifying
     @Query(value = "UPDATE TipEntity t SET t.view = t.view+1 WHERE t.idx = :idx")
     void increaseViewCount(Integer idx);
-
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE TipEntity t SET t.comment = :totalComment WHERE t.idx = :idx")
-    void updateTotalComment(Integer idx, int totalComment);
 }

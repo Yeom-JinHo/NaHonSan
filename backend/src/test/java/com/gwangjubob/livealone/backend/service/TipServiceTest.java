@@ -140,12 +140,14 @@ public class TipServiceTest {
 
             // 전체 댓글 수 조회
             int totalComment = tipCommentRepository.getCommentCount(idx);
-            tipRepository.updateTotalComment(idx, totalComment);
-
 
             // 좋아요 수 조회
+            int totalLike = userLikeTipsRepository.getLikeCount(idx);
 
+            tipEntity.setComment(totalComment);
+            tipEntity.setLike(totalLike);
 
+            tipRepository.saveAndFlush(tipEntity);
             // then
             System.out.println(tipDto.toString());
 
