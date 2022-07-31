@@ -26,6 +26,7 @@ import AccountSettingPage from "@screens/AccountSetting/AccountSettingPage";
 import Withdrawal from "@screens/AccountSetting/Withdrawal";
 import DealDetailPage from "@screens/DealDetailPage";
 import TipDetail from "@screens/TipDetail";
+import Editor from "@components/common/s3Uploader/Editor";
 
 function RootRouter() {
   return (
@@ -39,6 +40,7 @@ function RootRouter() {
             <Route path="detail/:id" element={<TipDetail />} />
           </Route>
           <Route path="/feed" element={<FeedPage />} />
+          <Route path="/edit" element={<Editor />} />
           <Route path="/deal">
             <Route index element={<DealPage />} />
             <Route path="detail/:id" element={<DealDetailPage />} />
