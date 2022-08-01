@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,8 +15,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
-@ToString
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

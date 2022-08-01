@@ -268,15 +268,14 @@ public class TipServiceTest {
         String content = "댓글 수정 테스트2222";
         byte[] bannerImg = null;
         Integer idx = 61;
-        Integer postIdx = 46;
         Integer upIdx = 60; // 댓글수정이면 0, 대댓글수정이면 댓글 글번호
 
         UserEntity user = userRepository.findByNickname(nickname).get();
-        TipEntity tip = tipRepository.findByIdx(postIdx).get();
         Optional<TipCommentEntity> optionalTipComment = tipCommentRepository.findByIdx(idx);
 
         if(optionalTipComment.isPresent()){ // 댓글이 있다면 수정
             TipCommentEntity testTipComment = optionalTipComment.get();
+            TipEntity tip = tipRepository.findByIdx(testTipComment.getTip().getIdx()).get();
 
             TipCommentEntity tipComment = TipCommentEntity.builder()
                     .idx(idx)
