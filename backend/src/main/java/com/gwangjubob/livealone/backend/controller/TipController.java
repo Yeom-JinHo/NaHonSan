@@ -188,6 +188,25 @@ public class TipController {
         return new ResponseEntity<>(resultMap, status);
     }
 
+    @GetMapping("honeyTip/like/{idx}")
+    public ResponseEntity<?> likeTip(HttpServletRequest request, @PathVariable Integer idx){
+        resultMap = new HashMap<>();
+        String decodeId = checkToken(request);
+
+        if(!decodeId.equals("timeout")){
+            try{
+                tipService.likeTip(decodeId, idx);
+                resultMap.put("message", okay);
+                status = HttpStatus.OK;
+            }catch (Exception e){
+                resultMap.put("message", fail);
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+        }
+
+        return new ResponseEntity<>(resultMap, status);
+    }
+
     public String checkToken(HttpServletRequest request){
         String accessToken = request.getHeader("Authorization");
         String decodeId = jwtService.decodeToken(accessToken);
