@@ -1,8 +1,10 @@
 package com.gwangjubob.livealone.backend.service.impl;
 
+import com.gwangjubob.livealone.backend.domain.entity.NoticeEntity;
 import com.gwangjubob.livealone.backend.domain.entity.TipEntity;
 import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
 import com.gwangjubob.livealone.backend.domain.entity.UserLikeTipsEntity;
+import com.gwangjubob.livealone.backend.domain.repository.NoticeRepository;
 import com.gwangjubob.livealone.backend.domain.repository.TipRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserLikeTipsRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
@@ -28,24 +30,24 @@ import java.util.Optional;
 @Service
 public class TipServiceImpl implements TipService {
     private TipRepository tipRepository;
-    private UserService userService;
     private UserRepository userRepository;
+    private NoticeRepository noticeRepository;
     private TipCreateMapper tipCreateMapper;
     private TipUpdateMapper tipUpdateMapper;
     private TipDetailViewMapper tipDetailViewMapper;
     private UserLikeTipsRepository userLikeTipsRepository;
 
     @Autowired
-    public TipServiceImpl(TipRepository tipRepository, UserService userService, UserRepository userRepository,
+    public TipServiceImpl(TipRepository tipRepository, NoticeRepository noticeRepository, UserRepository userRepository,
                           TipCreateMapper tipCreateMapper, TipUpdateMapper tipUpdateMapper, TipDetailViewMapper tipDetailViewMapper,
                           UserLikeTipsRepository userLikeTipsRepository){
         this.tipRepository = tipRepository;
-        this.userService = userService;
         this.userRepository = userRepository;
         this.tipCreateMapper = tipCreateMapper;
         this.tipUpdateMapper = tipUpdateMapper;
         this.tipDetailViewMapper = tipDetailViewMapper;
         this.userLikeTipsRepository = userLikeTipsRepository;
+        this.noticeRepository = noticeRepository;
     }
     @Override
     public void createTip(String decodeId, TipCreateDto tipCreateDto) {
@@ -140,15 +142,17 @@ public class TipServiceImpl implements TipService {
         Optional<UserLikeTipsEntity> userLikeTipsEntity = userLikeTipsRepository.findByUserAndTip(userEntity, tipEntity);
 
         if(userLikeTipsEntity.isPresent()){
-            // 회원이 게시물에 좋아요를 이미 누른 상태 -> 한 번 더 클릭하면 좋아요 취소
+            UserLikeTipsEntity userLikeTip = userLikeTipsEntity.get();
             userLikeTipsRepository.delete(userLikeTipsEntity.get());
 
             tipEntity.setLike(tipEntity.getLike() - 1);
             tipRepository.save(tipEntity);
 
+            NoticeEntity noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like", userEntity.getId(), "tip", tipEntity.getIdx());
+            if(noticeEntity != null){
+                noticeRepository.delete(noticeEntity);
+            }
         }else{
-            // 좋아요 누르지 않은 상태 -> 좋아요
-            // 좋아요 버튼을 한 번 누르면 -> 좋아요 등록
             UserLikeTipsEntity likeTipsEntity = UserLikeTipsEntity.builder()
                     .tip(tipEntity)
                     .user(userEntity)
@@ -159,6 +163,18 @@ public class TipServiceImpl implements TipService {
 
             tipEntity.setLike(tipEntity.getLike() + 1);
             tipRepository.save(tipEntity);
+
+            if(!tipEntity.getUser().getId().equals(userEntity.getId())){
+                NoticeEntity noticeEntity = NoticeEntity.builder()
+                        .noticeType("like")
+                        .user(tipEntity.getUser())
+                        .fromUserId(userEntity.getId())
+                        .postType("tip")
+                        .postIdx(tipEntity.getIdx())
+                        .build();
+
+                noticeRepository.save(noticeEntity);
+            }
         }
     }
 
