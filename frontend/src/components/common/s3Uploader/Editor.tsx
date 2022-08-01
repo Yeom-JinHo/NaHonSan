@@ -4,7 +4,11 @@ import "react-quill/dist/quill.snow.css";
 import { deleteFile, uploadFile } from "./awsS3";
 import "./Editor.scss";
 
-function Editor() {
+interface Editor {
+  editorValue: any;
+}
+
+function Editor({ editorValue }: Editor) {
   const [value, setValue] = useState("");
   const [tmpImg, setTmpImg] = useState([""]);
   const [preview, setPreview] = useState({
@@ -64,12 +68,10 @@ function Editor() {
     tmpImg.shift();
     tmpImg.forEach(async item => {
       if (!value.includes(item)) {
-        console.log(1);
-        console.log(item);
-        deleteFile(item);
+        await deleteFile(item);
       }
     });
-
+    editorValue(value);
     setPreview({
       __html: value
     });

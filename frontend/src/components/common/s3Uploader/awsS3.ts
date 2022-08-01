@@ -2,7 +2,7 @@ import AWS from "aws-sdk";
 import { v1 } from "uuid";
 
 AWS.config.update({
-  region: process.env.REACT_APP_AWS_REGION,
+  region: "ap-northeast-2",
   accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY,
   secretAccessKey: process.env.REACT_APP_AWS_SECRET_KEY
 });
@@ -10,7 +10,7 @@ AWS.config.update({
 export const uploadFile = (file: File) => {
   const upload = new AWS.S3.ManagedUpload({
     params: {
-      Bucket: process.env.REACT_APP_AWS_BUCKET as string,
+      Bucket: "gwangjubob",
       Key: `${v1()}.png`,
       Body: file
     }
@@ -25,7 +25,7 @@ export const deleteFile = (url: string) => {
   const del = new AWS.S3();
   del.deleteObject(
     {
-      Bucket: process.env.REACT_APP_AWS_BUCKET as string,
+      Bucket: "gwangjubob",
       Key: fileUrl as string
     },
     function (err, data) {
