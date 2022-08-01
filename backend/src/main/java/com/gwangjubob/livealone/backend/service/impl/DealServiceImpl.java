@@ -1,14 +1,8 @@
 package com.gwangjubob.livealone.backend.service.impl;
 
 
-import com.gwangjubob.livealone.backend.domain.entity.DealCommentEntity;
-import com.gwangjubob.livealone.backend.domain.entity.DealEntity;
-import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
-import com.gwangjubob.livealone.backend.domain.entity.UserLikeDealsEntity;
-import com.gwangjubob.livealone.backend.domain.repository.DealCommentRepository;
-import com.gwangjubob.livealone.backend.domain.repository.DealRepository;
-import com.gwangjubob.livealone.backend.domain.repository.UserLikeDealsRepository;
-import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
+import com.gwangjubob.livealone.backend.domain.entity.*;
+import com.gwangjubob.livealone.backend.domain.repository.*;
 import com.gwangjubob.livealone.backend.dto.Deal.DealCommentDto;
 import com.gwangjubob.livealone.backend.dto.Deal.DealDto;
 import com.gwangjubob.livealone.backend.mapper.DealCommentMapper;
@@ -29,15 +23,18 @@ public class DealServiceImpl implements DealService {
 
     private DealCommentRepository dealCommentRepository;
     private UserLikeDealsRepository userLikeDealsRepository;
+    private NoticeRepository noticeRepository;
     private DealCommentMapper dealCommentMapper;
     @Autowired
-    DealServiceImpl(DealRepository dealRepository, DealMapper dealMapper, UserRepository userRepository, DealCommentRepository dealCommentRepository, DealCommentMapper dealCommentMapper, UserLikeDealsRepository userLikeDealsRepository){
+    DealServiceImpl(DealRepository dealRepository, DealMapper dealMapper, UserRepository userRepository, DealCommentRepository dealCommentRepository,
+                    NoticeRepository noticeRepository, DealCommentMapper dealCommentMapper, UserLikeDealsRepository userLikeDealsRepository){
         this.dealRepository = dealRepository;
         this.dealMapper = dealMapper;
         this.userRepository = userRepository;
         this.dealCommentRepository = dealCommentRepository;
         this.dealCommentMapper = dealCommentMapper;
         this.userLikeDealsRepository = userLikeDealsRepository;
+        this.noticeRepository = noticeRepository;
     }
 
 
@@ -180,6 +177,12 @@ public class DealServiceImpl implements DealService {
                 userLikeDealsRepository.delete(userLikeDeals);
                 deal.setLikes(deal.getLikes() - 1);
                 dealRepository.save(deal);
+
+                // 좋아요 취소 누르면 알림까지 삭제
+                NoticeEntity noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like",user.getId(),"deal",deal.getIdx());
+                if(noticeEntity != null){
+                    noticeRepository.delete(noticeEntity);
+                }
             } else{
                 UserLikeDealsEntity userLikeDeals = UserLikeDealsEntity
                         .builder()
@@ -189,6 +192,17 @@ public class DealServiceImpl implements DealService {
                 userLikeDealsRepository.save(userLikeDeals);
                 deal.setLikes(deal.getLikes() + 1);
                 dealRepository.save(deal);
+
+                NoticeEntity noticeEntity = NoticeEntity.builder()
+                        .noticeType("like")
+                        .user(deal.getUser())
+                        .fromUserId(user.getId())
+                        .postType("deal")
+                        .postIdx(deal.getIdx())
+                        .time(userLikeDeals.getTime())
+                        .build();
+
+                noticeRepository.save(noticeEntity);
             }
             return true;
         } else{
