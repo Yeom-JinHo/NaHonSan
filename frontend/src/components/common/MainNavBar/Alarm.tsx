@@ -63,7 +63,7 @@ function Alarm({
           className="content notoReg fs-14"
           onClick={onClickAlarm}
         >
-          {name}님이 회원을 팔로우하였습니다.
+          {name}님이 회원님을 팔로우하였습니다.
         </Link>
       );
     }
@@ -92,7 +92,7 @@ function Alarm({
         className="content notoReg fs-14"
         onClick={onClickAlarm}
       >
-        ${name}님이 회원님의 댓글에 대댓글을 남겼습니다.
+        {name}님이 회원님의 댓글에 대댓글을 남겼습니다.
       </Link>
     );
   };
