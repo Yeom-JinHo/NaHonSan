@@ -84,7 +84,7 @@ public class DealController {
             Cookie[] cookies = request.getCookies();
             if(cookies != null){
                 for (Cookie cookie : cookies){
-                    if(cookie.getName().equals("postView")){
+                    if(cookie.getName().equals("postDeal")){
                         oldCookie = cookie;
                     }
                 }
@@ -101,7 +101,7 @@ public class DealController {
                 }
             } else{
                 dealService.countUpView(idx);
-                Cookie newCookie = new Cookie("postView", "["+ idx + "]");
+                Cookie newCookie = new Cookie("postDeal", "["+ idx + "]");
                 newCookie.setPath("/");
                 newCookie.setMaxAge(60 * 60 * 24);
                 response.addCookie(newCookie);
