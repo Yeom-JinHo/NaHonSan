@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./Card.scss";
 import UserDummyIcon from "@images/UserDummy.svg";
-import ThumDummy from "@images/ThumnailDummy.jpg";
+import HoneyRecipe from "@images/HoneyRecipe.svg";
+import HoneyTem from "@images/HoneyTem.svg";
+import HoneyTip from "@images/HoneyTip.svg";
 import HeartIcon from "@images/HeartSkelton.svg";
 import ViewIcon from "@images/ViewSkelton.svg";
 import CommentIcon from "@images/CommentSkelton.svg";
 import getCounts from "@utils/getCounts";
 import TipIcon from "@images/Tip.svg";
 import DealIcon from "@images/Deal.svg";
-import { getDummyImg } from "@apis/dummy";
 
 export type CardProps = {
   type: "tip" | "deal";
@@ -20,6 +21,7 @@ export type CardProps = {
   like: number;
   comment: number;
   view: number;
+  category: string;
 };
 
 function Card({
@@ -31,8 +33,16 @@ function Card({
   bannerImg,
   like,
   comment,
-  view
+  view,
+  category
 }: CardProps) {
+  const getImgSrc = () => {
+    if (bannerImg) return `data:image/jpeg;base64,${bannerImg}`;
+    if (category === "item") return HoneyTem;
+    if (category === "tip") return HoneyTip;
+    if (category === "recipe") return HoneyRecipe;
+    return null;
+  };
   return (
     <div id="card">
       <header className="card-header flex align-center">
@@ -51,7 +61,7 @@ function Card({
         <div className="img-container">
           <img
             className="card-main__thumnail"
-            src={bannerImg ? `data:image/jpeg;base64,${bannerImg}` : ThumDummy}
+            src={getImgSrc()}
             alt="썸네일더미"
           />
         </div>

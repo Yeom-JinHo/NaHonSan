@@ -116,7 +116,7 @@ function TipPage() {
           searchType="tip"
           sort={conditions.sort}
           keyword={conditions.keyword}
-          category={conditions.category}
+          searchCategory={conditions.category}
         />
       </div>
     </div>

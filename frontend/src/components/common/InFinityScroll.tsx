@@ -6,14 +6,14 @@ type InFinityScrollProps = {
   sort: string;
   searchType: "deal" | "tip";
   keyword: string | null;
-  category: string;
+  searchCategory: string;
 };
 
 function InFinityScroll({
   sort,
   searchType,
   keyword,
-  category
+  searchCategory
 }: InFinityScrollProps) {
   const [conditionList, setConditionList] = useState<Array<conditionType>>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +37,7 @@ function InFinityScroll({
     setIsLoading(true);
     setConditionList([
       ...conditionList,
-      { sort, searchType, keyword, category, page }
+      { sort, searchType, keyword, searchCategory, page }
     ]);
   }, [page]);
 
@@ -55,7 +55,7 @@ function InFinityScroll({
     setConditionList(() => []);
     setPage(-1);
     setIsEnd(false);
-  }, [sort, category, keyword]);
+  }, [sort, searchCategory, keyword]);
 
   const handleSpinner = useCallback(() => setIsLoading(false), []);
   const handleIsEnd = useCallback(() => setIsEnd(true), []);
@@ -68,7 +68,7 @@ function InFinityScroll({
               sort={condition.sort}
               searchType={searchType}
               keyword={condition.keyword}
-              category={condition.category}
+              searchCategory={condition.searchCategory}
               page={condition.page}
               key={condition.page}
               handleSpinner={handleSpinner}

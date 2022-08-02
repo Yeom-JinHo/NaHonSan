@@ -10,7 +10,7 @@ export type conditionType = {
   sort: string;
   searchType: "deal" | "tip";
   keyword: string | null;
-  category: string;
+  searchCategory: string;
   page: number;
 };
 
@@ -23,7 +23,7 @@ function CardList({
   searchType,
   sort,
   keyword,
-  category,
+  searchCategory,
   page,
   handleSpinner,
   handleIsEnd
@@ -33,7 +33,7 @@ function CardList({
   useEffect(() => {
     (async () => {
       if (searchType === "tip") {
-        const res = await getTipList(category, keyword, sort, page);
+        const res = await getTipList(searchCategory, keyword, sort, page);
         if (res.isEnd) handleIsEnd();
         setCards(res.data);
         setIsLoading(true);
@@ -51,6 +51,7 @@ function CardList({
               userNickname,
               userProfileImg,
               title,
+              category,
               bannerImg,
               like,
               comment,
@@ -66,6 +67,7 @@ function CardList({
                 like={like}
                 comment={comment}
                 view={view}
+                category={category}
                 key={v4()}
               />
             )
