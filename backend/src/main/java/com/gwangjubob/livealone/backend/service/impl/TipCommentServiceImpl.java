@@ -44,7 +44,7 @@ public class TipCommentServiceImpl implements TipCommentService {
         UserEntity user = userRepository.findById(decodeId).get();
         TipEntity tip = tipRepository.findByIdx(requestDto.getPostIdx()).get(); // 게시글 정보
 
-        TipCommentEntity entity = TipCommentEntity.builder()
+        TipCommentEntity tipComment = TipCommentEntity.builder()
                 .user(user)
                 .tip(tip)
                 .upIdx(requestDto.getUpIdx())
@@ -52,32 +52,35 @@ public class TipCommentServiceImpl implements TipCommentService {
                 .bannerImg(requestDto.getBannerImg())
                 .build();
 
-        tipCommentRepository.save(entity);
+        tipCommentRepository.save(tipComment);
 
         tip.setComment(tip.getComment() + 1);
         tipRepository.save(tip);
 
         if(!tip.getUser().getId().equals(user.getId())){
-            if(entity.getUpIdx() == 0){
-                NoticeEntity noticeEntity = NoticeEntity.builder()
+            if(tipComment.getUpIdx() == 0){
+                NoticeEntity notice = NoticeEntity.builder()
                         .noticeType("comment")
                         .user(tip.getUser())
                         .fromUserId(user.getId())
                         .postType("tip")
                         .postIdx(tip.getIdx())
+                        .commentIdx(tipComment.getIdx())
                         .build();
 
-                noticeRepository.save(noticeEntity);
+                noticeRepository.save(notice);
             }else{
-                NoticeEntity noticeEntity = NoticeEntity.builder()
+                NoticeEntity notice = NoticeEntity.builder()
                         .noticeType("reply")
                         .user(tip.getUser())
                         .fromUserId(user.getId())
                         .postType("tip")
                         .postIdx(tip.getIdx())
+                        .commentIdx(tipComment.getIdx())
+                        .commentUpIdx(tipComment.getUpIdx())
                         .build();
 
-                noticeRepository.save(noticeEntity);
+                noticeRepository.save(notice);
             }
         }
     }
@@ -139,40 +142,41 @@ public class TipCommentServiceImpl implements TipCommentService {
 
         if(optionalTipCommentEntity.isPresent()){
             TipCommentEntity tipComment = optionalTipCommentEntity.get();
-            TipEntity tipEntity = tipRepository.findByIdx(tipComment.getTip().getIdx()).get();
+            TipEntity tip = tipRepository.findByIdx(tipComment.getTip().getIdx()).get();
 
             if(user.getNickname().equals(tipComment.getUser().getNickname())){
                 if(tipComment.getUpIdx() != 0){
-                    tipEntity.setComment(tipEntity.getComment() - 1);
-                    tipRepository.save(tipEntity);
+                    tip.setComment(tip.getComment() - 1);
+                    tipRepository.save(tip);
 
                     tipCommentRepository.delete(tipComment);
 
-                    NoticeEntity noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("reply", user.getId(), "tip", tipEntity.getIdx());
-                    noticeRepository.delete(noticeEntity);
+                    NoticeEntity notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("reply", user.getId(), "tip", tip.getIdx(), tipComment.getIdx());
+                    if(notice != null){
+                        noticeRepository.delete(notice);
+                    }
                 }else{
                     List<TipCommentEntity> replyCommentList = tipCommentRepository.findByUpIdx(idx);
                     int size = replyCommentList.size();
 
                     if(!replyCommentList.isEmpty()){
-                        tipEntity.setComment(tipEntity.getComment() - size - 1);
-                        tipRepository.save(tipEntity);
+                        tip.setComment(tip.getComment() - size - 1);
+                        tipRepository.save(tip);
 
                         tipCommentRepository.deleteAllInBatch(replyCommentList);
 
-                        // 대댓글 들 알림까지 삭제
-                        List<NoticeEntity> noticeEntityList = noticeRepository.findAllByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("reply", user.getId(), "tip", tipEntity.getIdx());
+                        List<NoticeEntity> noticeList = noticeRepository.findAllByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentUpIdx("reply", user.getId(), "tip", tip.getIdx(), tipComment.getIdx());
 
-                        if(!noticeEntityList.isEmpty()){
-                            noticeRepository.deleteAllInBatch(noticeEntityList);
+                        if(!noticeList.isEmpty()){
+                            noticeRepository.deleteAllInBatch(noticeList);
                         }
                     }
                     tipCommentRepository.delete(tipComment);
 
-                    NoticeEntity noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("comment", user.getId(), "tip", tipEntity.getIdx());
+                    NoticeEntity notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("comment", user.getId(), "tip", tip.getIdx(), tipComment.getIdx());
 
-                    if(noticeEntity != null){
-                        noticeRepository.delete(noticeEntity);
+                    if(notice != null){
+                        noticeRepository.delete(notice);
                     }
                 }
             }

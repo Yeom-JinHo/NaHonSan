@@ -8,6 +8,7 @@ import com.gwangjubob.livealone.backend.dto.Deal.DealDto;
 import com.gwangjubob.livealone.backend.mapper.DealCommentMapper;
 import com.gwangjubob.livealone.backend.mapper.DealMapper;
 import com.gwangjubob.livealone.backend.service.DealService;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -130,6 +131,33 @@ public class DealServiceImpl implements DealService {
             data.setUserNickname(dealComment.getUser().getNickname());
             data.setUserId(dealComment.getUser().getId());
             data.setPostIdx(dealComment.getDeal().getIdx());
+
+            if(!deal.getUser().getId().equals(user.getId())){
+                if (dealComment.getUpIdx() == 0) {
+                    NoticeEntity notice = NoticeEntity.builder()
+                            .noticeType("comment")
+                            .user(deal.getUser())
+                            .fromUserId(user.getId())
+                            .postType("deal")
+                            .postIdx(deal.getIdx())
+                            .commentIdx(dealComment.getIdx())
+                            .build();
+
+                    noticeRepository.save(notice);
+                }else{
+                    NoticeEntity notice = NoticeEntity.builder()
+                            .noticeType("reply")
+                            .user(deal.getUser())
+                            .fromUserId(user.getId())
+                            .postType("deal")
+                            .postIdx(deal.getIdx())
+                            .commentIdx(dealComment.getIdx())
+                            .commentUpIdx(dealComment.getUpIdx())
+                            .build();
+
+                    noticeRepository.save(notice);
+                }
+            }
         } else{
             data = null;
         }
@@ -153,11 +181,49 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public boolean deleteDealComment(Integer idx) {
+    public boolean deleteDealComment(Integer idx, String userId) {
         Optional<DealCommentEntity> optionalDealComment = dealCommentRepository.findById(idx);
         if(optionalDealComment.isPresent()){
             DealCommentEntity dealComment = optionalDealComment.get();
-            dealCommentRepository.delete(dealComment);
+            DealEntity deal = dealRepository.findById(dealComment.getDeal().getIdx()).get();
+            UserEntity user = userRepository.findById(userId).get();
+
+            if(user.getId().equals(dealComment.getUser().getId())){
+                if(dealComment.getUpIdx() != 0){
+                    deal.setComment(deal.getComment() - 1);
+                    dealRepository.save(deal);
+
+                    dealCommentRepository.delete(dealComment);
+
+                    NoticeEntity notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("reply", user.getId(), "deal", deal.getIdx(), dealComment.getIdx());
+                    if(notice != null){
+                        noticeRepository.delete(notice);
+                    }
+                }
+            }else{
+                List<DealCommentEntity> replyCommentList = dealCommentRepository.findByUpIdx(idx);
+                int size = replyCommentList.size();
+
+                if(!replyCommentList.isEmpty()){
+                    deal.setComment(deal.getComment() - size - 1);
+                    dealRepository.save(deal);
+
+                    dealCommentRepository.deleteAllInBatch(replyCommentList);
+
+                    List<NoticeEntity> noticeList = noticeRepository.findAllByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentUpIdx("reply", user.getId(), "deal", deal.getIdx(), dealComment.getIdx());
+
+                    if(!noticeList.isEmpty()){
+                        noticeRepository.deleteAllInBatch(noticeList);
+                    }
+                    dealCommentRepository.delete(dealComment);
+
+                    NoticeEntity notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("comment", user.getId(), "deal", deal.getIdx(), dealComment.getIdx());
+
+                    if(notice != null){
+                        noticeRepository.delete(notice);
+                    }
+                }
+            }
             return true;
         } else{
             return false;
@@ -178,10 +244,9 @@ public class DealServiceImpl implements DealService {
                 deal.setLikes(deal.getLikes() - 1);
                 dealRepository.save(deal);
 
-                // 좋아요 취소 누르면 알림까지 삭제
-                NoticeEntity noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like",user.getId(),"deal",deal.getIdx());
-                if(noticeEntity != null){
-                    noticeRepository.delete(noticeEntity);
+                NoticeEntity notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like",user.getId(),"deal",deal.getIdx());
+                if(notice != null){
+                    noticeRepository.delete(notice);
                 }
             } else{
                 UserLikeDealsEntity userLikeDeals = UserLikeDealsEntity
@@ -193,7 +258,7 @@ public class DealServiceImpl implements DealService {
                 deal.setLikes(deal.getLikes() + 1);
                 dealRepository.save(deal);
 
-                NoticeEntity noticeEntity = NoticeEntity.builder()
+                NoticeEntity notice = NoticeEntity.builder()
                         .noticeType("like")
                         .user(deal.getUser())
                         .fromUserId(user.getId())
@@ -202,7 +267,7 @@ public class DealServiceImpl implements DealService {
                         .time(userLikeDeals.getTime())
                         .build();
 
-                noticeRepository.save(noticeEntity);
+                noticeRepository.save(notice);
             }
             return true;
         } else{

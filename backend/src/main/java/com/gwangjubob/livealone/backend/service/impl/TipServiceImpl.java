@@ -12,13 +12,10 @@ import com.gwangjubob.livealone.backend.dto.tip.TipCreateDto;
 import com.gwangjubob.livealone.backend.dto.tip.TipDetailViewDto;
 import com.gwangjubob.livealone.backend.dto.tip.TipUpdateDto;
 import com.gwangjubob.livealone.backend.dto.tip.TipViewDto;
-import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.mapper.TipCreateMapper;
 import com.gwangjubob.livealone.backend.mapper.TipDetailViewMapper;
 import com.gwangjubob.livealone.backend.mapper.TipUpdateMapper;
-import com.gwangjubob.livealone.backend.mapper.UserInfoMapper;
 import com.gwangjubob.livealone.backend.service.TipService;
-import com.gwangjubob.livealone.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -136,44 +133,44 @@ public class TipServiceImpl implements TipService {
 
     @Override
     public void likeTip(String decodeId, Integer idx) {
-        UserEntity userEntity = userRepository.findById(decodeId).get();
-        TipEntity tipEntity = tipRepository.findByIdx(idx).get();
+        UserEntity user = userRepository.findById(decodeId).get();
+        TipEntity tip = tipRepository.findByIdx(idx).get();
 
-        Optional<UserLikeTipsEntity> userLikeTipsEntity = userLikeTipsRepository.findByUserAndTip(userEntity, tipEntity);
+        Optional<UserLikeTipsEntity> userLikeTipsEntity = userLikeTipsRepository.findByUserAndTip(user, tip);
 
         if(userLikeTipsEntity.isPresent()){
             UserLikeTipsEntity userLikeTip = userLikeTipsEntity.get();
-            userLikeTipsRepository.delete(userLikeTipsEntity.get());
+            userLikeTipsRepository.delete(userLikeTip);
 
-            tipEntity.setLike(tipEntity.getLike() - 1);
-            tipRepository.save(tipEntity);
+            tip.setLike(tip.getLike() - 1);
+            tipRepository.save(tip);
 
-            NoticeEntity noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like", userEntity.getId(), "tip", tipEntity.getIdx());
-            if(noticeEntity != null){
-                noticeRepository.delete(noticeEntity);
+            NoticeEntity notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like", user.getId(), "tip", tip.getIdx());
+            if(notice != null){
+                noticeRepository.delete(notice);
             }
         }else{
             UserLikeTipsEntity likeTipsEntity = UserLikeTipsEntity.builder()
-                    .tip(tipEntity)
-                    .user(userEntity)
+                    .tip(tip)
+                    .user(user)
                     .time(LocalDateTime.now())
                     .build();
 
             userLikeTipsRepository.save(likeTipsEntity);
 
-            tipEntity.setLike(tipEntity.getLike() + 1);
-            tipRepository.save(tipEntity);
+            tip.setLike(tip.getLike() + 1);
+            tipRepository.save(tip);
 
-            if(!tipEntity.getUser().getId().equals(userEntity.getId())){
-                NoticeEntity noticeEntity = NoticeEntity.builder()
+            if(!tip.getUser().getId().equals(user.getId())){
+                NoticeEntity notice = NoticeEntity.builder()
                         .noticeType("like")
-                        .user(tipEntity.getUser())
-                        .fromUserId(userEntity.getId())
+                        .user(tip.getUser())
+                        .fromUserId(user.getId())
                         .postType("tip")
-                        .postIdx(tipEntity.getIdx())
+                        .postIdx(tip.getIdx())
                         .build();
 
-                noticeRepository.save(noticeEntity);
+                noticeRepository.save(notice);
             }
         }
     }
