@@ -42,7 +42,7 @@ function CardList({
     })();
   }, []);
   return (
-    <div id="card-list" className="flex justify-center">
+    <div id="card-list" className="flex">
       {isLoading
         ? cards.map(
             ({
