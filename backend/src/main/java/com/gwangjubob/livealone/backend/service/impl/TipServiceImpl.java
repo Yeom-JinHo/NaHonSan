@@ -145,9 +145,9 @@ public class TipServiceImpl implements TipService {
             tip.setLike(tip.getLike() - 1);
             tipRepository.save(tip);
 
-            NoticeEntity notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like", user.getId(), "tip", tip.getIdx());
-            if(notice != null){
-                noticeRepository.delete(notice);
+            Optional<NoticeEntity> notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like", user.getId(), "tip", tip.getIdx());
+            if(notice.isPresent()){
+                noticeRepository.delete(notice.get());
             }
         }else{
             UserLikeTipsEntity likeTipsEntity = UserLikeTipsEntity.builder()

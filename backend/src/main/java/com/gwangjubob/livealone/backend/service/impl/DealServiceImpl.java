@@ -195,9 +195,9 @@ public class DealServiceImpl implements DealService {
 
                     dealCommentRepository.delete(dealComment);
 
-                    NoticeEntity notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("reply", user.getId(), "deal", deal.getIdx(), dealComment.getIdx());
-                    if(notice != null){
-                        noticeRepository.delete(notice);
+                    Optional<NoticeEntity> notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("reply", user.getId(), "deal", deal.getIdx(), dealComment.getIdx());
+                    if(notice.isPresent()){
+                        noticeRepository.delete(notice.get());
                     }
                 }
             }else{
@@ -217,10 +217,10 @@ public class DealServiceImpl implements DealService {
                     }
                     dealCommentRepository.delete(dealComment);
 
-                    NoticeEntity notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("comment", user.getId(), "deal", deal.getIdx(), dealComment.getIdx());
+                    Optional<NoticeEntity> notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("comment", user.getId(), "deal", deal.getIdx(), dealComment.getIdx());
 
-                    if(notice != null){
-                        noticeRepository.delete(notice);
+                    if(notice.isPresent()){
+                        noticeRepository.delete(notice.get());
                     }
                 }
             }
@@ -244,9 +244,9 @@ public class DealServiceImpl implements DealService {
                 deal.setLikes(deal.getLikes() - 1);
                 dealRepository.save(deal);
 
-                NoticeEntity notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like",user.getId(),"deal",deal.getIdx());
-                if(notice != null){
-                    noticeRepository.delete(notice);
+                Optional<NoticeEntity> notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like",user.getId(),"deal",deal.getIdx());
+                if(notice.isPresent()){
+                    noticeRepository.delete(notice.get());
                 }
             } else{
                 UserLikeDealsEntity userLikeDeals = UserLikeDealsEntity

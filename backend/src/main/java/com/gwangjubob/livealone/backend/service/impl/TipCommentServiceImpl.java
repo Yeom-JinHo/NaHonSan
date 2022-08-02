@@ -151,9 +151,9 @@ public class TipCommentServiceImpl implements TipCommentService {
 
                     tipCommentRepository.delete(tipComment);
 
-                    NoticeEntity notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("reply", user.getId(), "tip", tip.getIdx(), tipComment.getIdx());
-                    if(notice != null){
-                        noticeRepository.delete(notice);
+                    Optional<NoticeEntity> notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("reply", user.getId(), "tip", tip.getIdx(), tipComment.getIdx());
+                    if(notice.isPresent()){
+                        noticeRepository.delete(notice.get());
                     }
                 }else{
                     List<TipCommentEntity> replyCommentList = tipCommentRepository.findByUpIdx(idx);
@@ -173,10 +173,10 @@ public class TipCommentServiceImpl implements TipCommentService {
                     }
                     tipCommentRepository.delete(tipComment);
 
-                    NoticeEntity notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("comment", user.getId(), "tip", tip.getIdx(), tipComment.getIdx());
+                    Optional<NoticeEntity> notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("comment", user.getId(), "tip", tip.getIdx(), tipComment.getIdx());
 
-                    if(notice != null){
-                        noticeRepository.delete(notice);
+                    if(notice.isPresent()){
+                        noticeRepository.delete(notice.get());
                     }
                 }
             }

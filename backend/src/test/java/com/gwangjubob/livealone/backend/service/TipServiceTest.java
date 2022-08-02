@@ -352,9 +352,9 @@ public class TipServiceTest {
                     tipCommentRepository.delete(tipComment);
 
                     // 알림이 있다면 알림도 삭제
-                    NoticeEntity noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("reply", userId, "tip", postIdx, tipComment.getIdx());
-                    if(noticeEntity != null){
-                        noticeRepository.delete(noticeEntity);
+                    Optional<NoticeEntity> noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("reply", userId, "tip", postIdx, tipComment.getIdx());
+                    if(noticeEntity.isPresent()){
+                        noticeRepository.delete(noticeEntity.get());
                     }
 
                 }else{ // 댓글이랑 엮인 대댓글"들"까지 삭제해야함
@@ -377,10 +377,10 @@ public class TipServiceTest {
                     }
                     tipCommentRepository.delete(tipComment); // 댓글 삭제
 
-                    NoticeEntity noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("comment", userId, "tip", postIdx, tipComment.getIdx());
+                    Optional<NoticeEntity> noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("comment", userId, "tip", postIdx, tipComment.getIdx());
 
-                    if(noticeEntity != null){
-                        noticeRepository.delete(noticeEntity);
+                    if(noticeEntity.isPresent()){
+                        noticeRepository.delete(noticeEntity.get());
                     }
                 }
             }
@@ -409,9 +409,9 @@ public class TipServiceTest {
 
             // 좋아요 취소 누르면 알림까지 삭제
 //            where n.notice_type = "like" and n.from_user_id = "ssafy" and n.post_type = "tip" and n.post_idx = 47;
-            NoticeEntity noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like",userId,"tip",postIdx);
-            if(noticeEntity != null){
-                noticeRepository.delete(noticeEntity);
+            Optional<NoticeEntity> noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like",userId,"tip",postIdx);
+            if(noticeEntity.isPresent()){
+                noticeRepository.delete(noticeEntity.get());
             }
         }else{
             // 좋아요 누르지 않은 상태 -> 좋아요
