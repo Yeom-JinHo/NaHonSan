@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@Transactional
+//@Transactional
 public class UserFeedServiceTest {
     private DMRepository dmRepository;
     private DMService dmService;

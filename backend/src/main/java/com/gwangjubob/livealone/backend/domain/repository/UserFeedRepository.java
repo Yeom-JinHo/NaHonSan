@@ -14,6 +14,7 @@ public interface UserFeedRepository extends JpaRepository<UserFollowEntity, Stri
     Optional<UserFollowEntity> findByUserIdAndFollowId(String userId, String followId);
     List<UserFollowEntity> findByUserId(String userId);
     List<UserFollowEntity> findByFollowId(String followId);
+    @Transactional
     void deleteByUserIdAndFollowId(String userId, String followId);
 
     int countByFollowId(String id);
