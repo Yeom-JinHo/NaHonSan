@@ -1,19 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { dataurlToBlob } from "@utils/resizer";
+import { v1 } from "uuid";
 import { deleteFile, uploadFile } from "./awsS3";
 import "./Editor.scss";
 
 interface Editor {
-  editorValue: any;
+  editorValue: (value: string) => void;
+  getValue: boolean;
 }
 
-function Editor({ editorValue }: Editor) {
+function Editor({ editorValue, getValue }: Editor) {
   const [value, setValue] = useState("");
   const [tmpImg, setTmpImg] = useState([""]);
-  const [preview, setPreview] = useState({
-    __html: ""
-  });
+
   const quillRef = useRef<any>(null);
   const toolbarOptions = [
     ["image"],
@@ -28,7 +29,9 @@ function Editor({ editorValue }: Editor) {
   };
 
   useEffect(() => {
+    // 에디터 이미지 첨부 시 커스텀 이미지핸들러 실행
     const handleImage = () => {
+      // 인풋 만들어서 업로드
       const input = document.createElement("input");
       input.setAttribute("type", "file");
       input.setAttribute("accept", "image/*");
@@ -38,10 +41,27 @@ function Editor({ editorValue }: Editor) {
           const quill = quillRef.current;
           const range = quill.getEditor().getSelection(true);
           const file = input.files[0];
-          const url = await uploadFile(file);
-          setTmpImg(cur => [...cur, url]);
-          quill.getEditor().insertEmbed(range.index, "image", url);
-          quill.getEditor().setSelection(range.index + 1);
+          const newImg = new Image();
+          const imgUrl = URL.createObjectURL(file);
+          newImg.src = imgUrl;
+
+          // 캔버스에 그리면서 리사이징, 컴포넌트로 사용하던거랑 조금 달라서 따로 구현
+          const canvas = document.createElement("canvas");
+          newImg.onload = async () => {
+            const ctx = canvas.getContext("2d");
+            canvas.width = 300;
+            canvas.height = 300;
+            ctx?.drawImage(newImg, 0, 0, 300, 300);
+            const dataUrl = canvas.toDataURL("image/jpeg");
+
+            // 캔버스로 그리면 dataurl 생성, 생성 된 dataurl > Blob > File 순으로 변경
+            const newFile = new File([dataurlToBlob(dataUrl)], v1());
+            console.log(newFile);
+            const url = await uploadFile(newFile);
+            setTmpImg(cur => [...cur, url]);
+            quill.getEditor().insertEmbed(range.index, "image", url);
+            quill.getEditor().setSelection(range.index + 1);
+          };
         }
       };
     };
@@ -64,7 +84,7 @@ function Editor({ editorValue }: Editor) {
     "width"
   ];
 
-  const send = () => {
+  if (getValue) {
     tmpImg.shift();
     tmpImg.forEach(async item => {
       if (!value.includes(item)) {
@@ -72,10 +92,7 @@ function Editor({ editorValue }: Editor) {
       }
     });
     editorValue(value);
-    setPreview({
-      __html: value
-    });
-  };
+  }
 
   return (
     <div id="editor">
@@ -89,10 +106,6 @@ function Editor({ editorValue }: Editor) {
           onChange={setValue}
         />
       </div>
-      <button type="button" onClick={send} className="send">
-        Send
-      </button>
-      {preview ? <div dangerouslySetInnerHTML={preview} /> : null}
     </div>
   );
 }

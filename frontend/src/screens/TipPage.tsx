@@ -6,9 +6,14 @@ import searchIcon from "@images/Search.svg";
 import HoneyRecipe from "@images/HoneyRecipe.svg";
 import HoneyTem from "@images/HoneyTem.svg";
 import HoneyTip from "@images/HoneyTip.svg";
+import { useNavigate } from "react-router-dom";
 
 function TipPage() {
   const [tag, setTag] = useState(0);
+  const navigate = useNavigate();
+  const goEdit = () => {
+    navigate("edit");
+  };
   return (
     <div id="tip-page">
       <div className="intro flex">
@@ -17,7 +22,7 @@ function TipPage() {
             <p className="fs-48 notoReg">
               <span>꿀</span>팁
             </p>
-            <button className="notoReg" type="button">
+            <button className="notoReg" type="button" onClick={goEdit}>
               꿀팁쓰기
             </button>
           </div>

@@ -17,7 +17,10 @@ export const uploadFile = (file: File) => {
   });
   const promise = upload.promise();
 
-  return promise.then(res => res.Location);
+  return promise.then(res => {
+    console.log(res);
+    return res.Location;
+  });
 };
 
 export const deleteFile = (url: string) => {

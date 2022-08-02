@@ -3,7 +3,7 @@
     width: (570px);
   }
   .quill {
-    margin-top: (24px);
+    margin-top: (60px);
   }
   .ql {
     &-toolbar {
@@ -16,10 +16,16 @@
       border-radius: (24px);
       margin-top: (36px);
       border: 1px solid #d9d9d9;
-      min-height: 60vh;
+      height: 60vh;
+      overflow-y: auto;
+      & img {
+        display: inline-block;
+        width: 100%;
+      }
     }
     &-editor {
-      padding: (36px);
+      padding: (60px);
+      line-height: (48px);
     }
   }
   .send {
@@ -29,5 +35,124 @@
     background-color: $MAIN_YELLOW;
     margin-top: (32px);
     margin-bottom: 100px;
+  }
+}
+
+@media screen and (max-width: $DESKTOP-VW) {
+  #editor {
+    .editor {
+      width: vw(570px);
+    }
+    .quill {
+      margin-top: vw(60px);
+    }
+    .ql {
+      &-toolbar {
+        border-radius: vw(24px);
+        display: flex;
+        justify-content: center;
+      }
+      &-container {
+        font-size: vw(24px);
+        border-radius: vw(24px);
+        margin-top: vw(36px);
+        border: 1px solid #d9d9d9;
+        height: 60vh;
+        overflow-y: auto;
+        & img {
+          display: inline-block;
+          width: 100%;
+        }
+      }
+      &-editor {
+        padding: vw(60px);
+        line-height: vw(48px);
+      }
+    }
+    .send {
+      border-radius: vw(24px);
+      width: 100px;
+      height: 44px;
+      background-color: $MAIN_YELLOW;
+      margin-top: vw(32px);
+      margin-bottom: 100px;
+    }
+  }
+}
+
+@media screen and (max-width: $TABLET-VW) {
+  #editor {
+    .editor {
+      width: vw-t(570px);
+    }
+    .quill {
+      margin-top: vw-t(60px);
+    }
+    .ql {
+      &-toolbar {
+        border-radius: vw-t(24px);
+        display: flex;
+        justify-content: center;
+      }
+      &-container {
+        font-size: vw-t(24px);
+        border-radius: vw-t(24px);
+        margin-top: vw-t(36px);
+        border: 1px solid #d9d9d9;
+        height: 60vh;
+        overflow-y: auto;
+        & img {
+          display: inline-block;
+          width: 100%;
+        }
+      }
+      &-editor {
+        padding: vw-t(60px);
+        line-height: vw-t(48px);
+      }
+    }
+    .send {
+      border-radius: vw-t(24px);
+      width: 100px;
+      height: 44px;
+      background-color: $MAIN_YELLOW;
+      margin-top: vw-t(32px);
+      margin-bottom: 100px;
+    }
+  }
+}
+
+@media screen and (max-width: $PHONE-VW) {
+  #editor {
+    .editor {
+      width: vw-p(375px);
+      padding: vw-p(12px);
+    }
+    .quill {
+      margin-top: vw-p(60px);
+    }
+    .ql {
+      &-toolbar {
+        border-radius: vw-p(24px);
+        display: flex;
+        justify-content: center;
+      }
+      &-container {
+        font-size: vw-p(24px);
+        border-radius: vw-p(24px);
+        margin-top: vw-p(36px);
+        border: 1px solid #d9d9d9;
+        height: 60vh;
+        overflow-y: auto;
+        & img {
+          display: inline-block;
+          width: 100%;
+        }
+      }
+      &-editor {
+        padding: vw-p(12px);
+        line-height: vw-p(48px);
+      }
+    }
   }
 }
