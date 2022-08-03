@@ -1,44 +1,64 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import loadingSpinner from "@images/LoadingSpinner.svg";
-import CardList, { conditionType } from "./CardList";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import {
+  resetInfinity,
+  setConditionList,
+  setIsLoading,
+  setPage
+} from "@store/ducks/infinity/infinitySlice";
+import CardList from "./CardList";
 
 type InFinityScrollProps = {
-  sort: string;
+  type: string;
   searchType: "deal" | "tip";
   keyword: string | null;
-  searchCategory: string;
+  category: string | undefined;
+  categorys: Array<string> | undefined;
+  state: string | undefined;
 };
 
 function InFinityScroll({
-  sort,
+  type,
   searchType,
   keyword,
-  searchCategory
+  category,
+  categorys,
+  state
 }: InFinityScrollProps) {
-  const [conditionList, setConditionList] = useState<Array<conditionType>>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isEnd, setIsEnd] = useState(false);
-  const [page, setPage] = useState(0);
   const observerTarget = useRef<HTMLDivElement>(null);
-
+  const dispatch = useAppDispatch();
+  const { page, isEnd, isLoading, conditionList } = useAppSelector(
+    ({ infinity }) => ({
+      page: infinity.page,
+      isLoading: infinity.isLoading,
+      isEnd: infinity.isEnd,
+      conditionList: infinity.conditionList
+    })
+  );
   const onIntersect = (entries: IntersectionObserverEntry[]) => {
     entries.forEach((entry: IntersectionObserverEntry) => {
       if (entry.isIntersecting && !isLoading) {
-        setPage(prev => prev + 1);
+        dispatch(setPage({ nextPage: page + 1 }));
       }
     });
   };
 
   useEffect(() => {
-    if (page === -1) {
-      setPage(0);
-      return;
-    }
-    setIsLoading(true);
-    setConditionList([
-      ...conditionList,
-      { sort, searchType, keyword, searchCategory, page }
-    ]);
+    dispatch(resetInfinity());
+  }, [type, searchType, keyword, category, categorys, state]);
+
+  useEffect(() => {
+    dispatch(setIsLoading(true));
+    dispatch(
+      setConditionList({
+        type,
+        keyword,
+        category,
+        categorys,
+        state
+      })
+    );
   }, [page]);
 
   useEffect(() => {
@@ -51,28 +71,15 @@ function InFinityScroll({
     };
   }, [isLoading]);
 
-  useEffect(() => {
-    setConditionList(() => []);
-    setPage(-1);
-    setIsEnd(false);
-  }, [sort, searchCategory, keyword]);
-
-  const handleSpinner = useCallback(() => setIsLoading(false), []);
-  const handleIsEnd = useCallback(() => setIsEnd(true), []);
   return (
     <div id="infinity-study-card-list">
       <ul className="flex column">
         {conditionList.length !== 0 &&
           conditionList.map(condition => (
             <CardList
-              sort={condition.sort}
               searchType={searchType}
-              keyword={condition.keyword}
-              searchCategory={condition.searchCategory}
-              page={condition.page}
-              key={condition.page}
-              handleSpinner={handleSpinner}
-              handleIsEnd={handleIsEnd}
+              condition={condition}
+              key={condition.lastIdx}
             />
           ))}
       </ul>

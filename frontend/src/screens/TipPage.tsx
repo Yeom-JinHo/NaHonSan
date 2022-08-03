@@ -109,14 +109,16 @@ function TipPage() {
           >
             <option value="최신순">최신순</option>
             <option value="조회순">조회순</option>
-            <option value="인기순">인기순</option>
+            <option value="좋아요순">좋아요순</option>
           </select>
         </div>
         <InFinityScroll
           searchType="tip"
-          sort={conditions.sort}
+          type={conditions.sort}
           keyword={conditions.keyword}
-          searchCategory={conditions.category}
+          category={conditions.category}
+          categorys={undefined}
+          state={undefined}
         />
       </div>
     </div>

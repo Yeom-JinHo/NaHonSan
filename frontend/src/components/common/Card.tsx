@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./Card.scss";
 import UserDummyIcon from "@images/UserDummy.svg";
 import HoneyRecipe from "@images/HoneyRecipe.svg";
@@ -19,7 +19,7 @@ export type CardProps = {
   userProfileImg: string | null;
   title: string;
   bannerImg: string | null;
-  like: number;
+  likes: number;
   comment: number;
   view: number;
   category: string;
@@ -32,7 +32,7 @@ function Card({
   userProfileImg,
   title,
   bannerImg,
-  like,
+  likes,
   comment,
   view,
   category
@@ -99,7 +99,9 @@ function Card({
             src={HeartIcon}
             alt="좋아요수"
           />
-          <p className="icon-container__cnt notoReg fs-15">{getCounts(like)}</p>
+          <p className="icon-container__cnt notoReg fs-15">
+            {getCounts(likes)}
+          </p>
         </div>
         <div className="icon-container flex align-center">
           <img
