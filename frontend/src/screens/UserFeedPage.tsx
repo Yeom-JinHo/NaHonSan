@@ -6,8 +6,18 @@ import FeedList from "@components/common/UserFeed/FeedList";
 import FollowList from "@components/common/UserFeed/FollowList";
 import getCounts from "@utils/getCounts";
 import BackImgSkeleton from "@components/common/FeedPage/BackImgSkeleton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppSelector } from "@store/hooks";
+import { getProfile } from "@apis/setAccount";
+
+type UserProfile = {
+  id: string | null;
+  nickname: string | null;
+  profileMsg: string | null;
+  profileImg: string | null;
+  followCount: number;
+  followerCount: number;
+};
 
 function UserFeedPage() {
   const [tagSwitch, setTagSwitch] = useState(true);
@@ -15,10 +25,27 @@ function UserFeedPage() {
   const [followModal, setFollowModal] = useState("");
   const [randomBack, setRandomBack] = useState("");
   const [isLoading, setLoading] = useState(true);
+  const [userProfile, setUserProfile] = useState<UserProfile>({
+    id: null,
+    nickname: null,
+    profileMsg: null,
+    profileImg: null,
+    followCount: 0,
+    followerCount: 0
+  });
   const userInfo = useAppSelector(state => state.auth.userInfo);
   const txtArea = useRef<HTMLTextAreaElement>(null);
 
+  const { nickName } = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
+    (async () => {
+      const res = await getProfile(nickName as string);
+      if (res.result === "Fail") {
+        navigate("/404");
+      }
+      setUserProfile(res.data);
+    })();
     if (txtArea.current) {
       txtArea.current.style.height = "1px";
       txtArea.current.style.height = `${12 + txtArea.current.scrollHeight}px`;
@@ -64,8 +91,8 @@ function UserFeedPage() {
         <div className="profile-user">
           <img
             src={
-              userInfo?.profileImg
-                ? `data:image/jpeg;base64,${userInfo?.profileImg}`
+              userProfile?.profileImg
+                ? `data:image/jpeg;base64,${userProfile?.profileImg}`
                 : UserDummyIcon
             }
             alt="User"
@@ -76,10 +103,12 @@ function UserFeedPage() {
       </div>
       <div className="info">
         <div className="info__nickname notoBold">
-          <p>{userInfo?.nickname}</p>
-          <Link to="/account">
-            <img src={SetIcon} alt="set" />
-          </Link>
+          <p>{userProfile?.nickname}</p>
+          {userProfile.nickname === userInfo?.nickname && (
+            <Link to="/account">
+              <img src={SetIcon} alt="set" />
+            </Link>
+          )}
         </div>
         <div className="info__follow flex">
           <button
@@ -90,7 +119,7 @@ function UserFeedPage() {
             }}
           >
             팔로워
-            <span>{getCounts(12324)}</span>
+            <span>{getCounts(userProfile?.followerCount)}</span>
           </button>
           <button
             className="notoMid"
@@ -100,7 +129,7 @@ function UserFeedPage() {
             }}
           >
             팔로잉
-            <span>{getCounts(12324)}</span>
+            <span>{getCounts(userProfile?.followCount)}</span>
           </button>
         </div>
         <div className="info__btn flex">
@@ -111,7 +140,9 @@ function UserFeedPage() {
       <div className="info__state notoReg flex ">
         <textarea
           className="notoReg"
-          value={userInfo?.profileMsg ? (userInfo.profileMsg as string) : ""}
+          value={
+            userProfile?.profileMsg ? (userProfile.profileMsg as string) : ""
+          }
           ref={txtArea}
           readOnly
         />

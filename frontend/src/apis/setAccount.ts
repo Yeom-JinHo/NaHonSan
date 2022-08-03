@@ -35,4 +35,9 @@ export const passwordChk = async (password: string) => {
   return res.data.message;
 };
 
+export const getProfile = async (userNickname: string) => {
+  const res = await API.get(`/userFeed/profile/${userNickname}`);
+  return res.data;
+};
+
 export default { setAccount };
