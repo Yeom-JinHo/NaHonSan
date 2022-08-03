@@ -40,4 +40,14 @@ export const getProfile = async (userNickname: string) => {
   return res.data;
 };
 
+export const getFeedItemList = async (
+  userNickname: string,
+  category: number
+) => {
+  const res = await API.get(
+    `/userFeed/post/${userNickname}?category=${category}`
+  );
+  return res.data;
+};
+
 export default { setAccount };

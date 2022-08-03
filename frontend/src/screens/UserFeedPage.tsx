@@ -20,7 +20,7 @@ type UserProfile = {
 };
 
 function UserFeedPage() {
-  const [tagSwitch, setTagSwitch] = useState(true);
+  const [tagType, setTagType] = useState<"deal" | "tip">("tip");
   const [followClick, setFollowClick] = useState(false);
   const [followModal, setFollowModal] = useState("");
   const [randomBack, setRandomBack] = useState("");
@@ -56,15 +56,8 @@ function UserFeedPage() {
         setRandomBack(res.url);
       })
       .then(() => setLoading(false));
-  }, []);
+  }, [nickName]);
 
-  const tagChange = (str: string) => {
-    if (str === "tip") {
-      setTagSwitch(true);
-    } else {
-      setTagSwitch(false);
-    }
-  };
   const follow = (state: string) => {
     setFollowModal(state);
     setFollowClick(true);
@@ -151,24 +144,24 @@ function UserFeedPage() {
         <div className="feed-tag flex">
           <button
             onClick={() => {
-              tagChange("tip");
+              setTagType("tip");
             }}
-            className={`notoBold ${tagSwitch ? "active" : null}`}
+            className={`notoBold ${tagType === "tip" ? "active" : null}`}
             type="button"
           >
             꿀팁보기<span>{`(${getCounts(1234)})`}</span>
           </button>
           <button
             onClick={() => {
-              tagChange("deal");
+              setTagType("deal");
             }}
-            className={`notoBold ${tagSwitch ? null : "active"}`}
+            className={`notoBold ${tagType === "tip" ? null : "active"}`}
             type="button"
           >
             꿀딜보기<span>{`(${getCounts(1234)})`}</span>
           </button>
         </div>
-        <FeedList />
+        <FeedList type={tagType} userNickname={nickName as string} />
       </div>
       {followClick ? (
         <FollowList signal={signal} followModal={followModal} />
