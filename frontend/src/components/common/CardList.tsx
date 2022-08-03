@@ -46,7 +46,6 @@ function CardList({
       {isLoading
         ? cards.map(
             ({
-              type,
               idx,
               userNickname,
               userProfileImg,
@@ -58,7 +57,7 @@ function CardList({
               view
             }) => (
               <Card
-                type={type}
+                type={searchType}
                 idx={idx}
                 userNickname={userNickname}
                 userProfileImg={userProfileImg}

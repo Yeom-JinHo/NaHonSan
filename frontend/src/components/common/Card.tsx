@@ -10,6 +10,7 @@ import CommentIcon from "@images/CommentSkelton.svg";
 import getCounts from "@utils/getCounts";
 import TipIcon from "@images/Tip.svg";
 import DealIcon from "@images/Deal.svg";
+import { Link } from "react-router-dom";
 
 export type CardProps = {
   type: "tip" | "deal";
@@ -45,7 +46,10 @@ function Card({
   };
   return (
     <div id="card">
-      <header className="card-header flex align-center">
+      <Link
+        className="card-header flex align-center"
+        to={`/userfeed/${userNickname}`}
+      >
         <img
           className="card-header__user-img"
           src={
@@ -56,8 +60,8 @@ function Card({
           alt="유저더미"
         />
         <p className="card-header__user-name notoBold fs-14">{userNickname}</p>
-      </header>
-      <main className="card-main flex column">
+      </Link>
+      <Link className="card-main flex column" to={`/${type}/detail/${idx}`}>
         <div className="img-container">
           <img
             className="card-main__thumnail"
@@ -87,7 +91,7 @@ function Card({
         </div>
 
         <p className="card-main__title notoBold fs-14 ellipsis">{title}</p>
-      </main>
+      </Link>
       <footer className="card-footer flex align-center justify-center">
         <div className="icon-container flex align-center">
           <img
