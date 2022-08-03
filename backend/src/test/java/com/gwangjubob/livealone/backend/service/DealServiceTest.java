@@ -7,6 +7,7 @@ import com.gwangjubob.livealone.backend.dto.Deal.DealCommentDto;
 import com.gwangjubob.livealone.backend.dto.Deal.DealDto;
 import com.gwangjubob.livealone.backend.mapper.DealCommentMapper;
 import com.gwangjubob.livealone.backend.mapper.DealMapper;
+import com.gwangjubob.livealone.backend.mapper.DealViewMapper;
 import jdk.jfr.Category;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -31,12 +32,14 @@ public class DealServiceTest {
     private DealCommentRepository dealCommentRepository;
     private UserLikeDealsRepository userLikeDealsRepository;
     private NoticeRepository noticeRepository;
+    private DealViewMapper dealViewMapper;
+
     private static final String okay = "SUCCESS";
     private static final String fail = "FAIL";
 
     @Autowired
     DealServiceTest(DealRepository dealRepository, DealMapper dealMapper, UserRepository userRepository, DealCommentMapper dealCommentMapper,
-                    DealCommentRepository dealCommentRepository, UserLikeDealsRepository userLikeDealsRepository, NoticeRepository noticeRepository){
+                    DealCommentRepository dealCommentRepository, UserLikeDealsRepository userLikeDealsRepository, NoticeRepository noticeRepository, DealViewMapper dealViewMapper){
         this.dealRepository = dealRepository;
         this.dealMapper = dealMapper;
         this.userRepository = userRepository;
@@ -44,6 +47,7 @@ public class DealServiceTest {
         this.dealCommentRepository = dealCommentRepository;
         this.userLikeDealsRepository = userLikeDealsRepository;
         this.noticeRepository = noticeRepository;
+        this.dealViewMapper = dealViewMapper;
     }
 
     @Test
