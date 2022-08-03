@@ -102,6 +102,7 @@ public class TipServiceImpl implements TipService {
                         .userProfileImg(t.getUser().getProfileImg())
                         .title(t.getTitle())
                         .bannerImg(t.getBannerImg())
+                        .like(t.getLike())
                         .view(t.getView())
                         .comment(t.getComment())
                         .build();
