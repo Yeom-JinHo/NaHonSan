@@ -12,7 +12,7 @@ function TipPage() {
   const [tag, setTag] = useState(0);
   const navigate = useNavigate();
   const goEdit = () => {
-    navigate("edit");
+    navigate("create");
   };
   return (
     <div id="tip-page">

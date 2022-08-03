@@ -27,6 +27,7 @@ import Withdrawal from "@screens/AccountSetting/Withdrawal";
 import DealDetailPage from "@screens/DealDetailPage";
 import TipDetail from "@screens/TipDetail";
 import TipEdit from "@screens/TipEdit";
+import TipUpdate from "@screens/TipUpdate";
 
 function RootRouter() {
   return (
@@ -38,7 +39,9 @@ function RootRouter() {
           <Route path="/tip">
             <Route index element={<TipPage />} />
             <Route path="detail/:id" element={<TipDetail />} />
-            <Route path="edit" element={<TipEdit />} />
+            <Route path="create" element={<TipEdit />} />
+            <Route path="edit/:id" element={<TipUpdate />} />
+            <Route path="*" element={<PageNotFound />} />
           </Route>
           <Route path="/feed" element={<FeedPage />} />
           <Route path="/deal">

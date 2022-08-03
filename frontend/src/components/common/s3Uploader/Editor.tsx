@@ -1,24 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
-import ReactQuill from "react-quill";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { dataurlToBlob } from "@utils/resizer";
 import { v1 } from "uuid";
 import { deleteFile, uploadFile } from "./awsS3";
 import "./Editor.scss";
 
-interface Editor {
+interface EditorProps {
   editorValue: (value: string) => void;
   getValue: boolean;
+  update: string;
 }
 
-function Editor({ editorValue, getValue }: Editor) {
+function Editor({ editorValue, getValue, update }: EditorProps) {
   const [value, setValue] = useState("");
   const [tmpImg, setTmpImg] = useState([""]);
 
+  // 에디터 커스텀
   const quillRef = useRef<any>(null);
   const toolbarOptions = [
     ["image"],
-    [{ list: "ordered" }, { list: "bullet" }],
     [{ color: [] }, { background: [] }],
     [{ align: [] }]
   ];
@@ -27,6 +28,15 @@ function Editor({ editorValue, getValue }: Editor) {
       container: toolbarOptions
     }
   };
+
+  useEffect(() => {
+    if (update) {
+      const quill = new Quill(".ql-container", {});
+      const delta = quill.clipboard.convert(update);
+      quill.setContents(delta, "silent");
+      setValue(update);
+    }
+  }, [update]);
 
   useEffect(() => {
     // 에디터 이미지 첨부 시 커스텀 이미지핸들러 실행
@@ -49,10 +59,11 @@ function Editor({ editorValue, getValue }: Editor) {
           const canvas = document.createElement("canvas");
           newImg.onload = async () => {
             const ctx = canvas.getContext("2d");
-            canvas.width = 300;
-            canvas.height = 300;
-            ctx?.drawImage(newImg, 0, 0, 300, 300);
+            canvas.width = 400;
+            canvas.height = 400;
+            ctx?.drawImage(newImg, 0, 0, 400, 400);
             const dataUrl = canvas.toDataURL("image/jpeg");
+            URL.revokeObjectURL(imgUrl);
 
             // 캔버스로 그리면 dataurl 생성, 생성 된 dataurl > Blob > File 순으로 변경
             const newFile = new File([dataurlToBlob(dataUrl)], v1());
@@ -75,8 +86,6 @@ function Editor({ editorValue, getValue }: Editor) {
   const formats = [
     "header",
     "align",
-    "list",
-    "bullet",
     "indent",
     "background",
     "color",
@@ -96,6 +105,14 @@ function Editor({ editorValue, getValue }: Editor) {
 
   return (
     <div id="editor">
+      <button
+        type="button"
+        onClick={() => {
+          console.log(value);
+        }}
+      >
+        asdasd
+      </button>
       <div className="editor">
         <ReactQuill
           theme="snow"
@@ -110,4 +127,4 @@ function Editor({ editorValue, getValue }: Editor) {
   );
 }
 
-export default Editor;
+export default React.memo(Editor);
