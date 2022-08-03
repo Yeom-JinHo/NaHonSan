@@ -1,39 +1,25 @@
 package com.gwangjubob.livealone.backend.service;
 
-import com.gwangjubob.livealone.backend.domain.entity.TipCommentEntity;
-import com.gwangjubob.livealone.backend.domain.entity.TipEntity;
-import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
-import com.gwangjubob.livealone.backend.domain.entity.UserLikeTipsEntity;
-import com.gwangjubob.livealone.backend.domain.repository.TipCommentRepository;
-import com.gwangjubob.livealone.backend.domain.repository.TipRepository;
-import com.gwangjubob.livealone.backend.domain.repository.UserLikeTipsRepository;
-import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
+import com.gwangjubob.livealone.backend.domain.entity.*;
+import com.gwangjubob.livealone.backend.domain.repository.*;
 import com.gwangjubob.livealone.backend.dto.tip.TipCreateDto;
 import com.gwangjubob.livealone.backend.dto.tip.TipDetailViewDto;
 import com.gwangjubob.livealone.backend.dto.tip.TipUpdateDto;
 import com.gwangjubob.livealone.backend.dto.tip.TipViewDto;
 import com.gwangjubob.livealone.backend.dto.tipcomment.TipCommentCreateDto;
-import com.gwangjubob.livealone.backend.dto.tipcomment.TipCommentUpdateDto;
 import com.gwangjubob.livealone.backend.dto.tipcomment.TipCommentViewDto;
-import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
-import com.gwangjubob.livealone.backend.mapper.TipCreateMapper;
-import com.gwangjubob.livealone.backend.mapper.TipDetailViewMapper;
-import com.gwangjubob.livealone.backend.mapper.TipUpdateMapper;
-import com.gwangjubob.livealone.backend.mapper.UserInfoMapper;
-import org.apache.catalina.User;
-import org.junit.jupiter.api.Disabled;
+import com.gwangjubob.livealone.backend.mapper.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -48,11 +34,15 @@ public class TipServiceTest {
     private TipUpdateMapper tipUpdateMapper;
     private TipDetailViewMapper tipDetailViewMapper;
     private UserLikeTipsRepository userLikeTipsRepository;
-
+    private NoticeRepository noticeRepository;
+    private TipViewMapper tipViewMapper;
+    private static final String okay = "SUCCESS";
+    private static final String fail = "FAIL";
     @Autowired
     public TipServiceTest(TipCommentService tipCommentService, TipRepository tipRepository, TipService tipService,
                             UserRepository userRepository, TipCommentRepository tipCommentRepository, TipCreateMapper tipCreateMapper,
-                          TipUpdateMapper tipUpdateMapper, TipDetailViewMapper tipDetailViewMapper, UserLikeTipsRepository userLikeTipsRepository){
+                          TipUpdateMapper tipUpdateMapper, TipDetailViewMapper tipDetailViewMapper, UserLikeTipsRepository userLikeTipsRepository,
+                          NoticeRepository noticeRepository, TipViewMapper tipViewMapper){
         this.tipRepository = tipRepository;
         this.tipService = tipService;
         this.tipCommentService = tipCommentService;
@@ -62,6 +52,8 @@ public class TipServiceTest {
         this.tipUpdateMapper = tipUpdateMapper;
         this.tipDetailViewMapper = tipDetailViewMapper;
         this.userLikeTipsRepository = userLikeTipsRepository;
+        this.noticeRepository = noticeRepository;
+        this.tipViewMapper = tipViewMapper;
     }
 
     @Test
@@ -109,17 +101,62 @@ public class TipServiceTest {
     }
 
     @Test
-    public void 카테고리별_리스트_조회_테스트(){
-        // given
-        String category = "item";
+    public void 꿀팁_게시글_조회(){
+        Map<String, Object> resultMap = new HashMap<>();
 
-        // when
-        List<TipViewDto> result = tipService.viewTip(category);
-        // then
+        String keyword = null; // 검색 문자(제목)
+        String category = "tip"; // item(꿀템), tip(꿀팁), recipe(꿀시피)
+        String type = "조회순"; // 조회순, 좋아요순, 최신순
+        List<TipEntity> tips = null;
 
-        for(TipViewDto dto : result){
-            System.out.println(dto.toString());
+        int pageNum = 1;
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+
+        if(keyword == null){
+            if(type.equals("조회순")){
+                tips = tipRepository.findByCategoryOrderByViewDesc(category,pageable);
+            }else if(type.equals("좋아요순")){
+                tips = tipRepository.findByCategoryOrderByLikeDesc(category, pageable);
+            }else{
+                tips = tipRepository.findByCategoryOrderByIdxDesc(category, pageable);
+            }
+        }else{
+            if(type.equals("조회순")){
+                tips = tipRepository.findByCategoryAndTitleContainsOrderByViewDesc(category, keyword, pageable);
+            }else if(type.equals("좋아요순")){
+                tips = tipRepository.findByCategoryAndTitleContainsOrderByLikeDesc(category, keyword, pageable);
+            }else{
+                tips = tipRepository.findByCategoryAndTitleContainsOrderByIdxDesc(category, keyword, pageable);
+            }
         }
+
+        if(tips != null){
+            List<TipViewDto> result = new ArrayList<>();
+            for(TipEntity t : tips){
+                TipViewDto tipViewDto = TipViewDto.builder()
+                        .idx(t.getIdx())
+                        .category(t.getCategory())
+                        .userNickname(t.getUser().getNickname())
+                        .userProfileImg(t.getUser().getProfileImg())
+                        .title(t.getTitle())
+                        .bannerImg(t.getBannerImg())
+                        .view(t.getView())
+                        .like(t.getLike())
+                        .comment(t.getComment())
+                        .build();
+
+                result.add(tipViewDto);
+            }
+
+            for(TipViewDto dto : result){
+                System.out.println(dto.toString());
+            }
+
+            System.out.println(result.size());
+        }
+
+
     }
 
     @Test
@@ -207,7 +244,7 @@ public class TipServiceTest {
     public void 게시글_삭제_테스트(){
         // given
         String testId = "test";
-        Integer idx = 46;
+        Integer idx = 47;
 
         Optional<TipEntity> testTip = tipRepository.findByIdx(idx);
 
@@ -219,6 +256,12 @@ public class TipServiceTest {
                 // 삭제 시 댓/대댓글도 모두 삭제
                 // cascade 걸려있으니 그냥 삭제?
                 tipRepository.delete(tip);
+
+                // 해당 게시글 관련 모든 알림 삭제
+                List<NoticeEntity> noticeEntityList = noticeRepository.findAllByPostIdxAndPostType(idx, "tip");
+                if(!noticeEntityList.isEmpty()){
+                    noticeRepository.deleteAllInBatch(noticeEntityList);
+                }
             }
         }
     }
@@ -227,15 +270,15 @@ public class TipServiceTest {
     @Test
     public void 댓글_대댓글_등록_테스트(){
         // given
-        int upIdx = 0;
+        int upIdx = 124;
 
-        String testNickname = "ssafy";
-        UserEntity user = userRepository.findByNickname(testNickname).get();
+        String userId = "test";
+        UserEntity user = userRepository.findById(userId).get();
 
-        String content = "ㅎㅇㅎㅇ22";
+        String content = "대댓글 알림 테스트";
         byte[] bannerImg = null;
 
-        int postIdx = 47;
+        int postIdx = 49;
         Optional<TipEntity> optionalTipEntity = tipRepository.findByIdx(postIdx);
 
         if(optionalTipEntity.isPresent()){
@@ -258,6 +301,37 @@ public class TipServiceTest {
             
             tip.setComment(tip.getComment() + 1); // 댓글 수 1 증가
             tipRepository.save(tip); // 수정
+
+            // 댓글 등록 알림 - 글 작성자가 아닌 사람이 댓글을 달았을 때만 알림가게
+            if(upIdx == 0 && !tip.getUser().getId().equals(userId)){ // 댓글 알림 등록
+                NoticeEntity noticeEntity = NoticeEntity.builder()
+                        .noticeType("comment")
+                        .user(tip.getUser()) // 글작성자
+                        .fromUserId(userId)
+                        .postType("tip")
+                        .commentIdx(entity.getIdx())
+                        .postIdx(tip.getIdx())
+                        .build();
+
+                noticeRepository.save(noticeEntity);
+            }
+            // 대댓글 등록 알림 - 댓글 작성자가 아닌 사람이 대댓글을 달았을 때, 댓글 작성자한테 알림 가게
+            if(upIdx != 0){
+                TipCommentEntity tipComment = tipCommentRepository.findByIdx(upIdx).get();
+                if(!tipComment.getUser().getId().equals(userId)){
+                    NoticeEntity noticeEntity = NoticeEntity.builder()
+                            .noticeType("reply")
+                            .user(tipComment.getUser()) // 댓글작성자
+                            .fromUserId(userId)
+                            .postType("tip")
+                            .commentIdx(entity.getIdx())
+                            .commentUpIdx(entity.getUpIdx())
+                            .postIdx(tip.getIdx())
+                            .build();
+
+                    noticeRepository.save(noticeEntity);
+                }
+            }
         }
     }
 
@@ -265,10 +339,10 @@ public class TipServiceTest {
     public void 댓글_대댓글_수정_테스트(){
         // given
         String nickname = "test";
-        String content = "댓글 수정 테스트2222";
+        String content = "대댓글 수정 테스트2222";
         byte[] bannerImg = null;
-        Integer idx = 61;
-        Integer upIdx = 60; // 댓글수정이면 0, 대댓글수정이면 댓글 글번호
+        Integer idx = 99;
+        Integer upIdx = 97; // 댓글수정이면 0, 대댓글수정이면 댓글 글번호
 
         UserEntity user = userRepository.findByNickname(nickname).get();
         Optional<TipCommentEntity> optionalTipComment = tipCommentRepository.findByIdx(idx);
@@ -302,22 +376,28 @@ public class TipServiceTest {
     @Test
     public void 댓글_대댓글_삭제_테스트() {
         // given
-        Integer postIdx = 47;
-        Integer idx = 72; // 댓글 번호
+        Integer postIdx = 48;
+        Integer idx = 104; // 댓글 번호
 
-        String testNickname = "test";
+        String userId = "test";
         Optional<TipCommentEntity> optionalTipComment = tipCommentRepository.findByIdx(idx);
         TipEntity tip = tipRepository.findByIdx(postIdx).get();
 
         if(optionalTipComment.isPresent()){
             TipCommentEntity tipComment = optionalTipComment.get();
             // when
-            if(testNickname.equals(tipComment.getUser().getNickname())){ // 아이디랑 댓글작성자 아이디가 같으면 삭제 가능
+            if(userId.equals(tipComment.getUser().getId())){ // 아이디랑 댓글작성자 아이디가 같으면 삭제 가능
                 if(tipComment.getUpIdx() != 0){ // 0이 아니면 대댓글이므로 그냥 삭제 가능
                     tip.setComment(tip.getComment() - 1);
                     tipRepository.save(tip);
 
                     tipCommentRepository.delete(tipComment);
+
+                    // 알림이 있다면 알림도 삭제
+                    Optional<NoticeEntity> noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("reply", userId, "tip", postIdx, tipComment.getIdx());
+                    if(noticeEntity.isPresent()){
+                        noticeRepository.delete(noticeEntity.get());
+                    }
 
                 }else{ // 댓글이랑 엮인 대댓글"들"까지 삭제해야함
                     List<TipCommentEntity> replyCommentList = tipCommentRepository.findByUpIdx(idx); // 대댓글 리스트 조회
@@ -328,8 +408,22 @@ public class TipServiceTest {
                         tipRepository.save(tip);
 
                         tipCommentRepository.deleteAllInBatch(replyCommentList);
+
+                        // 대댓글 들 알림까지 삭제
+                        List<NoticeEntity> noticeEntityList = noticeRepository.findAllByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentUpIdx("reply", userId, "tip", postIdx, tipComment.getIdx());
+
+                        if(!noticeEntityList.isEmpty()){
+                            noticeRepository.deleteAllInBatch(noticeEntityList);
+                        }
+
                     }
                     tipCommentRepository.delete(tipComment); // 댓글 삭제
+
+                    Optional<NoticeEntity> noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("comment", userId, "tip", postIdx, tipComment.getIdx());
+
+                    if(noticeEntity.isPresent()){
+                        noticeRepository.delete(noticeEntity.get());
+                    }
                 }
             }
         }
@@ -341,7 +435,7 @@ public class TipServiceTest {
     public void 게시글_좋아요_테스트(){
         // givn
         Integer postIdx = 47; // 게시글 번호
-        String userId = "test"; // 로그인 한 사용자 아이디
+        String userId = "ssafy"; // 로그인 한 사용자 아이디
 
         UserEntity userEntity = userRepository.findById(userId).get();
         TipEntity tipEntity = tipRepository.findByIdx(postIdx).get(); // 해당 게시물로 이동
@@ -354,6 +448,13 @@ public class TipServiceTest {
             userLikeTipsRepository.delete(userLikeTipsEntity.get());
             tipEntity.setLike(tipEntity.getLike() - 1); // 좋아요 취소
             tipRepository.save(tipEntity);
+
+            // 좋아요 취소 누르면 알림까지 삭제
+//            where n.notice_type = "like" and n.from_user_id = "ssafy" and n.post_type = "tip" and n.post_idx = 47;
+            Optional<NoticeEntity> noticeEntity = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like",userId,"tip",postIdx);
+            if(noticeEntity.isPresent()){
+                noticeRepository.delete(noticeEntity.get());
+            }
         }else{
             // 좋아요 누르지 않은 상태 -> 좋아요
             // 좋아요 버튼을 한 번 누르면 -> 좋아요 등록
@@ -367,9 +468,34 @@ public class TipServiceTest {
             tipEntity.setLike(tipEntity.getLike() + 1);
             tipRepository.save(tipEntity);
 
+            if(!tipEntity.getUser().getId().equals(userId)){
+                // 알림 등록
+                NoticeEntity noticeEntity = NoticeEntity.builder()
+                        .noticeType("like")
+                        .user(tipEntity.getUser())
+                        .fromUserId(userId)
+                        .postType("tip")
+                        .postIdx(tipEntity.getIdx())
+                        .build();
+
+                noticeRepository.save(noticeEntity);
+            }
+
         }
-
-
-
+    }
+    @Test
+    public void 조회수_증가(){
+        Map<String, Object> resultMap = new HashMap<>();
+        Integer idx = 51;
+        Optional<TipEntity> optionalTip = tipRepository.findById(idx);
+        if(optionalTip.isPresent()){
+            TipEntity tip = optionalTip.get();
+            tip.setView(tip.getView() + 1);
+            tipRepository.save(tip);
+            resultMap.put("message", okay);
+        } else{
+            resultMap.put("message", fail);
+        }
+        System.out.println(resultMap);
     }
 }

@@ -1,23 +1,21 @@
 package com.gwangjubob.livealone.backend.service.impl;
 
+import com.gwangjubob.livealone.backend.domain.entity.NoticeEntity;
 import com.gwangjubob.livealone.backend.domain.entity.TipEntity;
 import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
 import com.gwangjubob.livealone.backend.domain.entity.UserLikeTipsEntity;
+import com.gwangjubob.livealone.backend.domain.repository.NoticeRepository;
 import com.gwangjubob.livealone.backend.domain.repository.TipRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserLikeTipsRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
-import com.gwangjubob.livealone.backend.dto.tip.TipCreateDto;
-import com.gwangjubob.livealone.backend.dto.tip.TipDetailViewDto;
-import com.gwangjubob.livealone.backend.dto.tip.TipUpdateDto;
-import com.gwangjubob.livealone.backend.dto.tip.TipViewDto;
-import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
+import com.gwangjubob.livealone.backend.dto.tip.*;
 import com.gwangjubob.livealone.backend.mapper.TipCreateMapper;
 import com.gwangjubob.livealone.backend.mapper.TipDetailViewMapper;
 import com.gwangjubob.livealone.backend.mapper.TipUpdateMapper;
-import com.gwangjubob.livealone.backend.mapper.UserInfoMapper;
 import com.gwangjubob.livealone.backend.service.TipService;
-import com.gwangjubob.livealone.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,24 +26,24 @@ import java.util.Optional;
 @Service
 public class TipServiceImpl implements TipService {
     private TipRepository tipRepository;
-    private UserService userService;
     private UserRepository userRepository;
+    private NoticeRepository noticeRepository;
     private TipCreateMapper tipCreateMapper;
     private TipUpdateMapper tipUpdateMapper;
     private TipDetailViewMapper tipDetailViewMapper;
     private UserLikeTipsRepository userLikeTipsRepository;
 
     @Autowired
-    public TipServiceImpl(TipRepository tipRepository, UserService userService, UserRepository userRepository,
+    public TipServiceImpl(TipRepository tipRepository, NoticeRepository noticeRepository, UserRepository userRepository,
                           TipCreateMapper tipCreateMapper, TipUpdateMapper tipUpdateMapper, TipDetailViewMapper tipDetailViewMapper,
                           UserLikeTipsRepository userLikeTipsRepository){
         this.tipRepository = tipRepository;
-        this.userService = userService;
         this.userRepository = userRepository;
         this.tipCreateMapper = tipCreateMapper;
         this.tipUpdateMapper = tipUpdateMapper;
         this.tipDetailViewMapper = tipDetailViewMapper;
         this.userLikeTipsRepository = userLikeTipsRepository;
+        this.noticeRepository = noticeRepository;
     }
     @Override
     public void createTip(String decodeId, TipCreateDto tipCreateDto) {
@@ -66,26 +64,55 @@ public class TipServiceImpl implements TipService {
     }
 
     @Override
-    public List<TipViewDto> viewTip(String category) {
-        List<TipEntity> tipEntity = tipRepository.findByCategory(category);
-        List<TipViewDto> result = new ArrayList<>();
+    public List<TipViewDto> viewTip(TipListDto tipListDto) {
+        String keyword = tipListDto.getKeyword();
+        String category = tipListDto.getCategory();
+        String type = tipListDto.getType();
+        int pageNum = tipListDto.getPageNum();
+        int pageSize = tipListDto.getPageSize();
 
-        for(TipEntity t : tipEntity){
-            TipViewDto dto = TipViewDto.builder()
-                    .idx(t.getIdx())
-                    .userNickname(t.getUser().getNickname())
-                    .userProfileImg(t.getUser().getProfileImg())
-                    .title(t.getTitle())
-                    .bannerImg(t.getBannerImg())
-                    .view(t.getView())
-                    .like(t.getLike())
-                    .comment(t.getComment())
-                    .build();
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        List<TipEntity> tips = null;
 
-            result.add(dto);
+        if(keyword == null){
+            if(type.equals("조회순")){
+                tips = tipRepository.findByCategoryOrderByViewDesc(category,pageable);
+            }else if(type.equals("좋아요순")){
+                tips = tipRepository.findByCategoryOrderByLikeDesc(category, pageable);
+            }else{
+                tips = tipRepository.findByCategoryOrderByIdxDesc(category, pageable);
+            }
+        }else{
+            if(type.equals("조회순")){
+                tips = tipRepository.findByCategoryAndTitleContainsOrderByViewDesc(category, keyword, pageable);
+            }else if(type.equals("좋아요순")){
+                tips = tipRepository.findByCategoryAndTitleContainsOrderByLikeDesc(category, keyword, pageable);
+            }else{
+                tips = tipRepository.findByCategoryAndTitleContainsOrderByIdxDesc(category, keyword, pageable);
+            }
         }
-        return result;
 
+        if(tips != null){
+            List<TipViewDto> result = new ArrayList<>();
+            for(TipEntity t : tips){
+                TipViewDto tipViewDto = TipViewDto.builder()
+                        .idx(t.getIdx())
+                        .category(t.getCategory())
+                        .userNickname(t.getUser().getNickname())
+                        .userProfileImg(t.getUser().getProfileImg())
+                        .title(t.getTitle())
+                        .bannerImg(t.getBannerImg())
+                        .view(t.getView())
+                        .comment(t.getComment())
+                        .build();
+
+                result.add(tipViewDto);
+            }
+
+            return result;
+        }
+
+        return null;
     }
 
     @Override
@@ -118,9 +145,6 @@ public class TipServiceImpl implements TipService {
 
         if(optionalTipEntity.isPresent()){
             TipEntity tipEntity = optionalTipEntity.get();
-            tipEntity.setView(tipEntity.getView() + 1);
-            tipRepository.save(tipEntity);
-
             TipDetailViewDto tipDto = tipDetailViewMapper.toDto(tipEntity);
 
             tipDto.setUserNickname(tipEntity.getUser().getNickname());
@@ -134,32 +158,63 @@ public class TipServiceImpl implements TipService {
 
     @Override
     public void likeTip(String decodeId, Integer idx) {
-        UserEntity userEntity = userRepository.findById(decodeId).get();
-        TipEntity tipEntity = tipRepository.findByIdx(idx).get();
+        UserEntity user = userRepository.findById(decodeId).get();
+        TipEntity tip = tipRepository.findByIdx(idx).get();
 
-        Optional<UserLikeTipsEntity> userLikeTipsEntity = userLikeTipsRepository.findByUserAndTip(userEntity, tipEntity);
+        Optional<UserLikeTipsEntity> userLikeTipsEntity = userLikeTipsRepository.findByUserAndTip(user, tip);
 
         if(userLikeTipsEntity.isPresent()){
-            // 회원이 게시물에 좋아요를 이미 누른 상태 -> 한 번 더 클릭하면 좋아요 취소
-            userLikeTipsRepository.delete(userLikeTipsEntity.get());
+            UserLikeTipsEntity userLikeTip = userLikeTipsEntity.get();
+            userLikeTipsRepository.delete(userLikeTip);
 
-            tipEntity.setLike(tipEntity.getLike() - 1);
-            tipRepository.save(tipEntity);
+            tip.setLike(tip.getLike() - 1);
+            tipRepository.save(tip);
 
+            Optional<NoticeEntity> notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdx("like", user.getId(), "tip", tip.getIdx());
+            if(notice.isPresent()){
+                noticeRepository.delete(notice.get());
+            }
         }else{
-            // 좋아요 누르지 않은 상태 -> 좋아요
-            // 좋아요 버튼을 한 번 누르면 -> 좋아요 등록
             UserLikeTipsEntity likeTipsEntity = UserLikeTipsEntity.builder()
-                    .tip(tipEntity)
-                    .user(userEntity)
+                    .tip(tip)
+                    .user(user)
                     .time(LocalDateTime.now())
                     .build();
 
             userLikeTipsRepository.save(likeTipsEntity);
 
-            tipEntity.setLike(tipEntity.getLike() + 1);
-            tipRepository.save(tipEntity);
+            tip.setLike(tip.getLike() + 1);
+            tipRepository.save(tip);
+
+            if(!tip.getUser().getId().equals(user.getId())){
+                NoticeEntity notice = NoticeEntity.builder()
+                        .noticeType("like")
+                        .user(tip.getUser())
+                        .fromUserId(user.getId())
+                        .postType("tip")
+                        .postIdx(tip.getIdx())
+                        .build();
+
+                noticeRepository.save(notice);
+            }
         }
+    }
+
+    @Override
+    public boolean countUpView(Integer idx) {
+        Optional<TipEntity> optionalTip = tipRepository.findByIdx(idx);
+        if(optionalTip.isPresent()){
+            TipEntity tip = optionalTip.get();
+            tip.setView(tip.getView() + 1);
+            tipRepository.save(tip);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public long getTotalCount() {
+        return tipRepository.count();
     }
 
 }

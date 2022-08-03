@@ -1,9 +1,6 @@
 package com.gwangjubob.livealone.backend.controller;
 
-import com.gwangjubob.livealone.backend.dto.tip.TipCreateDto;
-import com.gwangjubob.livealone.backend.dto.tip.TipDetailViewDto;
-import com.gwangjubob.livealone.backend.dto.tip.TipUpdateDto;
-import com.gwangjubob.livealone.backend.dto.tip.TipViewDto;
+import com.gwangjubob.livealone.backend.dto.tip.*;
 import com.gwangjubob.livealone.backend.dto.tipcomment.TipCommentCreateDto;
 import com.gwangjubob.livealone.backend.dto.tipcomment.TipCommentUpdateDto;
 import com.gwangjubob.livealone.backend.dto.tipcomment.TipCommentViewDto;
@@ -15,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,13 +56,18 @@ public class TipController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @GetMapping("/honeyTip/{category}")
-    public ResponseEntity<?> viewTip(@PathVariable String category){
+    @PostMapping("/honeyTip/list")
+    public ResponseEntity<?> viewTip(@RequestBody TipListDto tipListDto){
         resultMap = new HashMap<>();
 
         try{
-            List<TipViewDto> list = tipService.viewTip(category); // 카테고리별 게시글 목록 조회
+            List<TipViewDto> list = tipService.viewTip(tipListDto); // 카테고리별 게시글 목록 조회
             resultMap.put("data", list);
+            if(list.size() != tipListDto.getPageSize()){
+                resultMap.put("isEnd", true);
+            }else{
+                resultMap.put("isEnd",false);
+            }
             resultMap.put("message", okay);
             status = HttpStatus.OK;
         }catch (Exception e){
@@ -74,12 +78,52 @@ public class TipController {
         return new ResponseEntity<>(resultMap, status);
     }
 
+    @GetMapping("honeyTip/totalCount")
+    public ResponseEntity<?> totalCount(){
+        resultMap = new HashMap<>();
+        try{
+            long totalCount = tipService.getTotalCount();
+            resultMap.put("total",totalCount);
+            resultMap.put("message", okay);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            resultMap.put("message", fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
     @GetMapping("/honeyTip/detail/{idx}")
-    public ResponseEntity<?> detailViewTip(@PathVariable Integer idx){
+    public ResponseEntity<?> detailViewTip(@PathVariable Integer idx, HttpServletRequest request, HttpServletResponse response){
         resultMap = new HashMap<>();
 
         try{
             TipDetailViewDto dto = tipService.detailViewTip(idx); // 게시글 세부 조회 서비스 호출
+            Cookie oldCookie = null;
+            Cookie[] cookies = request.getCookies();
+            if(cookies != null){
+                for (Cookie cookie : cookies){
+                    if(cookie.getName().equals("postTip")){
+                        oldCookie = cookie;
+                    }
+                }
+            }
+            if (oldCookie != null){
+                if (!oldCookie.getValue().contains("[" + idx + "]")){
+                    boolean upCheck = tipService.countUpView(idx);
+                    if(upCheck){
+                        oldCookie.setValue(oldCookie.getValue() + "[" + idx + "]");
+                        oldCookie.setPath("/");
+                        oldCookie.setMaxAge(60 * 60 * 24);
+                        response.addCookie(oldCookie);
+                    }
+                }
+            } else{
+                tipService.countUpView(idx);
+                Cookie newCookie = new Cookie("postTip", "["+ idx + "]");
+                newCookie.setPath("/");
+                newCookie.setMaxAge(60 * 60 * 24);
+                response.addCookie(newCookie);
+            }
             resultMap.put("tip",dto);
             List<TipCommentViewDto> list = tipCommentService.viewTipComment(idx); // 게시글 관련 댓글 조회 서비스 호출
             resultMap.put("tipComments", list);

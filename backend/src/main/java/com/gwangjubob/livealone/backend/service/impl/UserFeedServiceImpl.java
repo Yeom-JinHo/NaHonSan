@@ -13,6 +13,8 @@ import com.gwangjubob.livealone.backend.mapper.UserInfoMapper;
 import com.gwangjubob.livealone.backend.service.UserFeedService;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +35,9 @@ public class UserFeedServiceImpl implements UserFeedService {
     private DealRepository dealRepository;
     private UserFeedRepository userFeedRepository;
     private UserFollowTipsRepository userFollowTipsRepository;
+    private NoticeRepository noticeRepository;
     @Autowired
-    UserFeedServiceImpl(UserRepository userRepository,UserFollowTipsRepository userFollowTipsRepository,DealMapper dealMapper,DealRepository dealRepository,TipRepository tipRepository, UserFeedRepository userFeedRepository, PasswordEncoder passwordEncoder, UserCategoryRepository userCategoryRepository, UserInfoMapper userInfoMapper){
+    UserFeedServiceImpl(UserRepository userRepository,NoticeRepository noticeRepository,UserFollowTipsRepository userFollowTipsRepository,DealMapper dealMapper,DealRepository dealRepository,TipRepository tipRepository, UserFeedRepository userFeedRepository, PasswordEncoder passwordEncoder, UserCategoryRepository userCategoryRepository, UserInfoMapper userInfoMapper){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userFollowTipsRepository = userFollowTipsRepository;
@@ -44,6 +47,7 @@ public class UserFeedServiceImpl implements UserFeedService {
         this.userFeedRepository = userFeedRepository;
         this.tipRepository = tipRepository;
         this.dealRepository = dealRepository;
+        this.noticeRepository = noticeRepository;
 
     }
 
@@ -59,6 +63,15 @@ public class UserFeedServiceImpl implements UserFeedService {
                 .followNickname(follow.get().getNickname())
                 .build();
             userFeedRepository.save(userFollowEntity);
+
+            NoticeEntity notice = NoticeEntity.builder()
+                    .noticeType("follow")
+                    .user(user.get())
+                    .fromUserId(follow.get().getId())
+                    .time(userFollowEntity.getTime())
+                    .build();
+
+            noticeRepository.save(notice);
             return true;
         }
         return false;
@@ -187,6 +200,11 @@ public class UserFeedServiceImpl implements UserFeedService {
     public boolean deleteFollow(String toId, String fromId) {
         if(userFeedRepository.findByUserIdAndFollowId(toId,fromId).isPresent()){
             userFeedRepository.deleteByUserIdAndFollowId(toId,fromId);
+
+            Optional<NoticeEntity> notice = noticeRepository.findByNoticeTypeAndFromUserId("follow", fromId);
+            if(notice.isPresent()){
+                noticeRepository.delete(notice.get());
+            }
             return true;
         }
         return false;
@@ -254,12 +272,9 @@ public class UserFeedServiceImpl implements UserFeedService {
     }
 
     @Override
-    public List<TipViewDto> userFollowHoneyTip(String decodeId) {
+    public List<TipViewDto> userFollowHoneyTip(String decodeId, int pageNum, int pageSize) {
         List<TipViewDto> result = new ArrayList<>();
-        //when
-
-        List<UserFollowTipsEntity> tipEntityList = userFollowTipsRepository.findTips(decodeId); //내가 팔로우 한 유저 목록
-        //then
+        Pageable pageable = PageRequest.of(pageNum, pageSize);List<UserFollowTipsEntity> tipEntityList = userFollowTipsRepository.findTips(decodeId,pageable); //내가 팔로우 한 유저 목록
         for(UserFollowTipsEntity tipEntity : tipEntityList){
             TipViewDto dto = TipViewDto.builder()
                     .idx(tipEntity.getIdx())
