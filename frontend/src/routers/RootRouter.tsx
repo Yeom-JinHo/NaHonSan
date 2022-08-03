@@ -26,6 +26,7 @@ import AccountSettingPage from "@screens/AccountSetting/AccountSettingPage";
 import Withdrawal from "@screens/AccountSetting/Withdrawal";
 import DealDetailPage from "@screens/DealDetailPage";
 import TipDetail from "@screens/TipDetail";
+import DealMap from "@screens/DealMap";
 
 function RootRouter() {
   return (
@@ -43,7 +44,8 @@ function RootRouter() {
             <Route index element={<DealPage />} />
             <Route path="detail/:id" element={<DealDetailPage />} />
           </Route>
-          <Route path="/news/" element={<NewsPage />} />
+          {/* <Route path="/news/" element={<NewsPage />} /> */}
+          <Route path="/news/" element={<DealMap />} />
           <Route path="/userfeed/:id" element={<UserFeedPage />} />
           <Route path="/account/*">
             <Route index element={<ChkPw />} />
