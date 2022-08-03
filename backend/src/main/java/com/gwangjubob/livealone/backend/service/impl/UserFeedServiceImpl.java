@@ -32,10 +32,12 @@ public class UserFeedServiceImpl implements UserFeedService {
     private DealMapper dealMapper;
     private DealRepository dealRepository;
     private UserFeedRepository userFeedRepository;
+    private UserFollowTipsRepository userFollowTipsRepository;
     @Autowired
-    UserFeedServiceImpl(UserRepository userRepository,DealMapper dealMapper,DealRepository dealRepository,TipRepository tipRepository, UserFeedRepository userFeedRepository, PasswordEncoder passwordEncoder, UserCategoryRepository userCategoryRepository, UserInfoMapper userInfoMapper){
+    UserFeedServiceImpl(UserRepository userRepository,UserFollowTipsRepository userFollowTipsRepository,DealMapper dealMapper,DealRepository dealRepository,TipRepository tipRepository, UserFeedRepository userFeedRepository, PasswordEncoder passwordEncoder, UserCategoryRepository userCategoryRepository, UserInfoMapper userInfoMapper){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userFollowTipsRepository = userFollowTipsRepository;
         this.dealMapper = dealMapper;
         this.userCategoryRepository = userCategoryRepository;
         this.userInfoMapper = userInfoMapper;
@@ -253,7 +255,25 @@ public class UserFeedServiceImpl implements UserFeedService {
 
     @Override
     public List<TipViewDto> userFollowHoneyTip(String decodeId) {
+        List<TipViewDto> result = new ArrayList<>();
+        //when
 
-        return null;
+        List<UserFollowTipsEntity> tipEntityList = userFollowTipsRepository.findTips(decodeId); //내가 팔로우 한 유저 목록
+        //then
+        for(UserFollowTipsEntity tipEntity : tipEntityList){
+            TipViewDto dto = TipViewDto.builder()
+                    .idx(tipEntity.getIdx())
+                    .userNickname(tipEntity.getUser().getNickname())
+                    .userProfileImg(tipEntity.getUser().getProfileImg())
+                    .title(tipEntity.getTitle())
+                    .bannerImg(tipEntity.getBannerImg())
+                    .view(tipEntity.getView())
+                    .like(tipEntity.getLike())
+                    .comment(tipEntity.getComment())
+                    .build();
+
+            result.add(dto);
+        }
+        return result;
     }
 }

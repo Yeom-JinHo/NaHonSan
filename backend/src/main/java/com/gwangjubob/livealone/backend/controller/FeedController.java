@@ -220,6 +220,7 @@ public class FeedController {
         try{
             if(decodeId != null){
                 List<TipViewDto> result = userFeedService.userFollowHoneyTip(decodeId);
+                resultMap.put("total", result.size());
                 resultMap.put("data",result);
 
             }
