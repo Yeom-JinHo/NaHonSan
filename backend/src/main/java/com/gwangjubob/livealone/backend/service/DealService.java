@@ -30,4 +30,6 @@ public interface DealService {
 
     boolean countUpView(Integer idx);
     Map<String, Object> viewDealView(DealRequestDto dealRequestDto);
+
+    Boolean clickLikeButton(String decodeId, Integer idx);
 }
