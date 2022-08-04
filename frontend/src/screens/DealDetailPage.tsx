@@ -4,6 +4,7 @@ import UserDummyIcon from "@images/UserDummy.svg";
 import EmptyHeart from "@images/ArticleEmptyHeart.svg";
 import KakaoMap from "@images/kakao_map.png";
 import EditIcon from "@images/EditIcon.svg";
+import MapModal from "@components/common/MapModal";
 
 function DealDetailPage() {
   const [test] = useState(true);
@@ -81,6 +82,7 @@ function DealDetailPage() {
           <div className="comment-component"> </div>
         </div>
       </div>
+      <MapModal />
     </div>
   );
 }

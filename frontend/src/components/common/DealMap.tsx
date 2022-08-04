@@ -1,8 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import "./DealMap.scss";
 
-function DealMap() {
-  const { kakao } = window;
+interface DealMapProps {
+  closeModal: () => void;
+}
+
+function DealMap({ closeModal }: DealMapProps) {
+  const { kakao } = window as any;
   const mapRef = useRef(null);
   useEffect(() => {
     const container = mapRef.current;
@@ -39,8 +43,13 @@ function DealMap() {
   }, []);
   return (
     <div id="dealmap">
-      <div className="mapsight" ref={mapRef}>
-        kakao
+      <div className="map-exit flex">
+        <button type="button" onClick={closeModal}>
+          닫기
+        </button>
+      </div>
+      <div className="mapsight flex" ref={mapRef}>
+        <p>kakao</p>
       </div>
     </div>
   );
