@@ -48,7 +48,8 @@ public class SocialController {
         resultMap = new HashMap<>();
         String authToken = request.getHeader("authToken");
         try {
-            kakaoAuthService.login(authToken);
+            HashMap<String, Object> res = kakaoAuthService.login(authToken);
+            resultMap.put("res",res);
 //            String accessToken = jwtService.createAccessToken("id", userLoginDto.getId());
 //            String refreshToken = jwtService.createRefreshToken("id", userLoginDto.getId());
 //            resultMap.put("access-token", accessToken);

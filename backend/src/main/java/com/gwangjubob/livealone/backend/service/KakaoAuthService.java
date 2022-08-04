@@ -1,64 +1,79 @@
 package com.gwangjubob.livealone.backend.service;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
+import com.gwangjubob.livealone.backend.dto.user.KakaoUserDto;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.json.JSONParser;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.transaction.Transactional;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
+import java.util.HashMap;
+
 
 @Service
 @RequiredArgsConstructor
 public class KakaoAuthService {
-
     @Transactional
-    public String login(String authToken) {
-        String reqURL = "https://kauth.kakao.com/oauth/token";
+    public HashMap<String, Object> login(String authToken) {
+//        KakaoUserDto kakaoUserDto = webClient.get()
+//                .uri("https://kapi.kakao.com/v2/user/me")
+//                .headers(h -> h.setBearerAuth(authToken))
+//                .retrieve()
+////                .onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new TokenValidFailedException("Social Access Token is unauthorized")))
+////                .onStatus(HttpStatus::is5xxServerError, response -> Mono.error(new TokenValidFailedException("Internal Server Error")))
+//                .bodyToMono(KakaoUserDto.class)
+//                .block();
+//
+//
+//        return kakaoUserDto.getHas_signed_up();
 
-        String result = null;
+        //    요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
+        HashMap<String, Object> userInfo = new HashMap<>();
+        String reqURL = "https://kapi.kakao.com/v2/user/me";
         try {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            //POST 요청을 위해 기본값이 false인 setDoOutput을 true로
             conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
 
-            //POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-            StringBuilder sb = new StringBuilder();
-            sb.append("grant_type=authorization_code");
-            sb.append("&client_id=80a775f65089dae0fef7fd767e30684e"); // TODO REST_API_KEY 입력
-            sb.append("&redirect_uri=http://localhost:3000/oauth/kakao"); // TODO 인가코드 받은 redirect_uri 입력
-            sb.append("&code=" + authToken);
-            bw.write(sb.toString());
-            bw.flush();
+            //    요청에 필요한 Header에 포함될 내용
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
 
-            //결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
-            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
             String line = "";
-            result = "";
+            String result = "";
 
             while ((line = br.readLine()) != null) {
                 result += line;
             }
             System.out.println("response body : " + result);
 
+            JSONParser jsonParser = null;
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+//
+//            JsonObject properties = array.getAsJsonObject().get("properties").getAsJsonObject();
+//            JsonObject kakao_account = array.getAsJsonObject().get("kakao_account").getAsJsonObject();
+//
+//            String nickname = properties.getAsJsonObject().get("nickname").getAsString();
+//            String email = kakao_account.getAsJsonObject().get("email").getAsString();
+//
+//            userInfo.put("nickname", nickname);
+//            userInfo.put("email", email);
 
-            br.close();
-            bw.close();
         } catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        return result;
+        return userInfo;
     }
 }
