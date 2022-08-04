@@ -17,6 +17,8 @@ type UserProfile = {
   profileImg: string | null;
   followCount: number;
   followerCount: number;
+  tipCount: number;
+  dealCount: number;
 };
 
 function UserFeedPage() {
@@ -31,7 +33,9 @@ function UserFeedPage() {
     profileMsg: null,
     profileImg: null,
     followCount: 0,
-    followerCount: 0
+    followerCount: 0,
+    tipCount: 0,
+    dealCount: 0
   });
   const userInfo = useAppSelector(state => state.auth.userInfo);
   const txtArea = useRef<HTMLTextAreaElement>(null);
@@ -149,7 +153,7 @@ function UserFeedPage() {
             className={`notoBold ${tagType === "tip" ? "active" : null}`}
             type="button"
           >
-            꿀팁보기<span>{`(${getCounts(1234)})`}</span>
+            꿀팁보기<span>{`(${getCounts(userProfile.tipCount)})`}</span>
           </button>
           <button
             onClick={() => {
@@ -158,7 +162,7 @@ function UserFeedPage() {
             className={`notoBold ${tagType === "tip" ? null : "active"}`}
             type="button"
           >
-            꿀딜보기<span>{`(${getCounts(1234)})`}</span>
+            꿀딜보기<span>{`(${getCounts(userProfile.dealCount)})`}</span>
           </button>
         </div>
         <FeedList type={tagType} userNickname={nickName as string} />
