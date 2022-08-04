@@ -107,6 +107,14 @@ function Editor({ editorValue, getValue, update }: EditorProps) {
 
   return (
     <div id="editor">
+      <button
+        type="button"
+        onClick={() => {
+          console.log(value);
+        }}
+      >
+        asdasd
+      </button>
       <div className="editor">
         <ReactQuill
           theme="snow"

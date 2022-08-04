@@ -7,6 +7,8 @@ import HoneyTem from "@images/HoneyTem.svg";
 import HoneyTip from "@images/HoneyTip.svg";
 import { useNavigate } from "react-router-dom";
 import InFinityScroll from "@components/common/InFinityScroll";
+import { getTipTotalCnt } from "@apis/tip";
+import { useNavigate } from "react-router-dom";
 
 function TipPage() {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ function TipPage() {
     sort: "최신순",
     keyword: null
   });
+  const [totalCnt, setTotalCnt] = useState(0);
 
   const handleConditions = (type: string, value: string) => {
     if (type === "keyword" && value === "") {
@@ -26,6 +29,12 @@ function TipPage() {
       setConditions({ ...conditions, [type]: value });
     }
   };
+  useEffect(() => {
+    (async () => {
+      const res = await getTipTotalCnt();
+      setTotalCnt(res.total);
+    })();
+  }, []);
   return (
     <div id="tip-page">
       <div className="intro flex">
@@ -53,7 +62,7 @@ function TipPage() {
           <p className="intro-container__count">
             나혼자 잘 살러들의 꿀팁
             <br />
-            <span>366</span>개
+            <span>{totalCnt}</span>개
           </p>
         </div>
       </div>
@@ -114,14 +123,16 @@ function TipPage() {
           >
             <option value="최신순">최신순</option>
             <option value="조회순">조회순</option>
-            <option value="인기순">인기순</option>
+            <option value="좋아요순">좋아요순</option>
           </select>
         </div>
         <InFinityScroll
           searchType="tip"
-          sort={conditions.sort}
+          type={conditions.sort}
           keyword={conditions.keyword}
-          searchCategory={conditions.category}
+          category={conditions.category}
+          categorys={undefined}
+          state={undefined}
         />
       </div>
     </div>

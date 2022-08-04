@@ -19,11 +19,11 @@ function TipDetail() {
 
   useEffect(() => {
     const getArticle = tipRead(id as string);
-    console.log(getArticle);
     getArticle
       .then(res => {
         setArticle(res.tip);
         setComment(res.tipComments);
+        console.log(res);
       })
       .catch(() => navigate("NotFound"));
   }, []);
@@ -50,6 +50,7 @@ function TipDetail() {
   };
 
   const isAuthor = UserInfo?.nickname === article.userNickname;
+  console.log(isAuthor);
   return (
     <div id="tip-detail-page">
       <div className="article flex column">
