@@ -42,13 +42,19 @@ function DealMap({ closeModal }: DealMapProps) {
 
   return (
     <div id="dealmap">
-      <div className="map-exit flex">
-        <button type="button" onClick={closeModal}>
-          닫기
-        </button>
-      </div>
-      <div className="mapsight flex" ref={mapRef}>
-        <p>kakao</p>
+      <div className="container flex" onClick={closeModal}>
+        <div className="map-exit">
+          <button type="button" onClick={closeModal}>
+            닫기
+          </button>
+        </div>
+        <div
+          className="map-sight flex"
+          ref={mapRef}
+          onClick={e => e.stopPropagation()}
+        >
+          <p>kakao</p>
+        </div>
       </div>
     </div>
   );
