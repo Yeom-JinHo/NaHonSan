@@ -38,9 +38,9 @@ public interface DealRepository extends JpaRepository<DealEntity, Integer> {
     Slice<DealEntity> findTitleIdx(String state, String keyword, Integer idx, Pageable pageable); //검색어 최신순
 
 
-    @Query("select d from DealEntity d where d.state = :state and d.category in (:categorys) and ((d.idx < : idx and d.view = :view) or d.view < :view)")
+    @Query("select d from DealEntity d where d.state = :state and d.category in (:categorys) and ((d.idx < :idx and d.view = :view) or d.view < :view)")
     Slice<DealEntity> findCategoryView(String state, List<String> categorys, Integer idx, Integer view, Pageable pageable); //카테고리 조회순
-    @Query("select d from DealEntity d where d.state = :state and d.category in (:categorys) and ((d.idx < : idx and d.likes = :likes) or d.likes < :likes)")
+    @Query("select d from DealEntity d where d.state = :state and d.category in (:categorys) and ((d.idx < :idx and d.likes = :likes) or d.likes < :likes)")
     Slice<DealEntity> findCategoryLikes(String state, List<String> categorys, Integer idx, Integer likes, Pageable pageable); // 카테고리 좋아요순
     @Query("select d from DealEntity d where d.state = :state and d.category in (:categorys) and d.idx < :idx")
     Slice<DealEntity> findCategoryIdx(String state, List<String> categorys, Integer idx, Pageable pageable); //카테고리 최신순
