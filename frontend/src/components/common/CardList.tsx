@@ -6,10 +6,10 @@ import {
   TipCondition
 } from "@store/ducks/infinity/infinity.type";
 import { getDealList, getTipList } from "@store/ducks/infinity/infinityThunk";
-import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { useAppDispatch } from "@store/hooks";
 import React, { useEffect, useState } from "react";
 import { v4 } from "uuid";
-import Card, { CardProps } from "./Card";
+import Card, { CardType } from "./Card";
 import "./CardList.scss";
 import CardSkeleton from "./CardSkeleton";
 
@@ -22,12 +22,10 @@ function CardList({
   condition: TipCondition & DealCondition;
   pure: boolean;
 }) {
-  const [cards, setCards] = useState<Array<CardProps>>([]);
+  const [cards, setCards] = useState<Array<CardType>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
-  // const infi = useAppSelector(state => state.infinity);
   useEffect(() => {
-    // console.log("CARDlisT", pure, condition, infi);
     if (pure) {
       (async () => {
         let res;
@@ -64,33 +62,7 @@ function CardList({
             검색 결과가 없어요!
           </div>
         ) : (
-          cards.map(
-            ({
-              idx,
-              userNickname,
-              userProfileImg,
-              title,
-              category,
-              bannerImg,
-              likes,
-              comment,
-              view
-            }) => (
-              <Card
-                type={searchType}
-                idx={idx}
-                userNickname={userNickname}
-                userProfileImg={userProfileImg}
-                title={title}
-                bannerImg={bannerImg}
-                likes={likes}
-                comment={comment}
-                view={view}
-                category={category}
-                key={v4()}
-              />
-            )
-          )
+          cards.map(data => <Card type={searchType} data={data} key={v4()} />)
         )
       ) : (
         [0, 1, 2, 3, 4, 5].map(() => <CardSkeleton key={v4()} />)

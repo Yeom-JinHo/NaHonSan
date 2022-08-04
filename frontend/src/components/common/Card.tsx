@@ -12,8 +12,7 @@ import TipIcon from "@images/Tip.svg";
 import DealIcon from "@images/Deal.svg";
 import { Link } from "react-router-dom";
 
-export type CardProps = {
-  type: "tip" | "deal";
+export type CardType = {
   idx: number;
   userNickname: string;
   userProfileImg: string | null;
@@ -27,16 +26,21 @@ export type CardProps = {
 
 function Card({
   type,
-  idx,
-  userNickname,
-  userProfileImg,
-  title,
-  bannerImg,
-  likes,
-  comment,
-  view,
-  category
-}: CardProps) {
+  data: {
+    idx,
+    userNickname,
+    userProfileImg,
+    title,
+    bannerImg,
+    likes,
+    comment,
+    view,
+    category
+  }
+}: {
+  type: "tip" | "deal";
+  data: CardType;
+}) {
   const getImgSrc = () => {
     if (bannerImg) return `data:image/jpeg;base64,${bannerImg}`;
     if (category === "item") return HoneyTem;
