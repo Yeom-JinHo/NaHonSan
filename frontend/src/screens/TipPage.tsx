@@ -6,6 +6,7 @@ import HoneyRecipe from "@images/HoneyRecipe.svg";
 import HoneyTem from "@images/HoneyTem.svg";
 import HoneyTip from "@images/HoneyTip.svg";
 import InFinityScroll from "@components/common/InFinityScroll";
+import { getTipTotalCnt } from "@apis/tip";
 
 function TipPage() {
   const [conditions, setConditions] = useState({
@@ -13,6 +14,7 @@ function TipPage() {
     sort: "최신순",
     keyword: null
   });
+  const [totalCnt, setTotalCnt] = useState(0);
 
   const handleConditions = (type: string, value: string) => {
     if (type === "keyword" && value === "") {
@@ -21,6 +23,12 @@ function TipPage() {
       setConditions({ ...conditions, [type]: value });
     }
   };
+  useEffect(() => {
+    (async () => {
+      const res = await getTipTotalCnt();
+      setTotalCnt(res.total);
+    })();
+  }, []);
   return (
     <div id="tip-page">
       <div className="intro flex">
@@ -48,7 +56,7 @@ function TipPage() {
           <p className="intro-container__count">
             나혼자 잘 살러들의 꿀팁
             <br />
-            <span>366</span>개
+            <span>{totalCnt}</span>개
           </p>
         </div>
       </div>

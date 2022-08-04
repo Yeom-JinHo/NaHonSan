@@ -1,6 +1,7 @@
+import { reqDealList } from "@apis/deal";
 import { reqTipList } from "@apis/tip";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { TipCondition } from "./infinity.type";
+import { DealCondition, TipCondition } from "./infinity.type";
 
 export const getTipList = createAsyncThunk(
   "infinity/getTipList",
@@ -10,4 +11,10 @@ export const getTipList = createAsyncThunk(
   }
 );
 
-export const test = {};
+export const getDealList = createAsyncThunk(
+  "infinity/getDealList",
+  async (condition: DealCondition, { dispatch }) => {
+    const res = await reqDealList(condition);
+    return res;
+  }
+);

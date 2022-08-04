@@ -1,11 +1,11 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useEffect, useCallback, useState } from "react";
 import loadingSpinner from "@images/LoadingSpinner.svg";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import {
   resetInfinity,
   setConditionList,
   setIsLoading,
-  setPage
+  setUuid
 } from "@store/ducks/infinity/infinitySlice";
 import CardList from "./CardList";
 
@@ -28,38 +28,43 @@ function InFinityScroll({
 }: InFinityScrollProps) {
   const observerTarget = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
-  const { page, isEnd, isLoading, conditionList } = useAppSelector(
+  const [firstLender, setFirstLender] = useState(false);
+  const { uuid, isEnd, isLoading, conditionList, lastIdx } = useAppSelector(
     ({ infinity }) => ({
-      page: infinity.page,
+      uuid: infinity.uuid,
       isLoading: infinity.isLoading,
       isEnd: infinity.isEnd,
-      conditionList: infinity.conditionList
+      conditionList: infinity.conditionList,
+      lastIdx: infinity.lastIdx
     })
   );
   const onIntersect = (entries: IntersectionObserverEntry[]) => {
     entries.forEach((entry: IntersectionObserverEntry) => {
       if (entry.isIntersecting && !isLoading) {
-        dispatch(setPage({ nextPage: page + 1 }));
+        dispatch(setUuid());
       }
     });
   };
 
   useEffect(() => {
     dispatch(resetInfinity());
+    setFirstLender(true);
   }, [type, searchType, keyword, category, categorys, state]);
 
   useEffect(() => {
-    dispatch(setIsLoading(true));
-    dispatch(
-      setConditionList({
-        type,
-        keyword,
-        category,
-        categorys,
-        state
-      })
-    );
-  }, [page]);
+    if (!isLoading) {
+      dispatch(setIsLoading(true));
+      dispatch(
+        setConditionList({
+          type,
+          keyword,
+          category,
+          categorys,
+          state
+        })
+      );
+    }
+  }, [uuid]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(onIntersect, { threshold: 0.1 });
@@ -71,15 +76,24 @@ function InFinityScroll({
     };
   }, [isLoading]);
 
+  // useEffect(
+  //   () => () => {
+  //     dispatch(resetInfinity());
+  //   },
+  //   []
+  // );
+
   return (
     <div id="infinity-study-card-list">
       <ul className="flex column">
-        {conditionList.length !== 0 &&
+        {firstLender &&
+          conditionList.length !== 0 &&
           conditionList.map(condition => (
             <CardList
               searchType={searchType}
               condition={condition}
               key={condition.lastIdx}
+              pure={false}
             />
           ))}
       </ul>

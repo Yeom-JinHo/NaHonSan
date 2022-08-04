@@ -19,4 +19,8 @@ export const reqTipList = async (condition: TipCondition) => {
   return res.data;
 };
 
-export const test = {};
+export const getTipTotalCnt = async () => {
+  const res = await API.get("/honeyTip/totalCount");
+
+  return res.data;
+};

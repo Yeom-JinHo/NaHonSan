@@ -1,10 +1,11 @@
-import { getTipList } from "@store/ducks/infinity/infinityThunk";
+import { v4 } from "uuid";
+import { getDealList, getTipList } from "@store/ducks/infinity/infinityThunk";
 import { createSlice } from "@reduxjs/toolkit";
 import { TipCondition, DealCondition } from "./infinity.type";
 
 interface IntialStateType {
   conditionList: Array<TipCondition & DealCondition>;
-  page: number;
+  uuid: string;
   isEnd: boolean;
   isLoading: boolean;
   lastIdx: number | null;
@@ -14,7 +15,7 @@ interface IntialStateType {
 
 const initialState: IntialStateType = {
   conditionList: [],
-  page: 0,
+  uuid: v4(),
   isEnd: false,
   isLoading: false,
   lastIdx: null,
@@ -26,8 +27,8 @@ export const infinitySlice = createSlice({
   name: "infinity",
   initialState,
   reducers: {
-    setPage: (state, { payload }) => {
-      state.page = payload.nextPage;
+    setUuid: state => {
+      state.uuid = v4();
     },
     setIsEnd: (state, { payload }) => {
       state.isEnd = payload;
@@ -47,24 +48,44 @@ export const infinitySlice = createSlice({
         }
       ];
     },
-    resetInfinity: () => initialState
+    resetInfinity: state => {
+      state.conditionList = [];
+      state.uuid = v4();
+      state.isEnd = false;
+      state.isLoading = false;
+      state.lastIdx = null;
+      state.lastView = null;
+      state.lastLikes = null;
+    }
   },
   extraReducers: builder => {
     builder.addCase(getTipList.fulfilled, (state, { payload }) => {
       state.isEnd = !payload.hasNext;
-      const lastCard = payload.data[payload.data.length - 1];
+      if (payload.data.length !== 0) {
+        const lastCard = payload.data[payload.data.length - 1];
 
-      state.lastIdx = lastCard.idx;
-      state.lastLikes = lastCard.likes;
-      state.lastView = lastCard.view;
+        state.lastIdx = lastCard.idx;
+        state.lastLikes = lastCard.likes;
+        state.lastView = lastCard.view;
+      }
+      state.isLoading = false;
+    });
+    builder.addCase(getDealList.fulfilled, (state, { payload }) => {
+      state.isEnd = !payload.hasNext;
+      if (payload.data.length !== 0) {
+        const lastCard = payload.data[payload.data.length - 1];
 
+        state.lastIdx = lastCard.idx;
+        state.lastLikes = lastCard.likes;
+        state.lastView = lastCard.view;
+      }
       state.isLoading = false;
     });
   }
 });
 
 export const {
-  setPage,
+  setUuid,
   setIsEnd,
   setIsLoading,
   setConditionList,
