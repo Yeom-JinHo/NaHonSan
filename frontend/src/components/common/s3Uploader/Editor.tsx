@@ -28,18 +28,9 @@ function Editor({ editorValue, getValue, update }: EditorProps) {
       container: toolbarOptions
     }
   };
-
-  useEffect(() => {
-    if (update) {
-      const quill = new Quill(".ql-container", {});
-      const delta = quill.clipboard.convert(update);
-      quill.setContents(delta, "silent");
-      setValue(update);
-    }
-  }, [update]);
-
   useEffect(() => {
     // 에디터 이미지 첨부 시 커스텀 이미지핸들러 실행
+
     const handleImage = () => {
       // 인풋 만들어서 업로드
       const input = document.createElement("input");
@@ -80,8 +71,19 @@ function Editor({ editorValue, getValue, update }: EditorProps) {
     if (quillRef.current) {
       const toolbar = quillRef.current.getEditor().getModule("toolbar");
       toolbar.addHandler("image", handleImage);
+      console.log(update);
     }
   }, []);
+
+  // update 프롭스가 전달되면 디폴트값 설정
+  useEffect(() => {
+    if (update) {
+      setValue(update);
+      const quill = quillRef.current;
+      const delta = quill.getEditor().clipboard.convert(update);
+      quill.getEditor().setContents(delta, "silent");
+    }
+  }, [update]);
 
   const formats = [
     "header",
@@ -116,7 +118,7 @@ function Editor({ editorValue, getValue, update }: EditorProps) {
       <div className="editor">
         <ReactQuill
           theme="snow"
-          value={value}
+          defaultValue={value}
           modules={modules}
           formats={formats}
           ref={quillRef}

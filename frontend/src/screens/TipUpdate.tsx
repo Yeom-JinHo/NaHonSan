@@ -89,6 +89,10 @@ function TipUpdate() {
       bannerImg: thumnail.replace("data:image/jpeg;base64,", "")
     };
     const res = await tipUpdate(payload, id as string);
+    if (res.status === 500) {
+      alert("글이 너무 길어요 ㅠㅠ");
+      setSpinner(false);
+    }
     navigate(`/tip/detail/${id}`);
   };
 

@@ -38,7 +38,7 @@ export const tipUpdate = async (data: createForm, idx: string) => {
       Authorization: accessToken
     }
   });
-  return res.data;
+  return res;
 };
 
 export const tipRead = async (idx: string) => {
