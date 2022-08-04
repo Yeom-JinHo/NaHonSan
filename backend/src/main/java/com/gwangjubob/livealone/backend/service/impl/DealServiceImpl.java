@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 @Service
@@ -101,7 +102,7 @@ public class DealServiceImpl implements DealService {
         if(optionalDeal.isPresent()){
             DealEntity deal = optionalDeal.get();
             dealMapper.updateFromDto(dealDto, deal);
-            deal.setUpdateTime(LocalDateTime.now());
+            deal.setUpdateTime(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
             DealEntity res =dealRepository.save(deal);
             data = dealMapper.toDto(res);
         } else {
@@ -180,6 +181,7 @@ public class DealServiceImpl implements DealService {
         DealCommentDto data = new DealCommentDto();
         if(optionalDealComment.isPresent()){
             DealCommentEntity dealComment = optionalDealComment.get();
+            dealComment.setUpdateTime(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
             dealCommentMapper.updateFromDto(dealCommentDto, dealComment);
             dealCommentRepository.save(dealComment);
             data = dealCommentMapper.toDto(dealComment);
