@@ -94,6 +94,14 @@ public class TipController {
         resultMap = new HashMap<>();
 
         try{
+            if(request.getHeader("Authorization") != null){
+                String decodeId = checkToken(request);
+                boolean clickLikeButton = tipService.clickLikeButton(decodeId, idx); // 좋아요 여부 확인 서비스 호출
+                resultMap.put("isLike", clickLikeButton);
+                boolean isFollow = false;
+                resultMap.put("isFollow", isFollow);
+
+            }
             TipDetailViewDto dto = tipService.detailViewTip(idx); // 게시글 세부 조회 서비스 호출
             Cookie oldCookie = null;
             Cookie[] cookies = request.getCookies();

@@ -246,4 +246,9 @@ public class TipServiceImpl implements TipService {
         return tipRepository.count();
     }
 
+    @Override
+    public boolean clickLikeButton(String decodeId, Integer idx) {
+        return false;
+    }
+
 }
