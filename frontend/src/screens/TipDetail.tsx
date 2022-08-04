@@ -8,6 +8,7 @@ import EditIcon from "@images/EditIcon.svg";
 import DeleteIcon from "@images/DeleteIcon.svg";
 import { useAppSelector } from "@store/hooks";
 import { getTime } from "@utils/getTime";
+import Comments from "@components/common/Comments/Comments";
 
 function TipDetail() {
   const [article, setArticle] = useState<Article>();
@@ -18,11 +19,11 @@ function TipDetail() {
 
   useEffect(() => {
     const getArticle = tipRead(id as string);
+    console.log(getArticle);
     getArticle
       .then(res => {
         setArticle(res.tip);
         setComment(res.tipComments);
-        console.log(res);
       })
       .catch(() => navigate("NotFound"));
   }, []);
@@ -49,7 +50,6 @@ function TipDetail() {
   };
 
   const isAuthor = UserInfo?.nickname === article.userNickname;
-  console.log(isAuthor);
   return (
     <div id="tip-detail-page">
       <div className="article flex column">
@@ -57,23 +57,30 @@ function TipDetail() {
         <div className="header flex">
           <div className="header-info flex">
             <div className="header-info__img-container flex">
-              <img
-                src={
-                  article.userProfileImg
-                    ? `data:image/jpeg;base64,${article.userProfileImg}`
-                    : UserDummyIcon
-                }
-                alt="User"
-                className="profile-user__img"
-                title="User"
-              />
+              <button
+                type="button"
+                onClick={() => {
+                  navigate(`/userfeed/${article.userNickname}`);
+                }}
+              >
+                <img
+                  src={
+                    article.userProfileImg
+                      ? `data:image/jpeg;base64,${article.userProfileImg}`
+                      : UserDummyIcon
+                  }
+                  alt="User"
+                  className="profile-user__img"
+                  title="User"
+                />
+              </button>
             </div>
             <div className="header-info__text flex column justify-center">
               <p className="user-name notoMid">{article.userNickname}</p>
               <div className="created flex column align-center">
                 <p className=" notoReg">
                   {article.updateTime
-                    ? getTime(article.updateTime)
+                    ? `${getTime(article.updateTime)} (수정됨)`
                     : getTime(article.time)}
                 </p>
               </div>
@@ -117,7 +124,7 @@ function TipDetail() {
             </div>
             <input type="text" placeholder="댓글을 입력해" />
           </div>
-          <div className="comment-component"> </div>
+          {comment ? <Comments comments={comment} /> : null}
         </div>
       </div>
     </div>

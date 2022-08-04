@@ -367,4 +367,4 @@ function AccountSettingPage() {
   );
 }
 
-export default React.memo(AccountSettingPage);
+export default AccountSettingPage;

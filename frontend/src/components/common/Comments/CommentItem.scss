@@ -1,0 +1,55 @@
+#comment-item {
+  margin-bottom: (24px);
+  .wrapper {
+    border-radius: (24px);
+    border: 1px solid #d9d9d9;
+    width: (470px);
+    margin: auto;
+    padding: (12px);
+    .head {
+      width: 90%;
+      height: (52px);
+      border-bottom: 1px solid #d9d9d9;
+      &-profile {
+        width: 70%;
+        &_img {
+          margin-right: (8px);
+          & img {
+            width: (32px);
+            height: (32px);
+          }
+        }
+        &_info {
+          font-size: (12px);
+          & :nth-child(1) {
+            margin-bottom: (4px);
+          }
+        }
+      }
+    }
+    .body {
+      width: 90%;
+      & .content {
+        justify-content: flex-start;
+        &_img {
+          img {
+            width: (100px);
+            height: (100px);
+          }
+        }
+        &_text {
+          padding: (8px);
+          font-size: (12px);
+        }
+      }
+    }
+    .footer {
+      width: 90%;
+      color: #666;
+      padding: (8px);
+    }
+    & button {
+      font-size: (10px);
+    }
+  }
+}
