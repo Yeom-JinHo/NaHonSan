@@ -76,13 +76,6 @@ function InFinityScroll({
     };
   }, [isLoading]);
 
-  // useEffect(
-  //   () => () => {
-  //     dispatch(resetInfinity());
-  //   },
-  //   []
-  // );
-
   return (
     <div id="infinity-study-card-list">
       <ul className="flex column">

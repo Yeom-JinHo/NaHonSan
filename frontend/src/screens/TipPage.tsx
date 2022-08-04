@@ -7,8 +7,13 @@ import HoneyTem from "@images/HoneyTem.svg";
 import HoneyTip from "@images/HoneyTip.svg";
 import InFinityScroll from "@components/common/InFinityScroll";
 import { getTipTotalCnt } from "@apis/tip";
+import { useNavigate } from "react-router-dom";
 
 function TipPage() {
+  const navigate = useNavigate();
+  const goEdit = () => {
+    navigate("create");
+  };
   const [conditions, setConditions] = useState({
     category: "tip",
     sort: "최신순",
@@ -37,7 +42,7 @@ function TipPage() {
             <p className="fs-48 notoReg">
               <span>꿀</span>팁
             </p>
-            <button className="notoReg" type="button">
+            <button className="notoReg" type="button" onClick={goEdit}>
               꿀팁쓰기
             </button>
           </div>
