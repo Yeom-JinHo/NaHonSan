@@ -64,6 +64,7 @@ function DealDetailPage() {
                 <img src={EmptyHeart} alt="123" title="like" />
               </div>
             )}
+            <MapModal />
           </div>
         </div>
         <div className="body"> </div>
@@ -82,7 +83,6 @@ function DealDetailPage() {
           <div className="comment-component"> </div>
         </div>
       </div>
-      <MapModal />
     </div>
   );
 }
