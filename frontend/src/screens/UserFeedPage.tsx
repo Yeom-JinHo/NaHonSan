@@ -129,10 +129,12 @@ function UserFeedPage() {
             <span>{getCounts(userProfile?.followCount)}</span>
           </button>
         </div>
-        <div className="info__btn flex">
-          <button type="button">팔로우</button>
-          <button type="button">DM</button>
-        </div>
+        {userProfile.nickname !== userInfo?.nickname && (
+          <div className="info__btn flex">
+            <button type="button">팔로우</button>
+            <button type="button">DM</button>
+          </div>
+        )}
       </div>
       <div className="info__state notoReg flex ">
         <textarea
