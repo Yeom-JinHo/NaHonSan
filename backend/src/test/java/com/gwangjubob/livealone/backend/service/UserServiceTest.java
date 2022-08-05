@@ -7,11 +7,8 @@ import com.gwangjubob.livealone.backend.domain.repository.MailRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserCategoryRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
-import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
 import com.gwangjubob.livealone.backend.dto.user.UserMoreDTO;
 import com.gwangjubob.livealone.backend.mapper.UserInfoMapper;
-import jdk.jfr.Category;
-import org.apache.catalina.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -22,17 +19,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.Buffer;
 import java.util.*;
 
 @SpringBootTest
@@ -352,6 +345,60 @@ public class UserServiceTest {
         }
         //System.out.println("size 확인 :: " + size);
 
+    }
+
+    @Test
+    public void 중간위치_주변_버스정류장_조회() {
+        // given - 중간위치
+        double doubleMidX = 126.8533768895765;
+        double doubleMidY = 35.18480088833835; // DB에서 double로 받아온 값을 String으로 변환해줘야함
+
+        ArrayList<List> station = new ArrayList<>(); // 버스정류장 정보 담을 리스트 생성
+        String surl;
+        URL url;
+        HttpsURLConnection conn;
+        BufferedReader br;
+        String inputStr;
+        StringBuilder sb;
+
+        // when - api 조회
+        try{
+            // request params
+            String midX = String.valueOf(doubleMidX);
+            String midY = String.valueOf(doubleMidY);
+            String apiKey = "sVVsoLKtRaVMwkTbiQfAPb3Dzbu/GeKVmpaAxqvSH0c"; // 인증키
+            String radius = "500"; // 디폴트는 반경 500, 없으면 1000으로 바꿔서 조회
+
+            surl = "https://api.odsay.com/v1/api/pointSearch?apiKey=" + apiKey
+                    +"&x="+midX+"&y="+midY+"&radius="+radius; // ODsay 버정 조회 api
+
+            url = new URL(surl);
+
+            conn = (HttpsURLConnection) url.openConnection();
+
+            conn.setRequestMethod("GET");
+
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            sb = new StringBuilder();
+            while((inputStr = br.readLine()) != null){
+                sb.append(inputStr + "\n");
+            }
+            br.close();
+            conn.disconnect();
+
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("검색 실패.... T.T");
+        }
+
+
+        // 내 위치, 상대방 위치랑 중간위치 주변 버스 정류장 중 최단 시간이 걸리는 정류장 고르기.
+        for(int i=0; i<station.size(); i++){
+            Double x = (Double) station.get(i).get(0); // 버정 x좌표
+            Double y = (Double) station.get(i).get(1); // 버정 y좌표
+
+            System.out.println((i+1)+ " : " +x + "," +y);
+        }
     }
 }
 

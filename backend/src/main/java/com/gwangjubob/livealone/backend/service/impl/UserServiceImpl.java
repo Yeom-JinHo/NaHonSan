@@ -230,12 +230,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<String, Double> getUserPosition(String id) {
-        Map<String, Double> position = new HashMap<>();
-        double positionX = userRepository.findById(id).get().getAreaX();
-        double positionY = userRepository.findById(id).get().getAreaY();
-        position.put("positionX", positionX);
-        position.put("positionY", positionY);
+    public Map<String, Object> getPosition(String id) {
+        Map<String, Object> position = new HashMap<>();
+
+        if(!userRepository.findById(id).get().getArea().isEmpty()){
+            double positionX = userRepository.findById(id).get().getAreaX();
+            double positionY = userRepository.findById(id).get().getAreaY();
+
+            position.put("positionX", positionX);
+            position.put("positionY", positionY);
+        }else{
+            position.put("positionX", "null");
+            position.put("positionY", "null");
+        }
         return position;
     }
 }

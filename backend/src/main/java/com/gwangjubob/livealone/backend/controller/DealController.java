@@ -286,8 +286,8 @@ public class DealController {
         if(decodeId != null) {
             try {
                 // 사용자 위치 구하는 서비스 호출
-                resultMap.put("loginUserPosition", userService.getUserPosition(decodeId));
-                resultMap.put("targetUserPosition", userService.getUserPosition(targetId));
+                resultMap.put("loginUserPosition", userService.getPosition(decodeId));
+                resultMap.put("targetUserPosition", userService.getPosition(targetId));
                 // 중간 위치 구하는 서비스 호출
                 resultMap.put("message", okay);
                 status = HttpStatus.OK;
