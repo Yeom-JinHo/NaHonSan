@@ -28,7 +28,9 @@ function TipUpdate() {
   // 수정 전 데이터 불러오기
   useEffect(() => {
     const articleInfo = location.state as Article;
-    setThumnail(`data:image/jpeg;base64,${articleInfo.bannerImg}`);
+    if (articleInfo.bannerImg) {
+      setThumnail(`data:image/jpeg;base64,${articleInfo.bannerImg}`);
+    }
     setCategory(articleInfo.category);
     setTitle(articleInfo.title);
     setUpdateData(articleInfo.content);

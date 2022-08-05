@@ -8,7 +8,6 @@ import HoneyTip from "@images/HoneyTip.svg";
 import { useNavigate } from "react-router-dom";
 import InFinityScroll from "@components/common/InFinityScroll";
 import { getTipTotalCnt } from "@apis/tip";
-import { useNavigate } from "react-router-dom";
 
 function TipPage() {
   const navigate = useNavigate();
