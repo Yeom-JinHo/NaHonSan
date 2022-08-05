@@ -122,7 +122,7 @@ function CommentItem({ info, type, isAuthor, changed, postIdx }: CommentProps) {
               setEditInput(false);
             }}
             type="button"
-            className="flex justify-end align-center"
+            className="flex align-center"
           >
             <img src={X} alt="close" />
           </button>

@@ -6,6 +6,8 @@ import "./CommentInput.scss";
 import isImage from "@utils/isImage";
 import ImgResizer from "@components/common/ImgUploader/ImgResizer";
 import { commentCreate } from "@apis/comment";
+import { useAppSelector } from "@store/hooks";
+import { useNavigate } from "react-router-dom";
 
 interface CommentInputProps {
   articleIdx: string;
@@ -18,6 +20,8 @@ function CommentInput({ articleIdx, changed }: CommentInputProps) {
   const [preview, setPreview] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const imgInput = useRef<HTMLInputElement>(null);
+  const isLoggedIn = !!useAppSelector(state => state.auth.userInfo);
+  const navigate = useNavigate();
 
   // 썸네일 인풋태그열기 > 파일내리기 > 파일 받기
   const clickInput = () => {
@@ -45,6 +49,9 @@ function CommentInput({ articleIdx, changed }: CommentInputProps) {
   const submit = async (e: React.KeyboardEvent) => {
     if (e.key !== "Enter") {
       return inputRef.current?.focus();
+    }
+    if (!isLoggedIn) {
+      return navigate("/login");
     }
     if (!inputRef.current?.value.trim()) {
       return inputRef.current?.focus();

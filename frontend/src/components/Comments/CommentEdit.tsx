@@ -6,6 +6,8 @@ import "./CommentInput.scss";
 import { commentEdit, commentCreate } from "@apis/comment";
 import isImage from "@utils/isImage";
 import ImgResizer from "@components/common/ImgUploader/ImgResizer";
+import { useAppSelector } from "@store/hooks";
+import { useNavigate } from "react-router-dom";
 import { commentType } from "./Comments";
 
 interface CommentEditProps {
@@ -28,6 +30,8 @@ function CommentEdit({
   const [preview, setPreview] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const imgInput = useRef<HTMLInputElement>(null);
+  const isLoggedIn = !!useAppSelector(state => state.auth.userInfo);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (commentInfo.bannerImg && isAuthor) {
@@ -64,6 +68,9 @@ function CommentEdit({
   const submit = async (e: React.KeyboardEvent) => {
     if (e.key !== "Enter") {
       return inputRef.current?.focus();
+    }
+    if (!isLoggedIn) {
+      return navigate("/login");
     }
     if (!inputRef.current?.value.trim()) {
       return inputRef.current?.focus();

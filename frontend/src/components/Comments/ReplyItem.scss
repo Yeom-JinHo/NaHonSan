@@ -80,6 +80,9 @@
       }
     }
     & .edit-input {
+      & > button {
+        margin-left: (4px);
+      }
       width: (470px);
       margin-top: (32px);
       justify-content: space-between;
