@@ -1,10 +1,7 @@
 package com.gwangjubob.livealone.backend.dto.user;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
@@ -14,7 +11,20 @@ import java.util.Date;
 @Builder
 public class KakaoUserDto {
     private Long id;
-    private Boolean has_signed_up;
-    private Date connected_at;
-    private Date synched_at;
+    private Properties properties;
+    private KakaoAccount kakao_account;
+    private String test;
+
+    @Getter
+    @ToString
+    public static class KakaoAccount{
+        private String email;
+    }
+    @Getter
+    @ToString
+    public static class Properties{
+        private String nickname;
+        private String thumbnail_image;
+    }
+
 }

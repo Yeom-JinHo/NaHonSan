@@ -48,12 +48,13 @@ public class SocialController {
         resultMap = new HashMap<>();
         String authToken = request.getHeader("authToken");
         try {
-            HashMap<String, Object> res = kakaoAuthService.login(authToken);
-            resultMap.put("res",res);
+            String res = kakaoAuthService.login(authToken);
+            if(res!=null) {
+                resultMap.put("res", res);
 //            String accessToken = jwtService.createAccessToken("id", userLoginDto.getId());
 //            String refreshToken = jwtService.createRefreshToken("id", userLoginDto.getId());
 //            resultMap.put("access-token", accessToken);
-            resultMap.put("message", okay);
+                resultMap.put("message", okay);
 
 //            Cookie refreshCookie = new Cookie("refresh-token",refreshToken);
 //            refreshCookie.setMaxAge(1*60*60);
@@ -61,6 +62,10 @@ public class SocialController {
 //            refreshCookie.setHttpOnly(true);
 //
 //            response.addCookie(refreshCookie);
+            }else{
+                resultMap.put("message", fail);
+                status = HttpStatus.UNAUTHORIZED;
+            }
         } catch (Exception e){
             resultMap.put("message", fail);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
