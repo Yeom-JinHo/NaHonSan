@@ -469,5 +469,103 @@ public class UserServiceTest {
             System.out.println((i+1)+ " : " +x + "," +y);
         }
     }
+
+    @Test
+    public void 사용자와_버스정류장들중_최단거리_구하기() {
+        // given
+        Double loginUserX = 126.877498406332;
+        Double loginUserY = 35.1841322155411;
+
+        Double targetUserX = 126.829255372821;
+        Double targetUserY = 35.1854695611356;
+
+        ArrayList<List> station = new ArrayList<>();
+        List<Double> list1 = new ArrayList<>();
+        list1.add(126.85769);
+        list1.add(35.189346);
+        List<Double> list2 = new ArrayList<>();
+        list2.add(126.85758);
+        list2.add(35.189686);
+        List<Double> list3 = new ArrayList<>();
+        list3.add(126.85134);
+        list3.add(35.1917);
+        List<Double> list4 = new ArrayList<>();
+        list4.add(126.851555);
+        list4.add(35.19183);
+        List<Double> list5 = new ArrayList<>();
+        list5.add(126.8608);
+        list5.add(35.17906);
+        List<Double> list6 = new ArrayList<>();
+        list6.add(126.860794);
+        list6.add(35.179);
+        station.add(list1);
+        station.add(list2);
+        station.add(list3);
+        station.add(list4);
+        station.add(list5);
+        station.add(list6);
+
+        for(int i=0; i<station.size(); i++){
+            List<Long> loginUserTime = new ArrayList<>();
+            List<Long> targetUserTime = new ArrayList<>();
+            Double midX = (Double) station.get(i).get(0); // 하나씩 조회하며 시간 구하기
+            Double midY = (Double) station.get(i).get(1);
+
+            String loginUserSX = String.valueOf(loginUserX);
+            String loginUserSY = String.valueOf(loginUserY);
+
+            String targetUserSX = String.valueOf(targetUserX);
+            String targetUserSY = String.valueOf(targetUserY);
+
+            String EX = String.valueOf(midX);
+            String EY = String.valueOf(midY);
+
+            String apiKey = "sVVsoLKtRaVMwkTbiQfAPb3Dzbu/GeKVmpaAxqvSH0c";
+            String surl = "https://api.odsay.com/v1/api/searchPubTransPathT?apiKey="+apiKey+"&SX="+loginUserSX+"&SY="+loginUserSY+"&EX="+EX+"&EY="+EY;
+            String surl2 = "https://api.odsay.com/v1/api/searchPubTransPathT?apiKey="+apiKey+"&SX="+targetUserSX+"&SY="+targetUserSY+"&EX="+EX+"&EY="+EY;
+
+            try{
+                URL url = new URL(surl);
+                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+
+                conn.setRequestMethod("GET");
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(),  "UTF-8"));
+                String inputStr;
+                StringBuilder sb = new StringBuilder();
+                while((inputStr = br.readLine()) != null){
+                    sb.append(inputStr);
+                }
+                br.close();
+                conn.disconnect();
+
+                JSONParser parser = new JSONParser();
+                JSONObject json = (JSONObject) parser.parse(sb.toString());
+
+                JSONObject result = (JSONObject) json.get("result");
+//                System.out.println(result.toString());
+                JSONArray paths = (JSONArray) result.get("path"); // 여기서 최단 시간 찾아야함
+
+                JSONObject path = (JSONObject) paths.get(0);
+                JSONObject info = (JSONObject) path.get("info");
+
+                Long minTime = Long.parseLong(info.get("totalTime").toString());
+
+                for(int j=1; j<paths.size(); j++){
+                    path = (JSONObject) paths.get(j);
+                    info = (JSONObject) path.get("info");
+
+                    Long totalTime = Long.parseLong(info.get("totalTime").toString());
+                    if(minTime > totalTime) minTime = totalTime;
+                }
+                System.out.println("최단시간 : " + minTime);
+
+                loginUserTime.add(minTime);
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
 }
 
