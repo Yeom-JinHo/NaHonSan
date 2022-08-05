@@ -228,4 +228,14 @@ public class UserServiceImpl implements UserService {
     public String getTargetId(String nickname) {
         return userRepository.findByNickname(nickname).get().getNickname();
     }
+
+    @Override
+    public Map<String, Double> getUserPosition(String id) {
+        Map<String, Double> position = new HashMap<>();
+        double positionX = userRepository.findById(id).get().getAreaX();
+        double positionY = userRepository.findById(id).get().getAreaY();
+        position.put("positionX", positionX);
+        position.put("positionY", positionY);
+        return position;
+    }
 }
