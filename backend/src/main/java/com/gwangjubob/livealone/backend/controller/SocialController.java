@@ -1,22 +1,14 @@
 package com.gwangjubob.livealone.backend.controller;
 
-import com.gwangjubob.livealone.backend.dto.mail.MailCheckDto;
-import com.gwangjubob.livealone.backend.dto.mail.MailSendDto;
-import com.gwangjubob.livealone.backend.dto.user.UserMoreDTO;
-import com.gwangjubob.livealone.backend.dto.user.UserRegistDto;
-import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.service.JwtService;
-import com.gwangjubob.livealone.backend.service.KakaoAuthService;
+import com.gwangjubob.livealone.backend.service.SocialService;
+import com.gwangjubob.livealone.backend.service.impl.SocialServiceImpl;
 import com.gwangjubob.livealone.backend.service.impl.MailService;
 import com.gwangjubob.livealone.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -31,37 +23,94 @@ public class SocialController {
     private static final String timeOut = "access-token timeout";
     private final UserService userService;
     private final JwtService jwtService;
-    private final KakaoAuthService kakaoAuthService;
+    private final SocialService socialService;
     private final MailService mailService;
     private static HttpStatus status = HttpStatus.NOT_FOUND;
     private static Map<String, Object> resultMap;
     @Autowired
-    SocialController(UserService userService ,KakaoAuthService kakaoAuthService,JwtService jwtService,MailService mailService){
+    SocialController(UserService userService , SocialService socialService, JwtService jwtService, MailService mailService){
         this.userService = userService;
         this.jwtService = jwtService;
         this.mailService = mailService;
-        this.kakaoAuthService = kakaoAuthService;
+        this.socialService = socialService;
     }
+    @PostMapping("/google")
+    public ResponseEntity<?> authGoogle(HttpServletRequest request ,HttpServletResponse response) throws Exception{
+        resultMap = new HashMap<>();
+        String authToken = request.getHeader("authToken");
+        try {
+            String res = socialService.googleLogin(authToken);
+            if(res!=null) {
+                String accessToken = jwtService.createAccessToken("id", res);
+                String refreshToken = jwtService.createRefreshToken("id", res);
+                resultMap.put("access-token", accessToken);
+                resultMap.put("message", okay);
 
+                Cookie refreshCookie = new Cookie("refresh-token",refreshToken);
+                refreshCookie.setMaxAge(1*60*60);
+                refreshCookie.setPath("/");
+                refreshCookie.setHttpOnly(true);
+
+                response.addCookie(refreshCookie);
+                status = HttpStatus.OK;
+            }else{
+                resultMap.put("message", fail);
+                status = HttpStatus.UNAUTHORIZED;
+            }
+        } catch (Exception e){
+            resultMap.put("message", fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
+    @PostMapping("/naver")
+    public ResponseEntity<?> authNaver(HttpServletRequest request ,HttpServletResponse response) throws Exception{
+        resultMap = new HashMap<>();
+        String authToken = request.getHeader("authToken");
+        try {
+            String res = socialService.naverLogin(authToken);
+            if(res!=null) {
+                String accessToken = jwtService.createAccessToken("id", res);
+                String refreshToken = jwtService.createRefreshToken("id", res);
+                resultMap.put("access-token", accessToken);
+                resultMap.put("message", okay);
+
+                Cookie refreshCookie = new Cookie("refresh-token",refreshToken);
+                refreshCookie.setMaxAge(1*60*60);
+                refreshCookie.setPath("/");
+                refreshCookie.setHttpOnly(true);
+
+                response.addCookie(refreshCookie);
+                status = HttpStatus.OK;
+            }else{
+                resultMap.put("message", fail);
+                status = HttpStatus.UNAUTHORIZED;
+            }
+        } catch (Exception e){
+            resultMap.put("message", fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
     @PostMapping("/kakao")
     public ResponseEntity<?> authKakao(HttpServletRequest request ,HttpServletResponse response) throws Exception{
         resultMap = new HashMap<>();
         String authToken = request.getHeader("authToken");
         try {
-            String res = kakaoAuthService.login(authToken);
+            String res = socialService.kakaoLogin(authToken);
             if(res!=null) {
-                resultMap.put("res", res);
-//            String accessToken = jwtService.createAccessToken("id", userLoginDto.getId());
-//            String refreshToken = jwtService.createRefreshToken("id", userLoginDto.getId());
-//            resultMap.put("access-token", accessToken);
+                String accessToken = jwtService.createAccessToken("id", res);
+                String refreshToken = jwtService.createRefreshToken("id", res);
+                resultMap.put("access-token", accessToken);
                 resultMap.put("message", okay);
 
-//            Cookie refreshCookie = new Cookie("refresh-token",refreshToken);
-//            refreshCookie.setMaxAge(1*60*60);
-//            refreshCookie.setPath("/");
-//            refreshCookie.setHttpOnly(true);
-//
-//            response.addCookie(refreshCookie);
+                Cookie refreshCookie = new Cookie("refresh-token",refreshToken);
+                refreshCookie.setMaxAge(1*60*60);
+                refreshCookie.setPath("/");
+                refreshCookie.setHttpOnly(true);
+
+                response.addCookie(refreshCookie);
+                status = HttpStatus.OK;
             }else{
                 resultMap.put("message", fail);
                 status = HttpStatus.UNAUTHORIZED;
