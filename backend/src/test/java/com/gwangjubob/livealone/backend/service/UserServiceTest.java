@@ -386,11 +386,80 @@ public class UserServiceTest {
             br.close();
             conn.disconnect();
 
+            JSONParser parser = new JSONParser();
+            JSONObject json = (JSONObject) parser.parse(sb.toString());
+
+            JSONObject result = (JSONObject) json.get("result");
+            long count = (long) result.get("count"); // 검색 결과 주변 버스정류장 개수 - 잘 받아옴
+//            System.out.println("검색 결과 총 개수: " + count);
+            if(count > 0) {
+                JSONArray data = (JSONArray) result.get("station");
+
+                for(int i=0; i<data.size(); i++){
+                    JSONObject obj = (JSONObject) data.get(i);
+
+                    List<Double> list = new ArrayList<>();
+                    list.add(Double.parseDouble(obj.get("x").toString()));
+                    list.add(Double.parseDouble(obj.get("y").toString()));
+
+                    station.add(list);
+                }
+
+
+                for(List l : station){
+                    System.out.println(l.get(0));
+                    System.out.println(l.get(1));
+                }
+            }else{ // 조회 결과 없으면 반경 1000으로 변경
+                radius = "1000";
+                surl = "https://api.odsay.com/v1/api/pointSearch?apiKey=" + apiKey
+                        +"&x="+midX+"&y="+midY+"&radius="+radius; // ODsay 버정 조회 api
+
+                url = new URL(surl);
+
+                conn = (HttpsURLConnection) url.openConnection();
+
+                conn.setRequestMethod("GET");
+
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                sb = new StringBuilder();
+                while((inputStr = br.readLine()) != null){
+                    sb.append(inputStr + "\n");
+                }
+                br.close();
+                conn.disconnect();
+
+                JSONParser parser2 = new JSONParser();
+                JSONObject json2 = (JSONObject) parser2.parse(sb.toString());
+                JSONObject result2 = (JSONObject) json2.get("result");
+                long count2 = (long) result2.get("count");
+                if(count2 > 0) {
+                    JSONArray data = (JSONArray) result2.get("station");
+
+                    for(int i=0; i<data.size(); i++){
+                        JSONObject obj = (JSONObject) data.get(i);
+
+                        List<Double> list = new ArrayList<>();
+                        list.add(Double.parseDouble(obj.get("x").toString()));
+                        list.add(Double.parseDouble(obj.get("y").toString()));
+
+                        station.add(list);
+                    }
+
+
+                    for(List l : station){
+                        System.out.println(l.get(0));
+                        System.out.println(l.get(1));
+                    }
+                }
+//                System.out.println(result2.toString());
+            }
+
+
         }catch (Exception e){
             e.printStackTrace();
             System.out.println("검색 실패.... T.T");
         }
-
 
         // 내 위치, 상대방 위치랑 중간위치 주변 버스 정류장 중 최단 시간이 걸리는 정류장 고르기.
         for(int i=0; i<station.size(); i++){
