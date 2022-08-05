@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./DealMap.scss";
+import mapMdMarker from "@images/mapmdmarker.gif";
+import alarm from "@images/Alarm.svg";
 
 interface DealMapProps {
   closeModal: () => void;
@@ -18,8 +20,13 @@ function DealMap({ closeModal }: DealMapProps) {
     const map = new kakao.maps.Map(container, options);
     const markerPosition1 = new kakao.maps.LatLng(33.450701, 126.570667);
     const markerPosition2 = new kakao.maps.LatLng(33.450901, 126.574667);
-    const mdMarkerPosition = new kakao.maps.LatLng(33.450801, 126.572667);
 
+    const imgSrc = { mapMdMarker };
+    const imgSize = new kakao.maps.Size(64, 69);
+    const imgOption = { offset: new kakao.maps.Point(27, 69) };
+    const mdMarkerImg = new kakao.maps.MarkerImage(imgSrc, imgSize, imgOption);
+    const mdMarkerPosition = new kakao.maps.LatLng(33.450801, 126.572667);
+    
     const marker1 = new kakao.maps.Marker({
       position: markerPosition1
     });
@@ -27,7 +34,8 @@ function DealMap({ closeModal }: DealMapProps) {
       position: markerPosition2
     });
     const mdMarker = new kakao.maps.Marker({
-      position: mdMarkerPosition
+      position: mdMarkerPosition,
+      image: mdMarkerImg
     });
 
     marker1.setMap(map);
@@ -43,7 +51,7 @@ function DealMap({ closeModal }: DealMapProps) {
   return (
     <div id="dealmap">
       <div className="container flex" onClick={closeModal}>
-        <div className="map-exit">
+        <div className="map-exit notoBold">
           <button type="button" onClick={closeModal}>
             닫기
           </button>
