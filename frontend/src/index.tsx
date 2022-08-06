@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { googleClientId } from "@store/ducks/auth/authThunk";
+import { googleClientId } from "@apis/auth";
 import App from "./App";
 import { setUpStore } from "./store";
 

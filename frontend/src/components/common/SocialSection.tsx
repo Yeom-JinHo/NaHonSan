@@ -3,16 +3,11 @@ import KakaoIcon from "@images/Kakao.svg";
 import GoogleIcon from "@images/Google.svg";
 import NaverIcon from "@images/Naver.svg";
 import "./SocialSecion.scss";
-import {
-  KAKAO_AUTH_URL,
-  NAVER_AUTH_URL,
-  googleClientId,
-  getUserInfo
-} from "@store/ducks/auth/authThunk";
 import { useGoogleLogin } from "@react-oauth/google";
-import { loginWithGoogle } from "@apis/auth";
+import { KAKAO_AUTH_URL, loginWithSocial, NAVER_AUTH_URL } from "@apis/auth";
 import { useAppDispatch } from "@store/hooks";
 import { useNavigate } from "react-router-dom";
+import { getUserInfo } from "@store/ducks/auth/authThunk";
 
 function SocialSection() {
   const dispatch = useAppDispatch();
@@ -25,7 +20,7 @@ function SocialSection() {
   };
   const startGoogle = useGoogleLogin({
     onSuccess: async response => {
-      const res = await loginWithGoogle(response.access_token);
+      const res = await loginWithSocial("google", response.access_token);
       await dispatch(getUserInfo());
       if (res.isRegist) {
         navigate("/join/welcome");
