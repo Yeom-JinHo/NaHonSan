@@ -162,12 +162,13 @@ public class SocialServiceImpl implements SocialService {
     @Override
     public String googleLogin(String authToken) {
 
-        String reqURL = "https://openapi.naver.com/v1/nid/me";
-        String jsonId;
+
+        String reqURL = "https://www.googleapis.com/oauth2/v1/userinfo";
+        String jsonId = null;
         try {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod("GET");
             //    요청에 필요한 Header에 포함될 내용
             conn.setRequestProperty("Authorization", "Bearer " + authToken);
             int responseCode = conn.getResponseCode();
@@ -179,12 +180,11 @@ public class SocialServiceImpl implements SocialService {
             }
             JSONParser parser = new JSONParser();
             JSONObject json = (JSONObject) parser.parse(result);
-            JSONObject jsonObjectB = (JSONObject) json.get("response");
-            jsonId = jsonObjectB.get("id").toString();
-            String jsonName = jsonObjectB.get("nickname").toString();
+            jsonId = json.get("id").toString();
+            String jsonName = json.get("name").toString();
 //            String IMAGE_URL = (String) jsonObjectB.get("thumbnail_image");
             String nameId = jsonName + jsonId.substring(0, 4);
-            jsonId = "naver" + jsonId;
+            jsonId = "google" + jsonId;
             //DB에 회원인지 찾기
             Optional<UserEntity> user = userRepository.findByNickname(nameId);
             if (!user.isPresent()) { //존재하지 않는다면
@@ -192,7 +192,7 @@ public class SocialServiceImpl implements SocialService {
                         .id(jsonId)
                         .password("social")
                         .nickname(nameId)
-                        .social("naver")
+                        .social("google")
                         .build();
                 userRepository.save(userRegist);
 
