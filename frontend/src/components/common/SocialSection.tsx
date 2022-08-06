@@ -6,11 +6,17 @@ import "./SocialSecion.scss";
 import {
   KAKAO_AUTH_URL,
   NAVER_AUTH_URL,
-  googleClientId
+  googleClientId,
+  getUserInfo
 } from "@store/ducks/auth/authThunk";
 import { useGoogleLogin } from "@react-oauth/google";
+import { loginWithGoogle } from "@apis/auth";
+import { useAppDispatch } from "@store/hooks";
+import { useNavigate } from "react-router-dom";
 
 function SocialSection() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const startKakao = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
@@ -18,7 +24,15 @@ function SocialSection() {
     window.location.href = NAVER_AUTH_URL;
   };
   const startGoogle = useGoogleLogin({
-    onSuccess: res => console.log(res)
+    onSuccess: async response => {
+      const res = await loginWithGoogle(response.access_token);
+      await dispatch(getUserInfo());
+      if (res.isRegist) {
+        navigate("/join/welcome");
+      } else {
+        navigate("/");
+      }
+    }
   });
   return (
     <section className="social">

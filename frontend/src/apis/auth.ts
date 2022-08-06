@@ -50,3 +50,11 @@ export const setUserMoreInfo = async (
   );
   return res.data.message;
 };
+
+export const loginWithGoogle = async (authToken: string) => {
+  const res = await API.post("/google", {}, { headers: { authToken } });
+  if (res.data.message === "SUCCESS") {
+    sessionStorage.setItem("access-token", res.data["access-token"]);
+  }
+  return res.data;
+};
