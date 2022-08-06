@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import imageIcon from "@images/image.svg";
 import Clip from "@images/Clip.svg";
 import X from "@images/X.svg";
@@ -18,6 +18,7 @@ function CommentInput({ articleIdx, changed }: CommentInputProps) {
   const [sendFile, setSendFile] = useState<File | null>(null);
   const [commentImg, setCommentImg] = useState("");
   const [preview, setPreview] = useState(false);
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const imgInput = useRef<HTMLInputElement>(null);
   const isLoggedIn = !!useAppSelector(state => state.auth.userInfo);
@@ -62,13 +63,15 @@ function CommentInput({ articleIdx, changed }: CommentInputProps) {
       content: inputRef.current.value,
       bannerImg: commentImg.replace("data:image/jpeg;base64,", "")
     };
-    const res = await commentCreate(data);
-    if (res.message === "SUCCESS") {
-      inputRef.current.value = "";
-      setCommentImg("");
+    inputRef.current.disabled = true;
+    setTimeout(async () => {
+      await commentCreate(data);
       changed();
-    }
-    return res;
+    }, 300);
+    inputRef.current.value = "";
+    setCommentImg("");
+    inputRef.current.disabled = false;
+    return 0;
   };
 
   const deletePreview = () => {
@@ -77,19 +80,17 @@ function CommentInput({ articleIdx, changed }: CommentInputProps) {
 
   return (
     <div id="comment-input">
-      {preview ? (
-        <img className="preview" src={commentImg} alt="preview" />
-      ) : null}
+      {preview && <img className="preview" src={commentImg} alt="preview" />}
       <input type="file" accept="image/*" ref={imgInput} onChange={fileread} />
-      {sendFile ? (
+      {sendFile && (
         <ImgResizer
           imgfile={sendFile}
           newImgfile={receiveFile}
           imgW={200}
           imgH={200}
         />
-      ) : null}
-      {commentImg ? (
+      )}
+      {commentImg && (
         <div className="flex img-preview">
           <img
             className=" "
@@ -102,7 +103,7 @@ function CommentInput({ articleIdx, changed }: CommentInputProps) {
             <img src={X} alt="del" />
           </button>
         </div>
-      ) : null}
+      )}
       <input
         type="text"
         placeholder="댓글을 입력해주세요."

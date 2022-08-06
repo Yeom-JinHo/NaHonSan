@@ -85,6 +85,7 @@
           border-radius: (12px);
           width: (400px);
           height: (400px);
+          margin: (8px) 0 (8px) 0;
         }
       }
     }
@@ -116,6 +117,7 @@
             border: solid 2px #d9d9d9;
             border-radius: (12px);
             padding-left: (12px);
+            padding-right: (40px);
             font-size: (12px);
             &:focus {
               box-shadow: none;
@@ -231,6 +233,7 @@
             height: vw(36px);
             border-radius: vw(12px);
             padding-left: vw(12px);
+            padding-right: vw(40px);
             font-size: vw(12px);
           }
           &::placeholder {
@@ -346,6 +349,7 @@
             height: vw-t(36px);
             border-radius: vw-t(12px);
             padding-left: vw-t(12px);
+            padding-right: vw-t(40px);
             font-size: vw-t(12px);
             &::placeholder {
               font-size: vw-t(12px);
@@ -476,6 +480,7 @@
             height: vw-p(36px);
             border-radius: vw-p(12px);
             padding-left: vw-p(8px);
+            padding-right: vw-p(40px);
             &:focus {
               box-shadow: none;
             }

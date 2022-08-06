@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./TipDetail.scss";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { tipRead, Article, tipDelete } from "@apis/honeyTip";
 import UserDummyIcon from "@images/UserDummy.svg";
 import EmptyHeart from "@images/ArticleEmptyHeart.svg";
@@ -78,7 +78,12 @@ function TipDetail() {
               </button>
             </div>
             <div className="header-info__text flex column justify-center">
-              <p className="user-name notoMid">{article.userNickname}</p>
+              <Link
+                to={`/userfeed/${article.userNickname}`}
+                className="user-name notoMid"
+              >
+                {article.userNickname}
+              </Link>
               <div className="created flex column align-center">
                 <p className=" notoReg">
                   {article.updateTime

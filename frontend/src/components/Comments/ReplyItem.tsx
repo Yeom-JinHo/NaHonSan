@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./ReplyItem.scss";
 import ReplyArrow from "@images/ReplyCommentArrow.svg";
 import UserDummyIcon from "@images/UserDummy.svg";
@@ -57,7 +58,12 @@ function ReplyItem({ info, type, isAuthor, changed, postIdx }: ReplyProps) {
                   />
                 </button>
                 <div className="head-profile_info">
-                  <p className="notoReg">{info?.userNickname}</p>
+                  <Link
+                    to={`/userfeed/${info?.userNickname}`}
+                    className="notoReg"
+                  >
+                    {info?.userNickname}
+                  </Link>
                   <p className="notoReg">
                     {info?.updateTime
                       ? `${getTime(info?.updateTime)} (수정됨)`
@@ -65,14 +71,14 @@ function ReplyItem({ info, type, isAuthor, changed, postIdx }: ReplyProps) {
                   </p>
                 </div>
               </div>
-              {type === "deal" ? (
+              {type === "deal" && (
                 <button type="button" className="head-map flex justify-end">
                   <img src={KaKao} alt="" />
                 </button>
-              ) : null}
+              )}
             </div>
             <div className="body flex">
-              {info.bannerImg ? (
+              {info.bannerImg && (
                 <div className="img-container flex jusify-center">
                   <img
                     src={`data:image/jpeg;base64,${info.bannerImg}`}
@@ -80,11 +86,11 @@ function ReplyItem({ info, type, isAuthor, changed, postIdx }: ReplyProps) {
                     title="user"
                   />
                 </div>
-              ) : null}
+              )}
 
               <div className="body-content flex column">
                 <p className="body-content_text notoReg">{info?.content}</p>
-                {isAuthor ? (
+                {isAuthor && (
                   <div className="body-content_btn flex">
                     <button
                       type="button"
@@ -101,12 +107,12 @@ function ReplyItem({ info, type, isAuthor, changed, postIdx }: ReplyProps) {
                       삭제
                     </button>
                   </div>
-                ) : null}
+                )}
               </div>
             </div>
           </div>
         </div>
-        {replyEdit ? (
+        {replyEdit && (
           <div className="edit-input flex">
             <div className="empty-space" />
             <CommentEdit
@@ -126,7 +132,7 @@ function ReplyItem({ info, type, isAuthor, changed, postIdx }: ReplyProps) {
               <img src={X} alt="close" />
             </button>
           </div>
-        ) : null}
+        )}
       </div>
     </div>
   );

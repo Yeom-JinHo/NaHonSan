@@ -10,6 +10,7 @@ import ImgResizer from "@components/common/ImgUploader/ImgResizer";
 import isImage from "@utils/isImage";
 import { Article, tipUpdate } from "@apis/honeyTip";
 import LoadingSpinner from "@images/LoadingSpinner.svg";
+import X from "@images/X.svg";
 
 function TipUpdate() {
   const [sendFile, setSendFile] = useState<File | null>(null);
@@ -143,6 +144,15 @@ function TipUpdate() {
           </button>
         </div>
         <div className="header-preview flex justify-center">
+          <button
+            onClick={() => {
+              setThumnail("");
+            }}
+            type="button"
+            className={`close ${!thumnail && "hide"}`}
+          >
+            <img src={X} alt="close" />
+          </button>
           <button
             onClick={clickInput}
             type="button"

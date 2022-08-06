@@ -48,12 +48,8 @@ function CommentEdit({
   };
 
   const fileread = () => {
-    if (imgInput.current?.files) {
-      const file = imgInput.current.files[0];
-
-      if (file && isImage(file)) {
-        setSendFile(file);
-      }
+    if (imgInput.current?.files && isImage(imgInput.current.files[0])) {
+      setSendFile(imgInput.current.files[0]);
     }
   };
 
@@ -76,18 +72,17 @@ function CommentEdit({
       return inputRef.current?.focus();
     }
 
+    inputRef.current.disabled = true;
     // 수정일 경우
     if (isAuthor) {
-      const res = await commentEdit(commentInfo.idx, {
-        content: inputRef.current.value,
+      const data = {
+        content: inputRef.current?.value as string,
         bannerImg: commentImg.replace("data:image/jpeg;base64,", "")
-      });
-      if (res.message === "SUCCESS") {
-        inputRef.current.value = "";
-        setCommentImg("");
-        signal();
+      };
+      setTimeout(async () => {
+        await commentEdit(commentInfo.idx, data);
         changed();
-      }
+      }, 300);
 
       // 대댓글일 경우
     } else {
@@ -97,14 +92,14 @@ function CommentEdit({
         content: inputRef.current.value,
         bannerImg: commentImg.replace("data:image/jpeg;base64,", "")
       };
-      const res = await commentCreate(data);
-      if (res.message === "SUCCESS") {
-        inputRef.current.value = "";
-        setCommentImg("");
-        signal();
+      setTimeout(async () => {
+        await commentCreate(data);
         changed();
-      }
+      }, 300);
     }
+    inputRef.current.value = "";
+    setCommentImg("");
+    inputRef.current.disabled = false;
     return 1;
   };
 
@@ -114,18 +109,16 @@ function CommentEdit({
 
   return (
     <div id="comment-input">
-      {preview ? (
-        <img className="preview" src={commentImg} alt="preview" />
-      ) : null}
+      {preview && <img className="preview" src={commentImg} alt="preview" />}
       <input type="file" accept="image/*" ref={imgInput} onChange={fileread} />
-      {sendFile ? (
+      {sendFile && (
         <ImgResizer
           imgfile={sendFile}
           newImgfile={receiveFile}
           imgW={200}
           imgH={200}
         />
-      ) : null}
+      )}
       {commentImg ? (
         <div className="flex img-preview">
           <img

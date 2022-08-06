@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./CommentItem.scss";
 import UserDummyIcon from "@images/UserDummy.svg";
 import KaKao from "@images/kakao_map.png";
@@ -58,7 +58,9 @@ function CommentItem({ info, type, isAuthor, changed, postIdx }: CommentProps) {
               />
             </button>
             <div className="head-profile_info">
-              <p className="notoReg">{info?.userNickname}</p>
+              <Link to={`/userfeed/${info?.userNickname}`} className="notoReg">
+                {info?.userNickname}
+              </Link>
               <p className="notoReg">
                 {info?.updateTime
                   ? `${getTime(info?.updateTime)} (수정됨)`
@@ -66,14 +68,14 @@ function CommentItem({ info, type, isAuthor, changed, postIdx }: CommentProps) {
               </p>
             </div>
           </div>
-          {type === "deal" ? (
+          {type === "deal" && (
             <button type="button" className="head-map flex justify-end">
               <img src={KaKao} alt="" />
             </button>
-          ) : null}
+          )}
         </div>
         <div className="body flex">
-          {info.bannerImg ? (
+          {info.bannerImg && (
             <div className="img-container flex jusify-center">
               <img
                 src={`data:image/jpeg;base64,${info.bannerImg}`}
@@ -81,7 +83,7 @@ function CommentItem({ info, type, isAuthor, changed, postIdx }: CommentProps) {
                 title="user"
               />
             </div>
-          ) : null}
+          )}
           <div className="body-content flex column">
             <p className="body-content_text notoReg">{info?.content}</p>
 
@@ -108,7 +110,7 @@ function CommentItem({ info, type, isAuthor, changed, postIdx }: CommentProps) {
           </div>
         </div>
       </div>
-      {editInput ? (
+      {editInput && (
         <div className="edit-input flex">
           <CommentEdit
             signal={closeEdit}
@@ -127,7 +129,7 @@ function CommentItem({ info, type, isAuthor, changed, postIdx }: CommentProps) {
             <img src={X} alt="close" />
           </button>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
