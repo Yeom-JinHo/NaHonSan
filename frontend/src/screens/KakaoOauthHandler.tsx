@@ -17,7 +17,7 @@ function KakaoOauthHandler() {
       const token = await getKakaoToken(code);
       const res = await loginWithSocial("kakao", token);
       await dispatch(getUserInfo());
-      if (res.isRegist) {
+      if (res.isRegist === "true") {
         navigate("/join/welcome");
       } else {
         navigate("/");

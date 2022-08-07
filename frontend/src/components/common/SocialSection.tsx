@@ -3,13 +3,18 @@ import KakaoIcon from "@images/Kakao.svg";
 import GoogleIcon from "@images/Google.svg";
 import NaverIcon from "@images/Naver.svg";
 import "./SocialSecion.scss";
-import { useGoogleLogin } from "@react-oauth/google";
-import { KAKAO_AUTH_URL, loginWithSocial, NAVER_AUTH_URL } from "@apis/auth";
+import { useGoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import {
+  googleClientId,
+  KAKAO_AUTH_URL,
+  loginWithSocial,
+  NAVER_AUTH_URL
+} from "@apis/auth";
 import { useAppDispatch } from "@store/hooks";
 import { useNavigate } from "react-router-dom";
 import { getUserInfo } from "@store/ducks/auth/authThunk";
 
-function SocialSection() {
+function SocialCompo() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const startKakao = () => {
@@ -20,9 +25,10 @@ function SocialSection() {
   };
   const startGoogle = useGoogleLogin({
     onSuccess: async response => {
+      console.log(response);
       const res = await loginWithSocial("google", response.access_token);
       await dispatch(getUserInfo());
-      if (res.isRegist) {
+      if (res.isRegist === "true") {
         navigate("/join/welcome");
       } else {
         navigate("/");
@@ -56,6 +62,14 @@ function SocialSection() {
         <p className="social__content notoMid fs-15">구글로 시작하기</p>
       </button>
     </section>
+  );
+}
+
+function SocialSection() {
+  return (
+    <GoogleOAuthProvider clientId={googleClientId}>
+      <SocialCompo />
+    </GoogleOAuthProvider>
   );
 }
 

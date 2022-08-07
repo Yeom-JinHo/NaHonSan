@@ -15,7 +15,7 @@ function NaverOauthHandler() {
     (async () => {
       const res = await loginWithSocial("naver", code);
       await dispatch(getUserInfo());
-      if (res.isRegist) {
+      if (res.isRegist === "true") {
         navigate("/join/welcome");
       } else {
         navigate("/");

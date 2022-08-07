@@ -6,8 +6,6 @@ import ScrollToTop from "@utils/ScrollToTop.ts";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import { googleClientId } from "@apis/auth";
 import App from "./App";
 import { setUpStore } from "./store";
 
@@ -19,12 +17,10 @@ const persistor = persistStore(store);
 root.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <GoogleOAuthProvider clientId={googleClientId}>
-        <BrowserRouter>
-          <ScrollToTop />
-          <App />
-        </BrowserRouter>
-      </GoogleOAuthProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <App />
+      </BrowserRouter>
     </PersistGate>
   </Provider>
 );
