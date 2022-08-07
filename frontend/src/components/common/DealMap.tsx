@@ -22,6 +22,7 @@ function DealMap({ closeModal }: DealMapProps) {
     const markerPosition2 = new kakao.maps.LatLng(33.450901, 126.574667);
 
     const imgSrc = { mapMdMarker };
+    // const imgSrc = "@images/mapmdmarker.gif";
     const imgSize = new kakao.maps.Size(64, 69);
     const imgOption = { offset: new kakao.maps.Point(27, 69) };
     const mdMarkerImg = new kakao.maps.MarkerImage(imgSrc, imgSize, imgOption);
