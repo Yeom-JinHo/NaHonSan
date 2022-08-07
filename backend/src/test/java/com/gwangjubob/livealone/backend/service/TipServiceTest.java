@@ -193,24 +193,8 @@ public class TipServiceTest {
             TipDetailViewDto tipDto = tipDetailViewMapper.toDto(tipEntity);
             tipDto.setUserNickname(tipEntity.getUser().getNickname());
 
-            // 조회수 증가
-//            tipEntity.setView(tipEntity.getView() + 1);
-//            tipRepository.save(tipEntity);
-
             // then
             System.out.println(tipDto.toString());
-
-//            SELECT *
-//                    FROM tip_comments tc
-//            WHERE tc.post_idx = 48
-//            ORDER BY
-//            (
-//                    CASE
-//            WHEN tc.up_idx = 0
-//            THEN tc.idx
-//            ELSE tc.up_idx
-//                    END
-//              ), tc.idx DESC, tc.up_idx DESC;
 
             // 게시글 관련된 댓글 조회
             List<TipCommentEntity> tipCommentEntity = tipCommentRepository.findByTipOrderBycomment(tipEntity);
