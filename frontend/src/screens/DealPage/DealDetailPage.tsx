@@ -1,59 +1,70 @@
 import React, { useState, useEffect } from "react";
-import "./TipDetail.scss";
+import "./DealDetailPage.scss";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { tipRead, Article, tipDelete } from "@apis/honeyTip";
 import UserDummyIcon from "@images/UserDummy.svg";
 import EmptyHeart from "@images/ArticleEmptyHeart.svg";
+import KakaoMap from "@images/kakao_map.png";
 import EditIcon from "@images/EditIcon.svg";
 import DeleteIcon from "@images/DeleteIcon.svg";
-import { useAppSelector } from "@store/hooks";
 import { getTime } from "@utils/getTime";
+import { useAppSelector } from "@store/hooks";
+import { dealRead, dealArticle, dealDelete } from "@apis/honeyDeal";
 import Comments from "@components/Comments/Comments";
 import CommentInput from "@components/Comments/CommentInput";
 
-function TipDetail() {
+function DealDetailPage() {
   const [newComment, setNewComment] = useState(false);
-  const [article, setArticle] = useState<Article>();
+  const [dealState, setDealState] = useState(0);
+  const [article, setArticle] = useState<dealArticle>();
   const [comment, setComment] = useState();
   const { id } = useParams();
+  const userInfo = useAppSelector(state => state.auth.userInfo);
+  const isAuthor = userInfo?.nickname === article?.userNickname;
   const navigate = useNavigate();
-  const UserInfo = useAppSelector(state => state.auth.userInfo);
 
   const changed = () => {
     setNewComment(cur => !cur);
   };
 
   useEffect(() => {
-    tipRead(id as string)
-      .then(res => {
-        setArticle(res.tip);
-        setComment(res.tipComments);
-      })
-      .catch(() => navigate("NotFound"));
+    dealRead(id as string).then(res => {
+      setArticle(res.data);
+      setComment(res.data.comments);
+    });
   }, [newComment]);
 
-  if (!article) {
-    return <div />;
-  }
-  const content = {
-    __html: article.content
+  const changeDealState = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setDealState(parseInt(e.target.value, 10));
+  };
+
+  const changeColor = (state: number) => {
+    if (state === 0) {
+      return "green";
+    }
+    if (state === 1) {
+      return "yellow";
+    }
+    return "brown";
   };
 
   const goEdit = () => {
-    navigate(`/tip/edit/${id}`, { state: article });
+    navigate(`/deal/edit/${id}`, { state: article });
   };
 
   const deleteArticle = async () => {
-    const res = await tipDelete(id as string);
+    const res = await dealDelete(id as string);
     if (res === "SUCCESS") {
       navigate("/");
     }
     return res;
   };
 
-  const isAuthor = UserInfo?.nickname === article.userNickname;
+  if (!article) {
+    return <div />;
+  }
+
   return (
-    <div id="tip-detail-page">
+    <div id="deal-detail-page">
       <div className="article flex column">
         <p className="title notoMid">{article.title}</p>
         <div className="header flex">
@@ -77,13 +88,8 @@ function TipDetail() {
                 />
               </button>
             </div>
-            <div className="header-info__text flex column justify-center">
-              <Link
-                to={`/userfeed/${article.userNickname}`}
-                className="user-name notoMid"
-              >
-                {article.userNickname}
-              </Link>
+            <div className="header-info__text flex column">
+              <p className="user-name notoMid">{article.userNickname}</p>
               <div className="created flex column align-center">
                 <p className=" notoReg">
                   {article.updateTime
@@ -93,7 +99,7 @@ function TipDetail() {
               </div>
             </div>
             <button
-              className={`header-info__btn notoReg ${isAuthor ? "hide" : null}`}
+              className={`header-info__btn notoReg ${isAuthor && "hide"} `}
               type="button"
             >
               팔로우
@@ -101,7 +107,20 @@ function TipDetail() {
           </div>
           <div className="header-func flex">
             {isAuthor ? (
-              <div className="header-func-btn flex">
+              <div className="header-func-box flex">
+                <select
+                  className={`header-func-box__select notoReg ${changeColor(
+                    dealState
+                  )}`}
+                  onChange={e => {
+                    changeDealState(e);
+                  }}
+                  value={dealState}
+                >
+                  <option value="0">거래 대기</option>
+                  <option value="1">거래 진행</option>
+                  <option value="2">거래 완료</option>
+                </select>
                 <button onClick={goEdit} type="button">
                   <img src={EditIcon} alt="edit" title="edit" />
                 </button>
@@ -110,14 +129,20 @@ function TipDetail() {
                 </button>
               </div>
             ) : (
-              <button type="button" className="header-func-btn flex">
-                <img src={EmptyHeart} alt="like" title="like" />
-              </button>
+              <div className="header-func-btn flex">
+                <img src={KakaoMap} alt="123" title="map" />
+                <img src={EmptyHeart} alt="123" title="like" />
+              </div>
             )}
           </div>
         </div>
         <div className="body flex">
-          <div className="body-content " dangerouslySetInnerHTML={content} />
+          <div
+            className="body-content "
+            dangerouslySetInnerHTML={{
+              __html: article.content
+            }}
+          />
         </div>
         <div className="comment flex column">
           <div className="comment-head">
@@ -129,21 +154,25 @@ function TipDetail() {
             <div className="input-img-container flex">
               <img
                 src={
-                  UserInfo?.profileImg
-                    ? `data:image/jpeg;base64,${UserInfo.profileImg}`
+                  userInfo?.profileImg
+                    ? `data:image/jpeg;base64,${userInfo.profileImg}`
                     : UserDummyIcon
                 }
                 alt="dum"
                 title="user-icon"
               />
             </div>
-            <CommentInput changed={changed} articleIdx={id as string} />
+            <CommentInput
+              type="Deal"
+              changed={changed}
+              articleIdx={id as string}
+            />
           </div>
           {comment ? (
             <Comments
               postIdx={id as string}
               changed={changed}
-              type="tip"
+              type="Deal"
               comments={comment}
             />
           ) : null}
@@ -153,4 +182,4 @@ function TipDetail() {
   );
 }
 
-export default TipDetail;
+export default DealDetailPage;

@@ -1,13 +1,12 @@
 import API from "./index";
+import { createForm, Article } from "./honeyTip";
 
-export interface createForm {
-  category: string;
-  title: string;
-  content: string;
-  bannerImg: string;
+export interface dealCreateForm extends createForm {
+  state: string;
+  area: string;
 }
 
-export interface Article {
+export interface dealArticle extends Article {
   bannerImg: string;
   category: string;
   comment: number;
@@ -19,21 +18,23 @@ export interface Article {
   userNickname: string;
   userProfileImg: string;
   view: number;
+  state: string;
+  area: string;
 }
 
-export const tipCreate = async (data: createForm) => {
+export const dealCreate = async (data: dealCreateForm) => {
   const accessToken = sessionStorage.getItem("access-token") as string;
-  const res = await API.post("/honeyTip", data, {
+  const res = await API.post("/honeyDeal", data, {
     headers: {
       Authorization: accessToken
     }
   });
-  return res.data.postIdx;
+  return res.data;
 };
 
-export const tipUpdate = async (data: createForm, idx: string) => {
+export const dealUpdate = async (data: dealCreateForm, idx: string) => {
   const accessToken = sessionStorage.getItem("access-token") as string;
-  const res = await API.put(`/honeyTip/${idx}`, data, {
+  const res = await API.put(`/honeyDeal/${idx}`, data, {
     headers: {
       Authorization: accessToken
     }
@@ -41,14 +42,14 @@ export const tipUpdate = async (data: createForm, idx: string) => {
   return res;
 };
 
-export const tipRead = async (idx: string) => {
-  const res = await API.get(`/honeyTip/detail/${idx}`);
+export const dealRead = async (idx: string) => {
+  const res = await API.get(`/honeyDeal/detail/${idx}`);
   return res.data;
 };
 
-export const tipDelete = async (idx: string) => {
+export const dealDelete = async (idx: string) => {
   const accessToken = sessionStorage.getItem("access-token") as string;
-  const res = await API.delete(`/honeyTip/${idx}`, {
+  const res = await API.delete(`/honeyDeal/${idx}`, {
     headers: {
       Authorization: accessToken
     }
