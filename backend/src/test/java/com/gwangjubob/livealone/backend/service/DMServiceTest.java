@@ -19,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -89,11 +91,12 @@ public class DMServiceTest {
         // given
         UserEntity toId = userRepository.findById("ssafy").get();
         UserEntity fromId = userRepository.findById("test").get();
-
+        Integer lastIdx = 119;
+        Pageable pageable = PageRequest.ofSize(5);
 
 
         // when
-        List<DMEntity> dmEntityList = dmRepository.findByToUserIdAndFromUserId(toId, fromId);
+        List<DMEntity> dmEntityList = dmRepository.findByToUserIdAndFromUserId(toId, fromId,lastIdx,pageable);
 
         // thens
         for (int i = 0; i < dmEntityList.size(); i++) {

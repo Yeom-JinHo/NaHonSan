@@ -326,7 +326,7 @@ public class UserFeedServiceTest {
         UserEntity followUser = userRepository.findByNickname(followNickname).get();
 
         boolean isFollow = false;
-        if(userFeedRepository.findByUserIdAndFollowId(user.getId(), followUser.getId()).isPresent()){
+        if(userFeedRepository.findByUserIdAndFollowId(user.getId(), followUser.getId()).isEmpty()){
             isFollow = true;
         }
 
