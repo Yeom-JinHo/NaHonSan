@@ -165,20 +165,23 @@ public class TipCommentServiceImpl implements TipCommentService {
                     int size = replyCommentList.size();
 
                     if(!replyCommentList.isEmpty()){
-                        tip.setComment(tip.getComment() - size - 1);
+                        tip.setComment(tip.getComment() - size);
                         tipRepository.save(tip);
 
                         tipCommentRepository.deleteAllInBatch(replyCommentList);
 
-                        List<NoticeEntity> noticeList = noticeRepository.findAllByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentUpIdx("reply", user.getId(), "tip", tip.getIdx(), tipComment.getIdx());
+                        List<NoticeEntity> noticeList = noticeRepository.findAllByNoticeTypeAndPostTypeAndPostIdxAndCommentUpIdx("reply","tip", tip.getIdx(), tipComment.getIdx());
 
                         if(!noticeList.isEmpty()){
                             noticeRepository.deleteAllInBatch(noticeList);
                         }
                     }
+                    tip.setComment(tip.getComment() - 1);
+                    tipRepository.save(tip);
+
                     tipCommentRepository.delete(tipComment);
 
-                    Optional<NoticeEntity> notice = noticeRepository.findByNoticeTypeAndFromUserIdAndPostTypeAndPostIdxAndCommentIdx("comment", user.getId(), "tip", tip.getIdx(), tipComment.getIdx());
+                    Optional<NoticeEntity> notice = noticeRepository.findByNoticeTypeAndPostTypeAndPostIdxAndCommentIdx("comment","tip", tip.getIdx(), tipComment.getIdx());
 
                     if(notice.isPresent()){
                         noticeRepository.delete(notice.get());
