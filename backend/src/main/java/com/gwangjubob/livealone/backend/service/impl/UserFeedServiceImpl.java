@@ -55,7 +55,8 @@ public class UserFeedServiceImpl implements UserFeedService {
     public boolean registFollow(String toId, String fromId) {
         Optional<UserEntity> user = userRepository.findById(toId);
         Optional<UserEntity> follow = userRepository.findById(fromId);
-        if(follow.isPresent() && user.isPresent()){
+        List<UserFollowEntity> isValue = userFeedRepository.findByUserIdAndFollowId(toId, fromId);
+        if(follow.isPresent() && user.isPresent() && isValue.isEmpty()){
                 UserFollowEntity userFollowEntity = UserFollowEntity.builder()
                 .userId(toId)
                 .userNickname(user.get().getNickname())

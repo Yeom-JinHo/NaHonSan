@@ -543,7 +543,7 @@ public class UserServiceTest {
                 JSONObject json = (JSONObject) parser.parse(sb.toString());
 
                 JSONObject result = (JSONObject) json.get("result");
-//                System.out.println(result.toString());
+                System.out.println(result.toString());
                 JSONArray paths = (JSONArray) result.get("path"); // 여기서 최단 시간 찾아야함
 
                 JSONObject path = (JSONObject) paths.get(0);

@@ -243,7 +243,7 @@ public class UserFeedServiceTest {
         }
         //then
         for (PopularFollowDto popularFollowDto : popularFollowDtoList){
-            System.out.println(popularFollowDto.toString());
+            System.out.println(popularFollowDto.getFollow_id());
         }
     }
     @Test
