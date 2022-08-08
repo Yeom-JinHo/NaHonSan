@@ -7,23 +7,131 @@
     position: fixed;
     top: 0;
     left: 0;
-    
-    .map-exit {
-      width: (400px);
-      height: (20px);
-      position: absolute;
-      left: 50%;
-      top: 20%;
-    }
-    .map-sight {
-      width: (400px);
-      height: (400px);
-      background-color: #fff;
+    .map {
       position: absolute;
       left: 50%;
       top: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 100;
+      .map-exit {
+        width: (40px);
+        height: (20px);
+        position: absolute;
+        z-index: 100;
+        top: -200px;
+        left: 200px;
+      }
+      .map-sight {
+        width: (400px);
+        height: (400px);
+        background-color: #fff;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        z-index: 99;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $DESKTOP-VW) {
+  #dealmap {
+    .container {
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      position: fixed;
+      top: 0;
+      left: 0;
+      .map {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        .map-exit {
+          width: vw(40px);
+          height: vw(20px);
+          position: absolute;
+          z-index: 100;
+          top: vw(-200px);
+          left: vw(200px);
+        }
+        .map-sight {
+          width: vw(400px);
+          height: vw(400px);
+          background-color: #fff;
+          position: absolute;
+          transform: translate(-50%, -50%);
+          z-index: 99;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $TABLET-VW) {
+  #dealmap {
+    .container {
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      position: fixed;
+      top: 0;
+      left: 0;
+      .map {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        .map-exit {
+          width: vw-t(40px);
+          height: vw-t(20px);
+          position: absolute;
+          z-index: 100;
+          top: vw-t(-200px);
+          left: vw-t(200px);
+        }
+        .map-sight {
+          width: vw-t(400px);
+          height: vw-t(400px);
+          background-color: #fff;
+          position: absolute;
+          transform: translate(-50%, -50%);
+          z-index: 99;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $PHONE-VW) {
+  #dealmap {
+    .container {
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      position: fixed;
+      top: 0;
+      left: 0;
+      .map {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        .map-exit {
+          width: vw-p(40px);
+          height: vw-p(20px);
+          position: absolute;
+          z-index: 100;
+          top: vw-p(-200px);
+          left: vw-p(200px);
+        }
+        .map-sight {
+          width: vw-p(300px);
+          height: vw-p(300px);
+          background-color: #fff;
+          position: absolute;
+          transform: translate(-50%, -50%);
+          z-index: 99;
+        }
+      }
     }
   }
 }
