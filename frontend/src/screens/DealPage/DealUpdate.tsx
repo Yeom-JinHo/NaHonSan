@@ -27,17 +27,16 @@ function DealUpdate() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 수정 전 데이터 불러오기
-  // useEffect(() => {
-  //   const articleInfo = location.state as dealArticle;
-  //   if (articleInfo.bannerImg) {
-  //     setThumnail(`data:image/jpeg;base64,${articleInfo.bannerImg}`);
-  //   }
-  //   setCategory(articleInfo.category);
-  //   setTitle(articleInfo.title);
-  //   setUpdateData(articleInfo.content);
-  //   setdealState(articleInfo.state);
-  // }, []);
+  useEffect(() => {
+    const articleInfo = location.state as dealArticle;
+    if (articleInfo.bannerImg) {
+      setThumnail(`data:image/jpeg;base64,${articleInfo.bannerImg}`);
+    }
+    setCategory(articleInfo.category);
+    setTitle(articleInfo.title);
+    setUpdateData(articleInfo.content);
+    setDealState(articleInfo.state);
+  }, []);
 
   const { id } = useParams();
 
@@ -101,8 +100,9 @@ function DealUpdate() {
 
   // 검사 > 에디터에서 밸류 받기 > DB 전송
   const receiveValue = async (data: string) => {
+    console.log(1);
     const payload = {
-      area: useAppSelector(state => state.auth.userInfo?.area) as string,
+      area: "광주",
       state: dealState,
       category,
       title: titleRef.current?.value as string,
@@ -156,7 +156,7 @@ function DealUpdate() {
               return (
                 <button
                   onClick={() => {
-                    setCategory(item);
+                    changeCategory(item);
                   }}
                   type="button"
                   key={v4()}

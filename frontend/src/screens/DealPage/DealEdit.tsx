@@ -66,7 +66,7 @@ function DealEdit() {
   // 검사 > 에디터에서 밸류 받기 > DB 전송
   const receiveValue = async (data: string) => {
     const payload = {
-      area: userInfo?.area?.split(" ")[0] as string,
+      area: "광주",
       state: "거래 대기",
       category,
       title: titleRef.current?.value as string,

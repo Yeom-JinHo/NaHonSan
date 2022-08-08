@@ -14,7 +14,7 @@ import CommentInput from "@components/Comments/CommentInput";
 
 function DealDetailPage() {
   const [newComment, setNewComment] = useState(false);
-  const [dealState, setDealState] = useState(0);
+  const [dealState, setDealState] = useState("");
   const [article, setArticle] = useState<dealArticle>();
   const [comment, setComment] = useState();
   const { id } = useParams();
@@ -30,18 +30,16 @@ function DealDetailPage() {
     dealRead(id as string).then(res => {
       setArticle(res.data);
       setComment(res.data.comments);
+      setDealState(res.data.state);
     });
-  }, [newComment]);
+  }, [newComment, id]);
 
-  const changeDealState = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setDealState(parseInt(e.target.value, 10));
-  };
-
-  const changeColor = (state: number) => {
-    if (state === 0) {
+  const changeColor = (state: string) => {
+    console.log(dealState);
+    if (dealState === "거래 대기") {
       return "green";
     }
-    if (state === 1) {
+    if (dealState === "거래 진행") {
       return "yellow";
     }
     return "brown";
@@ -107,20 +105,10 @@ function DealDetailPage() {
           </div>
           <div className="header-func flex">
             {isAuthor ? (
-              <div className="header-func-box flex">
-                <select
-                  className={`header-func-box__select notoReg ${changeColor(
-                    dealState
-                  )}`}
-                  onChange={e => {
-                    changeDealState(e);
-                  }}
-                  value={dealState}
-                >
-                  <option value="0">거래 대기</option>
-                  <option value="1">거래 진행</option>
-                  <option value="2">거래 완료</option>
-                </select>
+              <div className="header-func-btn flex">
+                <div className="header-func-btn_state flex justify-center">
+                  <div className={`${changeColor(dealState)}`}> </div>
+                </div>
                 <button onClick={goEdit} type="button">
                   <img src={EditIcon} alt="edit" title="edit" />
                 </button>

@@ -49,7 +49,7 @@ function RootRouter() {
           <Route path="/deal">
             <Route index element={<DealPage />} />
             <Route path="detail/:id" element={<DealDetailPage />} />
-            <Route path="create" element={<DealUpdate />} />
+            <Route path="create" element={<DealEdit />} />
             <Route path="edit/:id" element={<DealUpdate />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>

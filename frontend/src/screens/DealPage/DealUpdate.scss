@@ -211,6 +211,26 @@
         font-size: vw(32px);
         padding: vw(24px);
       }
+      &-select {
+        &__select {
+          font-size: vw(12px);
+          width: vw(100px);
+          height: vw(36px);
+          border: none;
+          border-radius: vw(12px);
+          margin-right: vw(12px);
+          &:focus {
+            outline: none;
+          }
+          &:hover {
+            cursor: pointer;
+            transform: scale(1.2);
+          }
+          & > option {
+            background-color: white;
+          }
+        }
+      }
       &-category {
         margin-top: vw(24px);
         padding: vw(24px);
@@ -317,6 +337,16 @@
         font-size: vw-t(32px);
         padding: vw-t(24px);
       }
+      &-select {
+        &__select {
+          font-size: vw-t(12px);
+          width: vw-t(100px);
+          height: vw-t(36px);
+          border: none;
+          border-radius: vw-t(12px);
+          margin-right: vw-t(12px);
+        }
+      }
       &-category {
         margin-top: vw-t(24px);
         padding: vw-t(24px) 0px vw-t(24px) 0px;
@@ -419,6 +449,16 @@
       &-title {
         font-size: vw-p(32px);
         padding: vw-p(24px);
+      }
+      &-select {
+        &__select {
+          font-size: vw-p(12px);
+          width: vw-p(100px);
+          height: vw-p(36px);
+          border: none;
+          border-radius: vw-p(12px);
+          margin-right: vw-p(8px);
+        }
       }
       &-category {
         margin-top: vw-p(24px);

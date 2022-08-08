@@ -89,7 +89,7 @@ function DealPage() {
             </p>
             <button
               onClick={() => {
-                if (!isLoggedIn) {
+                if (isLoggedIn) {
                   navigate("create");
                 } else {
                   navigate("/login");
