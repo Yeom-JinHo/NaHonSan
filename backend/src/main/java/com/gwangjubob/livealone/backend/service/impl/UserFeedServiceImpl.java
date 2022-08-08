@@ -278,9 +278,13 @@ public class UserFeedServiceImpl implements UserFeedService {
     }
 
     @Override
-    public List<TipViewDto> userFollowHoneyTip(String decodeId, int pageNum, int pageSize) {
+    public List<TipViewDto> userFollowHoneyTip(String decodeId, Integer lastIdx, int pageSize) {
         List<TipViewDto> result = new ArrayList<>();
-        Pageable pageable = PageRequest.of(pageNum, pageSize);List<UserFollowTipsEntity> tipEntityList = userFollowTipsRepository.findTips(decodeId,pageable); //내가 팔로우 한 유저 목록
+        if(lastIdx == 0){ // null 이면 가장 최신 게시글 찾아줘야함
+            lastIdx = userFollowTipsRepository.findTop1ByOrderByIdxDesc().get().getIdx() + 1;
+        }
+        Pageable pageable = PageRequest.ofSize(pageSize);
+        List<UserFollowTipsEntity> tipEntityList = userFollowTipsRepository.findTips(decodeId,lastIdx,pageable); //내가 팔로우 한 유저 목록
         for(UserFollowTipsEntity tipEntity : tipEntityList){
             TipViewDto dto = TipViewDto.builder()
                     .idx(tipEntity.getIdx())
