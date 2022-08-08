@@ -59,6 +59,7 @@ public class DealServiceImpl implements DealService {
             data = dealMapper.toDto(deal);
             data.setUserNickname(deal.getUser().getNickname());
             data.setUserId(deal.getUser().getId());
+            data.setProfileImg(user.getProfileImg());
         } else{
             data = null;
         }
