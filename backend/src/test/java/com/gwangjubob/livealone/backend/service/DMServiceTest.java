@@ -59,7 +59,47 @@ public class DMServiceTest {
         final DMEntity dmEntity = DMEntity.builder()
                 .fromUserId(fromId)
                 .toUserId(toUserId)
-                .content("test")
+                .content("test2")
+                .build();
+
+        // when
+        final DMEntity res = dmRepository.save(dmEntity);
+
+        // then
+        Assertions.assertThat(res.getIdx()).isNotNull();
+        Assertions.assertThat(res.getFromUserId()).isEqualTo(dmEntity.getFromUserId());
+        Assertions.assertThat(res.getToUserId()).isEqualTo(dmEntity.getToUserId());
+        Assertions.assertThat(res.getContent()).isEqualTo(dmEntity.getContent());
+    }
+    @Disabled
+    @Test
+    public void 메시지_전송_없는_사용자_테스트() {
+        // given
+        final UserEntity fromId = userRepository.findById("test").get();
+        final UserEntity toUserId = userRepository.findById("ssafy2").get();
+        final DMEntity dmEntity = DMEntity.builder()
+                .fromUserId(fromId)
+                .toUserId(toUserId)
+                .content("test2")
+                .build();
+
+        // when
+        final DMEntity res = dmRepository.save(dmEntity);
+
+        // then
+        Assertions.assertThat(res.getIdx()).isNotNull();
+        Assertions.assertThat(res.getFromUserId()).isEqualTo(dmEntity.getFromUserId());
+        Assertions.assertThat(res.getToUserId()).isEqualTo(dmEntity.getToUserId());
+        Assertions.assertThat(res.getContent()).isEqualTo(dmEntity.getContent());
+    }
+    @Test
+    public void 메시지_전송_없는_메시지_테스트() {
+        // given
+        final UserEntity fromId = userRepository.findById("test").get();
+        final UserEntity toUserId = userRepository.findById("ssafy").get();
+        final DMEntity dmEntity = DMEntity.builder()
+                .fromUserId(fromId)
+                .toUserId(toUserId)
                 .build();
 
         // when
