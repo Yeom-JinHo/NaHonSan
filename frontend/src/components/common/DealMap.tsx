@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./DealMap.scss";
 import mapMdMarker from "@images/mapmdmarker.gif";
 import exit from "@images/X.svg";
@@ -14,21 +14,21 @@ function DealMap({ closeModal }: DealMapProps) {
   useEffect(() => {
     const container = mapRef.current;
     const options = {
-      center: new kakao.maps.LatLng(33.450701, 126.570667),
+      center: new kakao.maps.LatLng(33.430701, 126.560667),
       level: 3
     };
 
     const map = new kakao.maps.Map(container, options);
-    const markerPosition1 = new kakao.maps.LatLng(33.450701, 126.570667);
+    const markerPosition1 = new kakao.maps.LatLng(33.410701, 126.540667);
     const markerPosition2 = new kakao.maps.LatLng(33.450901, 126.574667);
 
-    // const imgSrc = { mapMdMarker };
-    const imgSrc =
-      "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png";
+    const imgSrc = "https://i.ibb.co/dPJKs7h/mapmdmarker.gif";
+    // const imgSrc =
+    //   "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png";
     const imgSize = new kakao.maps.Size(64, 69);
     const imgOption = { offset: new kakao.maps.Point(27, 69) };
     const mdMarkerImg = new kakao.maps.MarkerImage(imgSrc, imgSize, imgOption);
-    const mdMarkerPosition = new kakao.maps.LatLng(33.450801, 126.572667);
+    const mdMarkerPosition = new kakao.maps.LatLng(33.430801, 126.552667);
 
     const marker1 = new kakao.maps.Marker({
       position: markerPosition1
