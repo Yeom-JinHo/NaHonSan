@@ -65,8 +65,8 @@ public class UserFeedServiceImpl implements UserFeedService {
 
             NoticeEntity notice = NoticeEntity.builder()
                     .noticeType("follow")
-                    .user(user.get())
-                    .fromUserId(follow.get().getId())
+                    .user(follow.get())
+                    .fromUserId(user.get().getId())
                     .time(userFollowEntity.getTime())
                     .build();
 
@@ -204,11 +204,11 @@ public class UserFeedServiceImpl implements UserFeedService {
         List<UserFollowEntity> res = userFeedRepository.findByUserIdAndFollowId(toId, fromId);
         if(!res.isEmpty()){
             userFeedRepository.deleteByUserIdAndFollowId(toId,fromId);
-//
-//            Optional<NoticeEntity> notice = noticeRepository.findByNoticeTypeAndFromUserId("follow", fromId);
-//            if(notice.isPresent()){
-//                noticeRepository.delete(notice.get());
-//            }
+
+            Optional<NoticeEntity> notice = noticeRepository.findByNoticeTypeAndUserIdAndFromUserId("follow", fromId, toId);
+            if(notice.isPresent()){
+                noticeRepository.delete(notice.get());
+            }
             return true;
         }
         return false;
@@ -311,7 +311,7 @@ public class UserFeedServiceImpl implements UserFeedService {
         UserEntity user = userRepository.findById(decodeId).get();
         TipEntity tip = tipRepository.findByIdx(idx).get();
 
-        if(userFeedRepository.findByUserIdAndFollowNickname(tip.getUser().getId(), user.getNickname()).isPresent()){
+        if(userFeedRepository.findByUserIdAndFollowNickname(decodeId, tip.getUser().getNickname()).isPresent()){
             return true;
         }
         return false;
@@ -322,7 +322,7 @@ public class UserFeedServiceImpl implements UserFeedService {
         UserEntity user = userRepository.findById(decodeId).get();
         DealEntity deal = dealRepository.findByIdx(idx).get();
 
-        if(userFeedRepository.findByUserIdAndFollowId(user.getId(), deal.getUser().getId()).isEmpty()){
+        if(userFeedRepository.findByUserIdAndFollowNickname(decodeId, deal.getUser().getNickname()).isPresent()){
             return true;
         }
         return false;
