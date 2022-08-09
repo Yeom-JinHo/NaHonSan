@@ -66,6 +66,8 @@ public class DealServiceImpl implements DealService {
             UserEntity user = optionalUser.get();
             DealEntity deal = dealMapper.toEntity(dealDto);
             deal.setUser(user);
+            String area = user.getArea().split(" ")[0];
+            deal.setArea(area);
             dealRepository.save(deal);
             data = dealMapper.toDto(deal);
             data.setUserNickname(deal.getUser().getNickname());
