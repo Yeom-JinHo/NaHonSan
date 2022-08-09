@@ -12,9 +12,10 @@ import { useNavigate } from "react-router-dom";
 interface CommentInputProps {
   articleIdx: string;
   changed: () => void;
+  type: string;
 }
 
-function CommentInput({ articleIdx, changed }: CommentInputProps) {
+function CommentInput({ articleIdx, changed, type }: CommentInputProps) {
   const [sendFile, setSendFile] = useState<File | null>(null);
   const [commentImg, setCommentImg] = useState("");
   const [preview, setPreview] = useState(false);
@@ -57,20 +58,22 @@ function CommentInput({ articleIdx, changed }: CommentInputProps) {
     if (!inputRef.current?.value.trim()) {
       return inputRef.current?.focus();
     }
-    const data = {
-      postIdx: articleIdx,
-      upIdx: 0,
-      content: inputRef.current.value,
-      bannerImg: commentImg.replace("data:image/jpeg;base64,", "")
-    };
-    inputRef.current.disabled = true;
-    setTimeout(async () => {
-      await commentCreate(data);
+    if (!loading) {
+      setLoading(true);
+      const data = {
+        postIdx: articleIdx,
+        upIdx: 0,
+        content: inputRef.current.value,
+        bannerImg: commentImg.replace("data:image/jpeg;base64,", "")
+      };
+      inputRef.current.disabled = true;
+      await commentCreate(data, type);
+      setLoading(false);
       changed();
-    }, 300);
-    inputRef.current.value = "";
-    setCommentImg("");
-    inputRef.current.disabled = false;
+      inputRef.current.value = "";
+      setCommentImg("");
+      inputRef.current.disabled = false;
+    }
     return 0;
   };
 

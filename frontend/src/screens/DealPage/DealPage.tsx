@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./DealPage.scss";
 import DealImg from "@images/DealImg.svg";
 import CardList from "@components/common/CardList";
@@ -6,8 +7,14 @@ import { v4 } from "uuid";
 import searchIcon from "@images/Search.svg";
 import InFinityScroll from "@components/common/InFinityScroll";
 import dealCategory from "@constants/dealCategory";
+import { useAppSelector } from "@store/hooks";
 
 function DealPage() {
+  const navigate = useNavigate();
+  const userInfo = useAppSelector(state => state.auth.userInfo);
+  const area = !!userInfo?.area;
+  const isLoggedIn = !!userInfo;
+
   const [conditions, setConditions] = useState({
     categorys: ["전체", ...dealCategory],
     sort: "최신순",
@@ -82,7 +89,19 @@ function DealPage() {
             <p className="fs-48 notoReg">
               <span>꿀</span>딜
             </p>
-            <button className="notoReg" type="button">
+            <button
+              onClick={() => {
+                if (isLoggedIn && area) {
+                  navigate("create");
+                } else if (isLoggedIn && !area) {
+                  navigate("/join/more");
+                } else {
+                  navigate("/login");
+                }
+              }}
+              className="notoReg"
+              type="button"
+            >
               꿀딜쓰기
             </button>
           </div>

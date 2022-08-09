@@ -1,13 +1,12 @@
 import API from "./index";
+import { createForm, Article } from "./honeyTip";
 
-export interface createForm {
-  category: string;
-  title: string;
-  content: string;
-  bannerImg: string;
+export interface dealCreateForm extends createForm {
+  state: string;
+  area: string;
 }
 
-export interface Article {
+export interface dealArticle extends Article {
   bannerImg: string;
   category: string;
   comment: number;
@@ -19,31 +18,13 @@ export interface Article {
   userNickname: string;
   userProfileImg: string;
   view: number;
+  state: string;
+  area: string;
 }
 
-export const tipCreate = async (data: createForm) => {
+export const dealCreate = async (data: dealCreateForm) => {
   const accessToken = sessionStorage.getItem("access-token") as string;
-  const res = await API.post("/honeyTip", data, {
-    headers: {
-      Authorization: accessToken
-    }
-  });
-  return res.data.postIdx;
-};
-
-export const tipUpdate = async (data: createForm, idx: string) => {
-  const accessToken = sessionStorage.getItem("access-token") as string;
-  const res = await API.put(`/honeyTip/${idx}`, data, {
-    headers: {
-      Authorization: accessToken
-    }
-  });
-  return res;
-};
-
-export const tipRead = async (idx: string) => {
-  const accessToken = sessionStorage.getItem("access-token") as string;
-  const res = await API.get(`/honeyTip/detail/${idx}`, {
+  const res = await API.post("/honeyDeal", data, {
     headers: {
       Authorization: accessToken
     }
@@ -51,9 +32,29 @@ export const tipRead = async (idx: string) => {
   return res.data;
 };
 
-export const tipDelete = async (idx: string) => {
+export const dealUpdate = async (data: dealCreateForm, idx: string) => {
   const accessToken = sessionStorage.getItem("access-token") as string;
-  const res = await API.delete(`/honeyTip/${idx}`, {
+  const res = await API.put(`/honeyDeal/${idx}`, data, {
+    headers: {
+      Authorization: accessToken
+    }
+  });
+  return res;
+};
+
+export const dealRead = async (idx: string) => {
+  const accessToken = sessionStorage.getItem("access-token") as string;
+  const res = await API.get(`/honeyDeal/detail/${idx}`, {
+    headers: {
+      Authorization: accessToken
+    }
+  });
+  return res.data;
+};
+
+export const dealDelete = async (idx: string) => {
+  const accessToken = sessionStorage.getItem("access-token") as string;
+  const res = await API.delete(`/honeyDeal/${idx}`, {
     headers: {
       Authorization: accessToken
     }
@@ -61,9 +62,9 @@ export const tipDelete = async (idx: string) => {
   return res.data.message;
 };
 
-export const tipLike = async (idx: string) => {
+export const dealLike = async (idx: string) => {
   const accessToken = sessionStorage.getItem("access-token") as string;
-  const res = await API.get(`/honeyTip/like/${idx}`, {
+  const res = await API.get(`/honeyDeal/like/${idx}`, {
     headers: {
       Authorization: accessToken
     }

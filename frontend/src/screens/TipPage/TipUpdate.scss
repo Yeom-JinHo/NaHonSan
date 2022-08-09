@@ -22,7 +22,7 @@
     height: 0;
   }
 
-  .header {
+  .tip-header {
     width: (570px);
     padding: (24px);
     &-title {
@@ -116,7 +116,7 @@
       }
     }
   }
-  .title {
+  .tip-title {
     margin-top: (40px);
     width: (522px);
     height: (60px);
@@ -129,7 +129,7 @@
       border-bottom: 1px solid $MAIN_YELLOW;
     }
   }
-  .content {
+  .tip-content {
     position: relative;
     border-top: 4px solid #d9d9d9;
     width: (522px);
@@ -178,7 +178,7 @@
 
 @media screen and (max-width: $DESKTOP-VW) {
   #tip-edit {
-    .header {
+    .tip-header {
       width: vw(570px);
       padding: vw(24px);
       &-title {
@@ -240,14 +240,14 @@
         }
       }
     }
-    .title {
+    .tip-title {
       margin-top: vw(40px);
       width: vw(522px);
       height: vw(60px);
       font-size: vw(24px);
       padding: vw(24px);
     }
-    .content {
+    .tip-content {
       width: vw(522px);
       & > p {
         font-size: vw(16px);
@@ -278,7 +278,7 @@
 
 @media screen and (max-width: $TABLET-VW) {
   #tip-edit {
-    .header {
+    .tip-header {
       width: vw-t(468px);
       padding: vw-t(24px);
       &-title {
@@ -340,14 +340,14 @@
         }
       }
     }
-    .title {
+    .tip-title {
       margin-top: vw-t(40px);
       width: vw-t(422px);
       height: vw-t(60px);
       font-size: vw-t(24px);
       padding: vw-t(24px);
     }
-    .content {
+    .tip-content {
       width: vw-t(422px);
       & > p {
         font-size: vw-t(16px);
@@ -383,7 +383,7 @@
       bottom: (8px);
       z-index: 2;
     }
-    .he .header {
+    .tip-header {
       width: vw-p(375px);
       &-title {
         font-size: vw-p(32px);
@@ -444,14 +444,14 @@
         }
       }
     }
-    .title {
+    .tip-title {
       margin-top: vw-p(40px);
       width: vw-p(351px);
       height: vw-p(60px);
       font-size: vw-p(20px);
       padding: vw-p(24px);
     }
-    .content {
+    .tip-content {
       width: vw-p(351px);
       & > p {
         font-size: vw-p(16px);

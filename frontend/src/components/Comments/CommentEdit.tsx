@@ -16,6 +16,7 @@ interface CommentEditProps {
   signal: () => void;
   postIdx: string;
   isAuthor: boolean;
+  type: string;
 }
 
 function CommentEdit({
@@ -23,11 +24,14 @@ function CommentEdit({
   signal,
   changed,
   postIdx,
-  isAuthor
+  isAuthor,
+  type
 }: CommentEditProps) {
   const [sendFile, setSendFile] = useState<File | null>(null);
   const [commentImg, setCommentImg] = useState("");
   const [preview, setPreview] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const imgInput = useRef<HTMLInputElement>(null);
   const isLoggedIn = !!useAppSelector(state => state.auth.userInfo);
@@ -73,33 +77,31 @@ function CommentEdit({
     }
 
     inputRef.current.disabled = true;
-    // 수정일 경우
-    if (isAuthor) {
-      const data = {
-        content: inputRef.current?.value as string,
-        bannerImg: commentImg.replace("data:image/jpeg;base64,", "")
-      };
-      setTimeout(async () => {
-        await commentEdit(commentInfo.idx, data);
-        changed();
-      }, 300);
-
-      // 대댓글일 경우
-    } else {
-      const data = {
-        postIdx,
-        upIdx: commentInfo.idx,
-        content: inputRef.current.value,
-        bannerImg: commentImg.replace("data:image/jpeg;base64,", "")
-      };
-      setTimeout(async () => {
-        await commentCreate(data);
-        changed();
-      }, 300);
+    if (!loading) {
+      setLoading(true);
+      if (isAuthor) {
+        // 수정일 경우
+        const data = {
+          content: inputRef.current?.value as string,
+          bannerImg: commentImg.replace("data:image/jpeg;base64,", "")
+        };
+        await commentEdit(commentInfo.idx, data, type);
+        // 대댓글일 경우
+      } else {
+        const data = {
+          postIdx,
+          upIdx: commentInfo.idx,
+          content: inputRef.current.value,
+          bannerImg: commentImg.replace("data:image/jpeg;base64,", "")
+        };
+        await commentCreate(data, type);
+      }
+      changed();
+      setLoading(false);
+      inputRef.current.value = "";
+      setCommentImg("");
+      inputRef.current.disabled = false;
     }
-    inputRef.current.value = "";
-    setCommentImg("");
-    inputRef.current.disabled = false;
     return 1;
   };
 

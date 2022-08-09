@@ -8,6 +8,7 @@ import { commentDelete } from "@apis/comment";
 import { getTime } from "@utils/getTime";
 import { commentType } from "./Comments";
 import CommentEdit from "./CommentEdit";
+import BigImg from "./BigImg";
 
 interface CommentProps {
   info: commentType;
@@ -20,13 +21,14 @@ interface CommentProps {
 function CommentItem({ info, type, isAuthor, changed, postIdx }: CommentProps) {
   const [editInput, setEditInput] = useState(false);
   const navigate = useNavigate();
+  const [imgToggle, setImgToggle] = useState(false);
 
   const goFeed = () => {
     navigate(`/userfeed/${info.userNickname}`);
   };
 
   const deleteComment = async () => {
-    await commentDelete(info.idx);
+    await commentDelete(info.idx, type);
     changed();
   };
 
@@ -40,12 +42,20 @@ function CommentItem({ info, type, isAuthor, changed, postIdx }: CommentProps) {
 
   return (
     <div id="comment-item">
-      <div className="wrapper flex column align-center">
-        <div className="head flex">
-          <div className="head-profile flex align-center">
+      {imgToggle && info.bannerImg && (
+        <BigImg
+          imgProps={info.bannerImg}
+          signal={() => {
+            setImgToggle(false);
+          }}
+        />
+      )}
+      <div className="comment-wrapper flex column align-center">
+        <div className="comment-head flex">
+          <div className="comment-head-profile flex align-center">
             <button
               type="button"
-              className="head-profile_img flex justify-center"
+              className="comment-head-profile_img flex justify-center"
               onClick={goFeed}
             >
               <img
@@ -57,7 +67,7 @@ function CommentItem({ info, type, isAuthor, changed, postIdx }: CommentProps) {
                 alt="user"
               />
             </button>
-            <div className="head-profile_info">
+            <div className="comment-head-profile_info">
               <Link to={`/userfeed/${info?.userNickname}`} className="notoReg">
                 {info?.userNickname}
               </Link>
@@ -69,26 +79,32 @@ function CommentItem({ info, type, isAuthor, changed, postIdx }: CommentProps) {
             </div>
           </div>
           {type === "deal" && (
-            <button type="button" className="head-map flex justify-end">
+            <button type="button" className="comment-head-map flex justify-end">
               <img src={KaKao} alt="" />
             </button>
           )}
         </div>
-        <div className="body flex">
+        <div className="comment-body flex">
           {info.bannerImg && (
-            <div className="img-container flex jusify-center">
-              <img
-                src={`data:image/jpeg;base64,${info.bannerImg}`}
-                alt="user"
-                title="user"
-              />
+            <div className="comment-img-container flex jusify-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setImgToggle(true);
+                }}
+              >
+                <img
+                  src={`data:image/jpeg;base64,${info.bannerImg}`}
+                  alt="user"
+                  title="user"
+                />
+              </button>
             </div>
           )}
-          <div className="body-content flex column">
-            <p className="body-content_text notoReg">{info?.content}</p>
-
+          <div className="comment-body-content flex column">
+            <p className="comment-body-content_text notoReg">{info?.content}</p>
             {isAuthor ? (
-              <div className="body-content_btn flex">
+              <div className="comment-body-content_btn flex">
                 <button onClick={editComment} type="button" className="notoReg">
                   수정
                 </button>
@@ -101,7 +117,7 @@ function CommentItem({ info, type, isAuthor, changed, postIdx }: CommentProps) {
                 </button>
               </div>
             ) : (
-              <div className="body-content_btn flex">
+              <div className="comment-body-content_btn flex">
                 <button onClick={editComment} type="button" className="notoReg">
                   댓글달기
                 </button>
@@ -113,6 +129,7 @@ function CommentItem({ info, type, isAuthor, changed, postIdx }: CommentProps) {
       {editInput && (
         <div className="edit-input flex">
           <CommentEdit
+            type={type}
             signal={closeEdit}
             commentInfo={info}
             changed={changed}

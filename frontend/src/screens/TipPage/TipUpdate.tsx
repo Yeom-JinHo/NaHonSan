@@ -1,30 +1,46 @@
-import React, { useState, useCallback, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Editor from "@components/common/s3Uploader/Editor";
-import "./TipEdit.scss";
+import "./TipUpdate.scss";
 import noimg from "@images/noimg.svg";
 import HoneyRecipe from "@images/HoneyRecipe.svg";
 import HoneyTem from "@images/HoneyTem.svg";
 import HoneyTip from "@images/HoneyTip.svg";
 import ImgResizer from "@components/common/ImgUploader/ImgResizer";
 import isImage from "@utils/isImage";
-import { tipCreate } from "@apis/honeyTip";
+import { Article, tipUpdate } from "@apis/honeyTip";
 import LoadingSpinner from "@images/LoadingSpinner.svg";
 import X from "@images/X.svg";
 
-function TipEdit() {
+function TipUpdate() {
   const [sendFile, setSendFile] = useState<File | null>(null);
   const [thumnail, setThumnail] = useState("");
   const [category, setCategory] = useState("tip");
+  const [title, setTitle] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [chk, setChk] = useState(false);
+  const [updateData, setUpdateData] = useState("");
   const [spinner, setSpinner] = useState(false);
   const imgInput = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // 수정 전 데이터 불러오기
+  useEffect(() => {
+    const articleInfo = location.state as Article;
+    if (articleInfo.bannerImg) {
+      setThumnail(`data:image/jpeg;base64,${articleInfo.bannerImg}`);
+    }
+    setCategory(articleInfo.category);
+    setTitle(articleInfo.title);
+    setUpdateData(articleInfo.content);
+  }, []);
+
+  const { id } = useParams();
 
   const back = () => {
-    navigate("/tip");
+    navigate(`/tip/detail/${id}`);
   };
 
   // 썸네일 인풋태그열기 > 파일내리기 > 파일 받기
@@ -75,13 +91,12 @@ function TipEdit() {
       content: data,
       bannerImg: thumnail.replace("data:image/jpeg;base64,", "")
     };
-    const res = await tipCreate(payload);
+    const res = await tipUpdate(payload, id as string);
     if (res.status === 500) {
       alert("글이 너무 길어요 ㅠㅠ");
       setSpinner(false);
-      navigate(`/tip`);
     }
-    navigate(`/tip/detail/${res}`);
+    navigate(`/tip/detail/${id}`);
   };
 
   return (
@@ -91,17 +106,17 @@ function TipEdit() {
         <ImgResizer
           imgfile={sendFile}
           newImgfile={receiveFile}
-          imgW={200}
-          imgH={200}
+          imgW={400}
+          imgH={400}
         />
       ) : null}
-      <div className="header ">
-        <div className="header-title notoBold flex">
+      <div className="tip-header ">
+        <div className="tip-header-title notoBold flex">
           <p>
             <span>꿀</span>팁<span> 쓰</span>기
           </p>
         </div>
-        <div className="header-category flex">
+        <div className="tip-header-category flex">
           <p className="category-label notoMid">Category</p>
           <button
             type="button"
@@ -128,7 +143,7 @@ function TipEdit() {
             <p className="notoReg">꿀템</p>
           </button>
         </div>
-        <div className="header-preview flex justify-center">
+        <div className="tip-header-preview flex justify-center">
           <button
             onClick={() => {
               setThumnail("");
@@ -141,13 +156,15 @@ function TipEdit() {
           <button
             onClick={clickInput}
             type="button"
-            className="header-preview_container flex column justify-center align-center"
+            className="tip-header-preview_container flex column justify-center align-center"
           >
-            <p className="header-preview_container-title notoMid">Thumnail</p>
+            <p className="tip-header-preview_container-title notoMid">
+              Thumnail
+            </p>
             {thumnail ? (
               <img src={thumnail} alt="preview" />
             ) : (
-              <div className="header-preview_img flex justify-center align-center">
+              <div className="tip-header-preview_img flex justify-center align-center">
                 <img src={noimg} alt="no-img" title="preview" />
               </div>
             )}
@@ -157,17 +174,18 @@ function TipEdit() {
           </button>
         </div>
       </div>
-      <div className="content flex column align-center">
+      <div className="tip-content flex column align-center">
         <p className="notoMid">Content</p>
         <input
           ref={titleRef}
-          className="title"
+          className="tip-title"
           type="text"
           placeholder="제목은 30자까지 입력할 수 있어요."
+          defaultValue={title}
         />
         {errMsg ? <span className="notoReg fs-16">{errMsg}</span> : null}
 
-        <Editor editorValue={receiveValue} getValue={chk} update={`${""}`} />
+        <Editor editorValue={receiveValue} getValue={chk} update={updateData} />
       </div>
       {spinner ? (
         <div className="send flex">
@@ -191,4 +209,4 @@ function TipEdit() {
   );
 }
 
-export default TipEdit;
+export default TipUpdate;
