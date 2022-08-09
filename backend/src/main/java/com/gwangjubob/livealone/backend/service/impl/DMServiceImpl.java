@@ -81,6 +81,11 @@ public class DMServiceImpl implements DMService {
 			dmEntity.setRead(true);
 			dmRepository.save(dmEntity);
 			DMViewDto dmViewDto = new DMViewDto();
+			if(dmEntity.getFromUserId().getId().equals(id)){
+				dmViewDto.setType("send");
+			}else{
+				dmViewDto.setType("recv");
+			}
 			dmViewDto.setIdx(dmEntity.getIdx());
 			dmViewDto.setFromId(dmEntity.getFromUserId().getId());
 			dmViewDto.setToId(dmEntity.getToUserId().getId());

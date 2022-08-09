@@ -225,6 +225,7 @@ public class UserFeedServiceImpl implements UserFeedService {
                 break;
             }
             UserEntity userEntity = userRepository.findById(userFollowEntity.getFollowId()).get();
+
             PopularFollowDto popularFollowDto = new PopularFollowDto();
             popularFollowDto.setFollow_id(userEntity.getId());
             popularFollowDto.setFollow_nickname(userEntity.getNickname());
@@ -259,6 +260,7 @@ public class UserFeedServiceImpl implements UserFeedService {
                 map.put(rand,true);
                 DealEntity dealEntity = dealEntityList.get(rand);
                 DealDto dealDto = new DealDto();
+                dealDto.setIdx(dealEntity.getIdx());
                 dealDto.setUserNickname(dealEntity.getUser().getNickname());
                 dealDto.setTitle(dealEntity.getTitle());
                 dealDto.setContent(dealEntity.getContent());
