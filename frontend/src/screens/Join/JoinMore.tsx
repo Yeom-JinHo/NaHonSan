@@ -23,7 +23,6 @@ function JoinMore() {
     "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
   const open = useDaumPostcodePopup(scriptUrl);
   const handleComplete = (data: any) => {
-    console.log(data);
     let fullAddress = data.address;
     let extraAddress = "";
 
@@ -37,8 +36,6 @@ function JoinMore() {
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-
-    console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
     setAddress(fullAddress);
   };
 
@@ -108,11 +105,14 @@ function JoinMore() {
           <p className="form__title notoBold fs-16">관심 카테고리</p>
           <ul className="categorys-ul flex">
             {dealCategory.map(category => (
-              <li className={categoryClass(category)} key={v4()}>
-                <button type="button" onClick={() => toggleCategorys(category)}>
-                  {category}
-                </button>
-              </li>
+              <button
+                type="button"
+                className={categoryClass(category)}
+                key={v4()}
+                onClick={() => toggleCategorys(category)}
+              >
+                {category}
+              </button>
             ))}
           </ul>
           <button
