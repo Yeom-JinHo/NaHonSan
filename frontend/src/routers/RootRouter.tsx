@@ -3,8 +3,8 @@ import Main from "@screens/Main";
 import FeedPage from "@screens/FeedPage";
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import TipPage from "@screens/TipPage";
-import DealPage from "@screens/DealPage";
+import TipPage from "@screens/TipPage/TipPage";
+import DealPage from "@screens/DealPage/DealPage";
 import NewsPage from "@screens/NewsPage";
 import Join from "@screens/Join/Join";
 import ChkEmail from "@screens/ChkEmail";
@@ -24,8 +24,13 @@ import ChatRoom from "@screens/ChatRoom";
 import ChkPw from "@screens/AccountSetting/ChkPw";
 import AccountSettingPage from "@screens/AccountSetting/AccountSettingPage";
 import Withdrawal from "@screens/AccountSetting/Withdrawal";
-import DealDetailPage from "@screens/DealDetailPage";
-import TipDetail from "@screens/TipDetail";
+import DealDetailPage from "@screens/DealPage/DealDetailPage";
+import TipDetail from "@screens/TipPage/TipDetail";
+import TipEdit from "@screens/TipPage/TipEdit";
+import TipUpdate from "@screens/TipPage/TipUpdate";
+import DealEdit from "@screens/DealPage/DealEdit";
+import DealUpdate from "@screens/DealPage/DealUpdate";
+import NonFeed from "@components/common/FeedPage/NonFeed";
 
 function RootRouter() {
   return (
@@ -37,14 +42,21 @@ function RootRouter() {
           <Route path="/tip">
             <Route index element={<TipPage />} />
             <Route path="detail/:id" element={<TipDetail />} />
+            <Route path="create" element={<TipEdit />} />
+            <Route path="edit/:id" element={<TipUpdate />} />
+            <Route path="*" element={<PageNotFound />} />
           </Route>
           <Route path="/feed" element={<FeedPage />} />
+          <Route path="/nonFeed" element={<NonFeed />} />
           <Route path="/deal">
             <Route index element={<DealPage />} />
             <Route path="detail/:id" element={<DealDetailPage />} />
+            <Route path="create" element={<DealEdit />} />
+            <Route path="edit/:id" element={<DealUpdate />} />
+            <Route path="*" element={<PageNotFound />} />
           </Route>
           <Route path="/news/" element={<NewsPage />} />
-          <Route path="/userfeed/:id" element={<UserFeedPage />} />
+          <Route path="/userfeed/:nickName" element={<UserFeedPage />} />
           <Route path="/account/*">
             <Route index element={<ChkPw />} />
             <Route path="set" element={<AccountSettingPage />} />

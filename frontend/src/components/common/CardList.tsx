@@ -1,31 +1,88 @@
-import { getDummy } from "@apis/dummy";
+/* eslint-disable no-nested-ternary */
+import { reqDealList } from "@apis/deal";
+import { reqTipList } from "@apis/tip";
+import {
+  DealCondition,
+  TipCondition
+} from "@store/ducks/infinity/infinity.type";
+import {
+  getDealList,
+  getFollowTipList,
+  getTipList
+} from "@store/ducks/infinity/infinityThunk";
+import { useAppDispatch } from "@store/hooks";
 import React, { useEffect, useState } from "react";
 import { v4 } from "uuid";
-import Card from "./Card";
+import Card, { CardType } from "./Card";
 import "./CardList.scss";
 import CardSkeleton from "./CardSkeleton";
 
-type CardListProps = {
-  type: "tip" | "deal";
-};
-
-function CardList({ type }: CardListProps) {
-  const [dummy, setDummy] = useState<Array<any>>([]);
+function CardList({
+  searchType,
+  condition,
+  pure
+}: {
+  searchType: "tip" | "deal" | "followTip";
+  condition: TipCondition & DealCondition;
+  pure: boolean;
+}) {
+  const [cards, setCards] = useState<Array<CardType>>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    (async () => {
-      const res = await getDummy();
-      setDummy(res);
-      setIsLoading(true);
-    })();
+    if (pure) {
+      (async () => {
+        let res;
+        if (searchType === "tip") {
+          res = await reqTipList(condition);
+          setCards(res.data);
+          setIsLoading(true);
+        } else if (searchType === "deal") {
+          res = await reqDealList(condition);
+          setCards(res.data);
+          setIsLoading(true);
+        }
+      })();
+    } else {
+      (async () => {
+        let res;
+        if (searchType === "tip") {
+          res = await dispatch(getTipList(condition));
+          setCards(res.payload.data);
+          setIsLoading(true);
+        } else if (searchType === "deal") {
+          res = await dispatch(getDealList(condition));
+          setCards(res.payload.data);
+          setIsLoading(true);
+        } else if (searchType === "followTip") {
+          res = await dispatch(getFollowTipList(condition));
+          setCards(res.payload.list);
+          setIsLoading(true);
+        }
+      })();
+    }
   }, []);
   return (
-    <div id="card-list" className="flex justify-center">
-      {isLoading
-        ? dummy.map(value => <Card type={type} data={value} key={v4()} />)
-        : [0, 1, 2, 3, 4, 5].map(() => <CardSkeleton key={v4()} />)}
+    <div id="card-list" className="flex">
+      {isLoading ? (
+        cards.length === 0 ? (
+          <div className="nocontent flex justify-center align-center notoReg fs-24">
+            검색 결과가 없어요!
+          </div>
+        ) : (
+          cards.map(data => (
+            <Card
+              type={searchType === "followTip" ? "tip" : searchType}
+              data={data}
+              key={v4()}
+            />
+          ))
+        )
+      ) : (
+        [0, 1, 2, 3, 4, 5].map(() => <CardSkeleton key={v4()} />)
+      )}
     </div>
   );
 }
 
-export default CardList;
+export default React.memo(CardList);
