@@ -29,6 +29,11 @@ function FeedPage() {
   }, []);
   return (
     <div id="feed-page">
+      <div className="carousel-label flex justify-center">
+        <p className="fs-36 notoBold flex justify-center">
+          맞춤형 <span> 꿀</span>딜 추천!
+        </p>
+      </div>
       <CardCarousel />
       {!isLoading ? (
         <img
