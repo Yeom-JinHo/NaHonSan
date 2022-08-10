@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
+import javax.print.attribute.standard.MediaSize;
 import java.util.*;
 
 @Service
@@ -76,12 +77,17 @@ public class DMServiceImpl implements DMService {
 				}
 				Collections.sort(dmList, (a,b) -> b.getIdx() - a.getIdx());
 				for(DMEntity d : dmList){
+					String otherId = null;
 					String nickname = null;
 					if(d.getFromUserId().getId().equals(id)){
 						nickname = d.getToUserId().getNickname();
+						otherId = d.getToUserId().getId();
 					} else if(d.getToUserId().getId().equals(id)){
 						nickname = d.getFromUserId().getNickname();
+						otherId = d.getFromUserId().getId();
 					}
+
+					int cnt = dmRepository.findCount(id, otherId);
 
 					DMViewDto dmViewDto = DMViewDto.builder()
 							.idx(d.getIdx())
@@ -92,6 +98,7 @@ public class DMServiceImpl implements DMService {
 							.read(d.getRead())
 							.Nickname(nickname)
 							.time(d.getTime())
+							.count(cnt)
 							.build();
 					dmViewDtoList.add(dmViewDto);
 				}
