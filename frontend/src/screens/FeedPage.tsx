@@ -12,6 +12,7 @@ import NonFeed from "@components/common/FeedPage/NonFeed";
 function FeedPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [followCnt, setFollowCnt] = useState(0);
+  const [change, setChange] = useState(false);
   const userInfo = useAppSelector(state => state.auth.userInfo);
   const navigate = useNavigate();
   useEffect(() => {
@@ -26,7 +27,12 @@ function FeedPage() {
       }
       setIsLoading(true);
     })();
-  }, []);
+  }, [change]);
+
+  const changed = () => {
+    setChange(state => !state);
+  };
+
   return (
     <div id="feed-page">
       <div className="carousel-label flex justify-center">
@@ -43,7 +49,7 @@ function FeedPage() {
           className="loading-spinner"
         />
       ) : followCnt === 0 ? (
-        <NonFeed />
+        <NonFeed changed={changed} />
       ) : (
         <div className="card-list">
           <InFinityScroll

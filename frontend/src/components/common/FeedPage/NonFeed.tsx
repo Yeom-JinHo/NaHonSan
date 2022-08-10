@@ -3,10 +3,13 @@ import { v4 } from "uuid";
 import "./NonFeed.scss";
 import loadingSpinner from "@images/LoadingSpinner.svg";
 import { getPopUsers } from "@apis/feed";
-
 import FeedUserItem from "./FeedUserItem";
 
-function NonFeed() {
+type NonFeedProps = {
+  changed: () => void;
+};
+
+function NonFeed({ changed }: NonFeedProps) {
   const [popUsers, setPopUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [change, setChange] = useState(false);
@@ -18,11 +21,7 @@ function NonFeed() {
         setIsLoading(true);
       }
     })();
-  }, [change]);
-
-  const changed = () => {
-    setChange(state => !state);
-  };
+  }, []);
 
   return (
     <div id="nonfeed-page">
