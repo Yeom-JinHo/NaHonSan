@@ -1,4 +1,5 @@
 import axios from "axios";
+import { refreshAccessToken } from "./auth";
 
 // export const BASE_URL = "http://i7c208.p.ssafy.io:8083/api"; // 개발 주소
 export const BASE_URL = "/api";
@@ -11,5 +12,18 @@ const API = axios.create({
     withCredentials: true
   }
 });
+
+API.interceptors.response.use(
+  response => {
+    return response;
+  },
+  err => {
+    console.log("intercept", err);
+    if (err.response.status === 401) {
+      refreshAccessToken();
+    }
+    return Promise.reject(err);
+  }
+);
 
 export default API;
