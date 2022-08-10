@@ -217,8 +217,9 @@ public class UserFeedServiceImpl implements UserFeedService {
     }
 
     @Override
-    public List<PopularFollowDto> popularFollower() {
-        List<PopularFollowEntity> userFollowEntities = userFeedRepository.popularFollowerList();//조회
+    public List<PopularFollowDto> popularFollower(String decodeId) {
+        List<PopularFollowEntity> userFollowEntities = userFeedRepository.popularFollowerList();// 인기있는 팔로우 유저
+        List<UserFollowEntity> userFollowEntityList= userFollowsRepository.findByUserId(decodeId); // 내가 팔로우 한 유저 목록
         List<PopularFollowDto> popularFollowDtoList = new ArrayList<>();
         int maxCnt = 0;
         //when
@@ -230,9 +231,28 @@ public class UserFeedServiceImpl implements UserFeedService {
 
             PopularFollowDto popularFollowDto = new PopularFollowDto();
             popularFollowDto.setFollow_id(userEntity.getId());
+            popularFollowDto.setIsFollow(false);
+            for(UserFollowEntity userFollow : userFollowEntityList){
+                if(userFollow.getFollowId().equals(userFollowEntity.getFollowId())){
+                    popularFollowDto.setIsFollow(true);
+                }
+            }
             popularFollowDto.setFollow_nickname(userEntity.getNickname());
             popularFollowDto.setCnt(userFollowEntity.getCnt());
             popularFollowDto.setProfileImg(userEntity.getProfileImg());
+            List<TipEntity> tipEntityList = tipRepository.findTop3ByUserIdOrderByIdxDesc(userEntity.getId());
+            List<TipViewDto> tipViewDtoList = new ArrayList<>();
+            for (TipEntity tipEntity :tipEntityList) { //인기있는 팔로우 유저의 게시글 3개 추가
+                TipViewDto tipViewDto = new TipViewDto();
+                tipViewDto.setIdx(tipEntity.getIdx());
+                tipViewDto.setBannerImg(tipEntity.getBannerImg());
+                tipViewDto.setCategory(tipEntity.getCategory());
+                tipViewDto.setLikes(tipEntity.getLike());
+                tipViewDto.setComment(tipEntity.getComment());
+                tipViewDto.setView(tipEntity.getView());
+                tipViewDtoList.add(tipViewDto);
+            }
+            popularFollowDto.setTipViewDtoList(tipViewDtoList);
             popularFollowDtoList.add(popularFollowDto);
 
         }
