@@ -22,6 +22,7 @@ public interface UserService {
     boolean updatePassword(UserLoginDto userLoginDto);
 
     void moreUpdate(UserMoreDTO userMoreDTO);
+
     UserInfoDto infoUser(String id);
     String NicknameToId(String nickname);
     UserMoreDTO infoMore(String id);
@@ -30,5 +31,6 @@ public interface UserService {
 
     String getTargetId(String nickname);
 
-    Map<String, Object> getPosition(String id);
+    Map<String, Double> getPosition(String id);
+
 }

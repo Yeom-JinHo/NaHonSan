@@ -14,6 +14,8 @@ public interface DealService {
     DealDto registDeal(DealDto dealDto);
     DealDto viewDetailDeal(Integer idx);
 
+    List<DealCommentDto> viewDealComment(Integer idx);
+
     List<DealDto> viewDeal(String category);
 
     DealDto updateDeal(Integer idx, DealDto DealDto);
@@ -33,4 +35,6 @@ public interface DealService {
     Boolean clickLikeButton(String decodeId, Integer idx);
 
     Map<String, Object> viewDealView(DealRequestDto dealRequestDto,String decodeId);
+
+    Map<String,Object> searchMidPosition(String loginUserId, String targetUserId);
 }

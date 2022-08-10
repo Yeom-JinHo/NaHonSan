@@ -44,7 +44,7 @@ public class DealController {
         this.userService = userService;
     }
 
-    @PostMapping("/honeyDeal")
+    @PostMapping("/api/honeyDeal")
     public ResponseEntity<?> registDeal(@RequestBody DealDto dealDto, HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
@@ -66,7 +66,7 @@ public class DealController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
-    @GetMapping("/honeyDeal/{category}")
+    @GetMapping("/api/honeyDeal/{category}")
     public ResponseEntity<?> viewDeal(@PathVariable String category){
         resultMap = new HashMap<>();
         try {
@@ -84,7 +84,7 @@ public class DealController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
-    @GetMapping("/honeyDeal/detail/{idx}")
+    @GetMapping("/api/honeyDeal/detail/{idx}")
     public ResponseEntity<?> viewDetailDeal(@PathVariable Integer idx, HttpServletRequest request, HttpServletResponse response){
         resultMap = new HashMap<>();
         String decodeId = null;
@@ -97,7 +97,7 @@ public class DealController {
                 resultMap.put("isLike", dealService.clickLikeButton(decodeId, idx));
                 resultMap.put("isFollow", userFeedService.checkFollowDeal(decodeId, idx));
             }
-            DealDto data = dealService.viewDetailDeal(idx);
+            DealDto dto = dealService.viewDetailDeal(idx);
             Cookie oldCookie = null;
             Cookie[] cookies = request.getCookies();
             if(cookies != null){
@@ -124,8 +124,10 @@ public class DealController {
                 newCookie.setMaxAge(60 * 60 * 24);
                 response.addCookie(newCookie);
             }
-            if(data != null){
-                resultMap.put("data", data);
+            if(dto != null){
+                resultMap.put("deal", dto);
+                List<DealCommentDto> list = dealService.viewDealComment(idx);
+                resultMap.put("dealComments", list);
                 resultMap.put("message", okay);
             } else{
                 resultMap.put("message", fail);
@@ -138,7 +140,7 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @PutMapping("/honeyDeal/{idx}")
+    @PutMapping("/api/honeyDeal/{idx}")
     public ResponseEntity<?> updateDeal(@PathVariable Integer idx, @RequestBody DealDto dealDto){
         resultMap = new HashMap<>();
         try {
@@ -157,7 +159,7 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @DeleteMapping("/honeyDeal/{idx}")
+    @DeleteMapping("/api/honeyDeal/{idx}")
     public ResponseEntity<?> deleteDeal(@PathVariable Integer idx){
         resultMap = new HashMap<>();
         try {
@@ -174,7 +176,7 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @PostMapping("/honeyDeal/comment")
+    @PostMapping("/api/honeyDeal/comment")
     public ResponseEntity<?> registDealComment(@RequestBody DealCommentDto dealCommentDto, HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
@@ -197,7 +199,7 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @PutMapping("/honeyDeal/comment/{idx}")
+    @PutMapping("/api/honeyDeal/comment/{idx}")
     public ResponseEntity<?> updateDealComment(@PathVariable Integer idx, @RequestBody DealCommentDto dealCommentDto){
         resultMap = new HashMap<>();
         try {
@@ -215,7 +217,7 @@ public class DealController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
-    @DeleteMapping("/honeyDeal/comment/{idx}")
+    @DeleteMapping("/api/honeyDeal/comment/{idx}")
     public ResponseEntity<?> deleteDealComment(HttpServletRequest request, @PathVariable Integer idx){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
@@ -233,7 +235,7 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @GetMapping("/honeyDeal/like/{idx}")
+    @GetMapping("/api/honeyDeal/like/{idx}")
     public ResponseEntity<?> likeDeal(@PathVariable Integer idx, HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
@@ -250,16 +252,13 @@ public class DealController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
-    @PostMapping("honeyDeal/view")
+    @PostMapping("/api/honeyDeal/view")
     public ResponseEntity<?> viewDealView(@RequestBody DealRequestDto dealRequestDto, HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = null;
         if(request !=null && request.getHeader("Authorization") != null){
             decodeId = checkToken(request);
         }
-        System.out.println("----------------------------------------------------------");
-        System.out.println(decodeId);
-        System.out.println("----------------------------------------------------------");
         try{
             Map<String, Object> data = dealService.viewDealView(dealRequestDto, decodeId);
             if(data != null){
@@ -277,18 +276,20 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @GetMapping("honeyDeal/position/{nickname}")
+    @GetMapping("/api/honeyDeal/position/{nickname}")
     public ResponseEntity<?> getPosition(HttpServletRequest request, @PathVariable String nickname){
         resultMap = new HashMap<>();
-        String decodeId = checkToken(request);
-        String targetId = userService.getTargetId(nickname);
+        String loginUserId = checkToken(request);
+        String targetUserId = userService.getTargetId(nickname);
 
-        if(decodeId != null) {
+        if(loginUserId != null) {
             try {
                 // 사용자 위치 구하는 서비스 호출
-                resultMap.put("loginUserPosition", userService.getPosition(decodeId));
-                resultMap.put("targetUserPosition", userService.getPosition(targetId));
+                resultMap.put("loginUserPosition", userService.getPosition(loginUserId));
+                resultMap.put("targetUserPosition", userService.getPosition(targetUserId));
                 // 중간 위치 구하는 서비스 호출
+                resultMap.put("midPositionInfo",dealService.searchMidPosition(loginUserId,targetUserId));
+
                 resultMap.put("message", okay);
                 status = HttpStatus.OK;
             } catch (Exception e) {

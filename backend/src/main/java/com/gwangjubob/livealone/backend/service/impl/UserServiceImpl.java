@@ -1,22 +1,22 @@
 package com.gwangjubob.livealone.backend.service.impl;
 
-import com.gwangjubob.livealone.backend.domain.entity.NoticeEntity;
+import com.gwangjubob.livealone.backend.domain.entity.DealEntity;
 import com.gwangjubob.livealone.backend.domain.entity.UserCategoryEntity;
 import com.gwangjubob.livealone.backend.domain.entity.UserEntity;
+import com.gwangjubob.livealone.backend.domain.repository.DealRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserCategoryRepository;
 import com.gwangjubob.livealone.backend.domain.repository.UserRepository;
 import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
 import com.gwangjubob.livealone.backend.dto.user.UserMoreDTO;
 import com.gwangjubob.livealone.backend.dto.user.UserRegistDto;
-import com.gwangjubob.livealone.backend.mapper.GenericMapper;
 import com.gwangjubob.livealone.backend.mapper.UserInfoMapper;
-import com.gwangjubob.livealone.backend.service.JwtService;
 import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.service.UserService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,12 +33,15 @@ public class UserServiceImpl implements UserService {
     private UserCategoryRepository userCategoryRepository;
     private final PasswordEncoder passwordEncoder;
     private UserInfoMapper userInfoMapper;
+
+    private DealRepository dealRepository;
     @Autowired
-    UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserCategoryRepository userCategoryRepository, UserInfoMapper userInfoMapper){
+    UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserCategoryRepository userCategoryRepository, UserInfoMapper userInfoMapper, DealRepository dealRepository){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userCategoryRepository = userCategoryRepository;
         this.userInfoMapper = userInfoMapper;
+        this.dealRepository = dealRepository;
     }
     @Override
     public boolean loginUser(UserLoginDto userLoginDto){
@@ -112,13 +115,19 @@ public class UserServiceImpl implements UserService {
         if(user != null){
             user.setArea(userMoreDTO.getArea());
             userRepository.save(user);
-
+            String area = userMoreDTO.getArea().split(" ")[0];
             Map<String, Double> location = getXYLocation(user.getId());
 
             user.setAreaX(location.get("areaX"));
             user.setAreaY(location.get("areaY"));
             userRepository.save(user);
-
+            List<DealEntity> deals = dealRepository.findByUser(user);
+            if(!deals.isEmpty()){
+                for(DealEntity deal : deals){
+                    deal.setArea(area);
+                    dealRepository.save(deal);
+                }
+            }
             List<UserCategoryEntity> delCategorys = userCategoryRepository.findByUser(user);
             for (UserCategoryEntity uc : delCategorys) {
                 userCategoryRepository.delete(uc);
@@ -133,6 +142,9 @@ public class UserServiceImpl implements UserService {
             }
         }
     }
+
+
+
     public UserInfoDto infoUser(String id) {
         UserEntity user = userRepository.findById(id).get();
         UserInfoDto userInfo = userInfoMapper.toDto(user);
@@ -222,12 +234,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getTargetId(String nickname) {
-        return userRepository.findByNickname(nickname).get().getNickname();
+        return userRepository.findByNickname(nickname).get().getId();
     }
 
     @Override
-    public Map<String, Object> getPosition(String id) {
-        Map<String, Object> position = new HashMap<>();
+    public Map<String, Double> getPosition(String id) {
+        Map<String, Double> position = new HashMap<>();
 
         if(!userRepository.findById(id).get().getArea().isEmpty()){
             double positionX = userRepository.findById(id).get().getAreaX();
@@ -236,9 +248,13 @@ public class UserServiceImpl implements UserService {
             position.put("positionX", positionX);
             position.put("positionY", positionY);
         }else{
-            position.put("positionX", "null");
-            position.put("positionY", "null");
+            position.put("positionX", null);
+            position.put("positionY", null);
         }
         return position;
     }
+
+
+
+
 }
