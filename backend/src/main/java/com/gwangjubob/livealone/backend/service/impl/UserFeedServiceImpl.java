@@ -34,10 +34,12 @@ public class UserFeedServiceImpl implements UserFeedService {
     private UserFeedRepository userFeedRepository;
     private UserFollowTipsRepository userFollowTipsRepository;
     private NoticeRepository noticeRepository;
+    private UserFollowsRepository userFollowsRepository;
     @Autowired
-    UserFeedServiceImpl(UserRepository userRepository,NoticeRepository noticeRepository,UserFollowTipsRepository userFollowTipsRepository,DealMapper dealMapper,DealRepository dealRepository,TipRepository tipRepository, UserFeedRepository userFeedRepository, PasswordEncoder passwordEncoder, UserCategoryRepository userCategoryRepository, UserInfoMapper userInfoMapper){
+    UserFeedServiceImpl(UserRepository userRepository,UserFollowsRepository userFollowsRepository,NoticeRepository noticeRepository,UserFollowTipsRepository userFollowTipsRepository,DealMapper dealMapper,DealRepository dealRepository,TipRepository tipRepository, UserFeedRepository userFeedRepository, PasswordEncoder passwordEncoder, UserCategoryRepository userCategoryRepository, UserInfoMapper userInfoMapper){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userFollowsRepository = userFollowsRepository;
         this.userFollowTipsRepository = userFollowTipsRepository;
         this.dealMapper = dealMapper;
         this.userCategoryRepository = userCategoryRepository;
@@ -302,7 +304,8 @@ public class UserFeedServiceImpl implements UserFeedService {
             tipViewDtoArrayList.add(dto);
         }
         boolean hasNext = tipEntityList.hasNext();
-
+        List<UserFollowEntity> userFollowEntityList= userFollowsRepository.findByUserId(decodeId);
+        result.put("follow",userFollowEntityList.size());
         result.put("list", tipViewDtoArrayList);
         result.put("hasNext", hasNext);
         return result;
