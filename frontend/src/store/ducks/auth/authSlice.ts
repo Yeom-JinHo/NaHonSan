@@ -15,6 +15,7 @@ export interface UserInfoType {
   profileImg: string | null;
   backgroundImg: string | null;
   likeCategorys: Array<string> | null;
+  social: string;
 }
 interface InitialStateType {
   tmpId: string;
@@ -36,6 +37,7 @@ export const authSlice = createSlice({
     resetUserInfo: state => {
       state.userInfo = null;
       sessionStorage.removeItem("access-token");
+      window.location.href = "/";
     },
     setMoreInfo: (state, action) => {
       if (state.userInfo) {
