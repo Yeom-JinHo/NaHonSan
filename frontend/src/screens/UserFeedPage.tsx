@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import "./UserFeedPage.scss";
 import UserDummyIcon from "@images/UserDummy.svg";
 import SetIcon from "@images/SetIcon.svg";
-import FeedList from "@components/common/UserFeed/FeedList";
-import FollowList from "@components/common/UserFeed/FollowList";
+import FeedList from "@components/UserFeed/FeedList";
+import FollowList from "@components/UserFeed/FollowList";
 import getCounts from "@utils/getCounts";
-import BackImgSkeleton from "@components/common/FeedPage/BackImgSkeleton";
+import BackImgSkeleton from "@components/FeedPage/BackImgSkeleton";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppSelector } from "@store/hooks";
 import { getProfile } from "@apis/setAccount";
@@ -19,6 +19,7 @@ type UserProfile = {
   followerCount: number;
   tipCount: number;
   dealCount: number;
+  social: string;
 };
 
 function UserFeedPage() {
@@ -37,7 +38,8 @@ function UserFeedPage() {
     followCount: 0,
     followerCount: 0,
     tipCount: 0,
-    dealCount: 0
+    dealCount: 0,
+    social: ""
   });
   const userInfo = useAppSelector(state => state.auth.userInfo);
   const txtArea = useRef<HTMLTextAreaElement>(null);
@@ -47,7 +49,6 @@ function UserFeedPage() {
   useEffect(() => {
     (async () => {
       const res = await getProfile(nickName as string);
-      console.log(res);
       if (res.result === "Fail") {
         navigate("/404");
       }
@@ -72,12 +73,10 @@ function UserFeedPage() {
     setFollowModal(state);
     setFollowClick(true);
   };
-  const change = () => {
-    setIsChanged(state => !state);
-  };
+
   const signal = () => {
     setFollowClick(false);
-    change();
+    setIsChanged(state => !state);
   };
 
   return (
@@ -111,11 +110,16 @@ function UserFeedPage() {
       <div className="info">
         <div className="info__nickname notoBold">
           <p>{userProfile?.nickname}</p>
-          {userProfile.nickname === userInfo?.nickname && (
-            <Link to="/account">
-              <img src={SetIcon} alt="set" />
-            </Link>
-          )}
+          {nickName === userInfo?.nickname &&
+            (userInfo?.social === "normal" ? (
+              <Link to="/account">
+                <img src={SetIcon} alt="set" />
+              </Link>
+            ) : (
+              <Link to="/account/set">
+                <img src={SetIcon} alt="set" />
+              </Link>
+            ))}
         </div>
         <div className="info__follow flex">
           <button

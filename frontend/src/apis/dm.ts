@@ -16,9 +16,9 @@ export const getDmList = async () => {
   return res.data;
 };
 
-export const getDmDetailList = async (withId: string) => {
+export const getDmDetailList = async (withId: string, lastIdx: number) => {
   const accessToken = sessionStorage.getItem("access-token");
-  const res = await API.get(`/dm/${withId}`, {
+  const res = await API.get(`/dm/${withId}?lastIdx=${lastIdx}&pageSize=10`, {
     headers: { Authorization: `${accessToken}` }
   });
   return res.data;

@@ -35,10 +35,12 @@ function DealDetailPage() {
 
   useEffect(() => {
     dealRead(id as string).then(res => {
-      console.log(res);
-      setArticle(res.data);
-      setComment(res.data.comments);
-      setDealState(res.data.state);
+      setArticle(res.deal);
+      if (res.dealComments) {
+        const comments = res.dealComments.reverse();
+        setComment(comments);
+      }
+      setDealState(res.deal.state);
       setUserState({
         isFollow: res.isFollow,
         isLike: res.isLike
@@ -47,7 +49,6 @@ function DealDetailPage() {
   }, [newComment, id]);
 
   const changeColor = (state: string) => {
-    console.log(dealState);
     if (dealState === "거래 대기") {
       return "green";
     }
@@ -62,11 +63,15 @@ function DealDetailPage() {
   };
 
   const deleteArticle = async () => {
-    const res = await dealDelete(id as string);
-    if (res === "SUCCESS") {
-      navigate("/");
+    const chk = window.confirm("삭제 할거에요?");
+    if (chk) {
+      const res = await dealDelete(id as string);
+      if (res === "SUCCESS") {
+        navigate("/");
+      }
+      return res;
     }
-    return res;
+    return 0;
   };
 
   if (!article) {
@@ -82,8 +87,6 @@ function DealDetailPage() {
       const res = await dealLike(id as string);
       if (res.status === 200) {
         changed();
-      } else {
-        console.log(res.status);
       }
       setIsLoading(false);
     }
