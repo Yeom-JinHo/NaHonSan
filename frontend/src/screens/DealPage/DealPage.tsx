@@ -8,6 +8,7 @@ import searchIcon from "@images/Search.svg";
 import InFinityScroll from "@components/common/InFinityScroll";
 import dealCategory from "@constants/dealCategory";
 import { useAppSelector } from "@store/hooks";
+import MapModal from "@components/common/MapModal";
 
 function DealPage() {
   const navigate = useNavigate();
@@ -191,6 +192,7 @@ function DealPage() {
             <option value="좋아요순">좋아요순</option>
           </select>
         </div>
+        <MapModal />
         <InFinityScroll
           searchType="deal"
           type={conditions.sort}
