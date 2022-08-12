@@ -120,15 +120,21 @@ public class DealServiceImpl implements DealService {
 
 
     @Override
-    public DealDto updateDeal(Integer idx, DealDto dealDto) {
+    public DealDto updateDeal(Integer idx, DealDto dealDto, String decodeId) {
         Optional<DealEntity> optionalDeal = dealRepository.findById(idx);
+        Optional<UserEntity> optionalUser = userRepository.findById(decodeId);
         DealDto data = new DealDto();
-        if(optionalDeal.isPresent()){
+        if(optionalDeal.isPresent() && optionalUser.isPresent()){
             DealEntity deal = optionalDeal.get();
-            dealMapper.updateFromDto(dealDto, deal);
-            deal.setUpdateTime(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
-            DealEntity res =dealRepository.save(deal);
-            data = dealMapper.toDto(res);
+            UserEntity user = optionalUser.get();
+            if(deal.getUser().getId().equals(user.getId())){
+                dealMapper.updateFromDto(dealDto, deal);
+                deal.setUpdateTime(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
+                DealEntity res =dealRepository.save(deal);
+                data = dealMapper.toDto(res);
+            } else{
+                data = null;
+            }
         } else {
             data = null;
         }
@@ -136,12 +142,17 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public boolean deleteDeal(Integer idx) {
+    public boolean deleteDeal(Integer idx, String decodeId) {
         Optional<DealEntity> optionalDeal = dealRepository.findById(idx);
-        if(optionalDeal.isPresent()){
+        Optional<UserEntity> optionalUser = userRepository.findById(decodeId);
+        if(optionalDeal.isPresent() && optionalUser.isPresent()){
             DealEntity deal = optionalDeal.get();
-            dealRepository.delete(deal);
-            return true;
+            UserEntity user = optionalUser.get();
+            if(deal.getUser().getId().equals(user.getId())){
+                dealRepository.delete(deal);
+                return true;
+            }
+            return false;
         } else{
             return false;
         }
@@ -205,14 +216,20 @@ public class DealServiceImpl implements DealService {
     @Override
     public DealCommentDto updateDealComment(Integer idx, DealCommentDto dealCommentDto) {
         Optional<DealCommentEntity> optionalDealComment = dealCommentRepository.findById(idx);
+        Optional<UserEntity> optionalUser = userRepository.findById(dealCommentDto.getUserId());
         DealCommentDto data = new DealCommentDto();
-        if(optionalDealComment.isPresent()){
+        if(optionalDealComment.isPresent() && optionalUser.isPresent()){
             DealCommentEntity dealComment = optionalDealComment.get();
-            dealComment.setUpdateTime(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
-            dealCommentMapper.updateFromDto(dealCommentDto, dealComment);
-            dealCommentRepository.save(dealComment);
-            data = dealCommentMapper.toDto(dealComment);
-            data.setUserNickname(dealComment.getUser().getNickname());
+            UserEntity user = optionalUser.get();
+            if(dealComment.getUser().getId().equals(user.getId())){
+                dealComment.setUpdateTime(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
+                dealCommentMapper.updateFromDto(dealCommentDto, dealComment);
+                dealCommentRepository.save(dealComment);
+                data = dealCommentMapper.toDto(dealComment);
+                data.setUserNickname(dealComment.getUser().getNickname());
+            } else{
+                data = null;
+            }
         } else{
             data = null;
         }

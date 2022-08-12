@@ -16,9 +16,9 @@ public interface DealService {
 
     List<DealCommentDto> viewDealComment(Integer idx);
 
-    DealDto updateDeal(Integer idx, DealDto DealDto);
+    DealDto updateDeal(Integer idx, DealDto DealDto, String decodeId);
 
-    boolean deleteDeal(Integer idx);
+    boolean deleteDeal(Integer idx, String decodeId);
 
     DealCommentDto registDealComment(DealCommentDto dealCommentDto);
 
