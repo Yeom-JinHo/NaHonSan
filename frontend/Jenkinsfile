@@ -4,21 +4,41 @@ pipeline {
     stages {
         stage("frontend"){
             parallel{
-                stage("test"){
+                stage("unit test"){
                     steps{
                         script{
                             try {
-                                sh 'docker rmi front-test'
+                                sh 'docker rmi front-unit'
                             } catch (e) {
                                 sh 'echo "fail remove test-images"'
                             }
                         }
-                        sh 'docker build -t front-test -f ./frontend/Dockerfile.dev ./frontend'
+                        sh 'docker build -t front-unit -f ./frontend/Dockerfile.unit ./frontend'
                         // sh 'docker run front-test npm run test'
                     }
                     post {
                         success{
                             sh 'echo test 성공!!'
+                        }
+                    }
+                }
+                stage("e2e test"){
+                    steps{
+                        script{
+                            try {
+                                sh 'docker stop e2e'
+                                sh 'docker rm e2e'
+                                sh 'docker rmi front-e2e'
+                            } catch (e) {
+                                sh 'echo "fail remove e2e-test-images"'
+                            }
+                            sh 'docker build -t front-e2e -f ./frontend/Dockerfile.e2e ./frontend --build-arg CYPRESS_RECORD_KEY=${CYPRESS_RECORD_KEY}'
+                            sh 'docker run --name e2e front-e2e /app/node_modules/.bin/cypress run --record --key ${CYPRESS_RECORD_KEY}'
+                        }
+                        post {
+                            success{
+                                sh 'echo test 성공!!'
+                            }
                         }
                     }
                 }
@@ -39,8 +59,9 @@ pipeline {
                         sh "docker push wlsgh97/nahonsan-frontend"
                         sh "docker run -d -p 3000:3000 --name frontend wlsgh97/nahonsan-frontend"
                     }
-                }
+                }    
             }
         }
+        
     }
 }
