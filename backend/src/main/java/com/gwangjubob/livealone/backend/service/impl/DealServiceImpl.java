@@ -472,12 +472,6 @@ public class DealServiceImpl implements DealService {
                 }
             }
         }
-        long cnt = 0;
-        if(area == null){
-            cnt = dealRepository.count();
-        } else{
-            cnt = dealRepository.countAllByArea(area);
-        }
         if(deals != null){
             List<DealEntity> dealsList = deals.getContent();
             for (DealEntity res : dealsList){
@@ -488,7 +482,6 @@ public class DealServiceImpl implements DealService {
             }
             data.put("list", list);
             data.put("hasNext", deals.hasNext());
-            data.put("areaCount", cnt);
         } else{
             data = null;
         }
@@ -698,6 +691,16 @@ public class DealServiceImpl implements DealService {
         return info;
     }
 
+    @Override
+    public long countArea(String area) {
+        long cnt = 0;
+        if(area.equals("전체")){
+            cnt = dealRepository.count();
+        } else{
+            cnt = dealRepository.countAllByArea(area);
+        }
+        return cnt;
+    }
 
 
     private ArrayList<Long> getMidBusStation(ArrayList<List> station, Double userX, Double userY) {
