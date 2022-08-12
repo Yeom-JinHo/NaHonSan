@@ -35,7 +35,6 @@ function DealDetailPage() {
 
   useEffect(() => {
     dealRead(id as string).then(res => {
-      console.log(res);
       setArticle(res.deal);
       if (res.dealComments) {
         const comments = res.dealComments.reverse();
@@ -64,11 +63,15 @@ function DealDetailPage() {
   };
 
   const deleteArticle = async () => {
-    const res = await dealDelete(id as string);
-    if (res === "SUCCESS") {
-      navigate("/");
+    const chk = window.confirm("삭제 할거에요?");
+    if (chk) {
+      const res = await dealDelete(id as string);
+      if (res === "SUCCESS") {
+        navigate("/");
+      }
+      return res;
     }
-    return res;
+    return 0;
   };
 
   if (!article) {
@@ -84,8 +87,6 @@ function DealDetailPage() {
       const res = await dealLike(id as string);
       if (res.status === 200) {
         changed();
-      } else {
-        console.log(res.status);
       }
       setIsLoading(false);
     }

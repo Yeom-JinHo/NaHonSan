@@ -2,17 +2,18 @@ import React, { useState, useEffect, useRef } from "react";
 import "./UserFeedPage.scss";
 import UserDummyIcon from "@images/UserDummy.svg";
 import SetIcon from "@images/SetIcon.svg";
-import FeedList from "@components/common/UserFeed/FeedList";
-import FollowList from "@components/common/UserFeed/FollowList";
+import FeedList from "@components/UserFeed/FeedList";
+import FollowList from "@components/UserFeed/FollowList";
 import getCounts from "@utils/getCounts";
-import BackImgSkeleton from "@components/common/FeedPage/BackImgSkeleton";
+import BackImgSkeleton from "@components/FeedPage/BackImgSkeleton";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { addFollow, delFollow } from "@apis/userFeed";
 import { useAppSelector } from "@store/hooks";
 import { getProfile } from "@apis/setAccount";
 
 type UserProfile = {
   id: string | null;
-  nickname: string | null;
+  nickname: string;
   profileMsg: string | null;
   profileImg: string | null;
   followCount: number;
@@ -20,6 +21,7 @@ type UserProfile = {
   tipCount: number;
   dealCount: number;
   social: string;
+  isFollow: boolean;
 };
 
 function UserFeedPage() {
@@ -29,20 +31,21 @@ function UserFeedPage() {
   const [randomBack, setRandomBack] = useState("");
   const [isLoading, setLoading] = useState(true);
   const [isChanged, setIsChanged] = useState(false);
+  const [wait, setWait] = useState(false);
 
   const [userProfile, setUserProfile] = useState<UserProfile>({
     id: null,
-    nickname: null,
+    nickname: "",
     profileMsg: null,
     profileImg: null,
     followCount: 0,
     followerCount: 0,
     tipCount: 0,
     dealCount: 0,
-    social: ""
+    social: "",
+    isFollow: false
   });
   const userInfo = useAppSelector(state => state.auth.userInfo);
-  console.log(userInfo);
   const txtArea = useRef<HTMLTextAreaElement>(null);
 
   const { nickName } = useParams();
@@ -80,6 +83,30 @@ function UserFeedPage() {
     setIsChanged(state => !state);
   };
 
+  const goDM = () => {
+    if (!userInfo) {
+      return navigate("/login");
+    }
+    return navigate("/letters");
+  };
+
+  const setFollow = async () => {
+    if (!userInfo) {
+      return navigate("/login");
+    }
+    if (!wait) {
+      setWait(true);
+      if (userProfile.isFollow) {
+        await delFollow(userProfile.nickname);
+      } else {
+        await addFollow(userProfile.nickname);
+      }
+      setIsChanged(state => !state);
+      setWait(false);
+    }
+    return 0;
+  };
+
   return (
     <div id="userfeed-page">
       <div className="profile">
@@ -111,16 +138,16 @@ function UserFeedPage() {
       <div className="info">
         <div className="info__nickname notoBold">
           <p>{userProfile?.nickname}</p>
-          {userProfile.nickname === userInfo?.nickname &&
-          userInfo.social === "normal" ? (
-            <Link to="/account">
-              <img src={SetIcon} alt="set" />
-            </Link>
-          ) : (
-            <Link to="/account/set">
-              <img src={SetIcon} alt="set" />
-            </Link>
-          )}
+          {nickName === userInfo?.nickname &&
+            (userInfo?.social === "normal" ? (
+              <Link to="/account">
+                <img src={SetIcon} alt="set" />
+              </Link>
+            ) : (
+              <Link to="/account/set">
+                <img src={SetIcon} alt="set" />
+              </Link>
+            ))}
         </div>
         <div className="info__follow flex">
           <button
@@ -146,8 +173,12 @@ function UserFeedPage() {
         </div>
         {userProfile.nickname !== userInfo?.nickname && (
           <div className="info__btn flex">
-            <button type="button">팔로우</button>
-            <button type="button">DM</button>
+            <button type="button" onClick={setFollow}>
+              {userProfile.isFollow ? "언팔로우" : "팔로우"}
+            </button>
+            <button onClick={goDM} type="button">
+              DM
+            </button>
           </div>
         )}
       </div>

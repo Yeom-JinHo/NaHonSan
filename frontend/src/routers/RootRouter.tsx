@@ -5,7 +5,6 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import TipPage from "@screens/TipPage/TipPage";
 import DealPage from "@screens/DealPage/DealPage";
-import NewsPage from "@screens/NewsPage";
 import Join from "@screens/Join/Join";
 import ChkEmail from "@screens/ChkEmail";
 import JoinDetail from "@screens/Join/JoinDetail";
@@ -16,9 +15,9 @@ import ResetPw from "@screens/Login/ResetPw";
 import FindPw from "@screens/Login/FindPw";
 import UserFeedPage from "@screens/UserFeedPage";
 import "./RootLayout.scss";
-import PageNotFound from "@screens/PageNotFound";
-import KakaoOauthHandler from "@screens/KakaoOauthHandler";
-import NaverOauthHandler from "@screens/NaverOauthHandler";
+import PageNotFound from "@screens/common/PageNotFound";
+import KakaoOauthHandler from "@screens/common/KakaoOauthHandler";
+import NaverOauthHandler from "@screens/common/NaverOauthHandler";
 import Letters from "@screens/Letters";
 import ChatRoom from "@screens/ChatRoom";
 import ChkPw from "@screens/AccountSetting/ChkPw";
@@ -30,7 +29,6 @@ import TipEdit from "@screens/TipPage/TipEdit";
 import TipUpdate from "@screens/TipPage/TipUpdate";
 import DealEdit from "@screens/DealPage/DealEdit";
 import DealUpdate from "@screens/DealPage/DealUpdate";
-import NonFeed from "@components/common/FeedPage/NonFeed";
 
 function RootRouter() {
   return (
@@ -47,7 +45,6 @@ function RootRouter() {
             <Route path="*" element={<PageNotFound />} />
           </Route>
           <Route path="/feed" element={<FeedPage />} />
-          <Route path="/nonFeed" element={<NonFeed />} />
           <Route path="/deal">
             <Route index element={<DealPage />} />
             <Route path="detail/:id" element={<DealDetailPage />} />
@@ -55,7 +52,6 @@ function RootRouter() {
             <Route path="edit/:id" element={<DealUpdate />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
-          <Route path="/news/" element={<NewsPage />} />
           <Route path="/userfeed/:nickName" element={<UserFeedPage />} />
           <Route path="/account/*">
             <Route index element={<ChkPw />} />

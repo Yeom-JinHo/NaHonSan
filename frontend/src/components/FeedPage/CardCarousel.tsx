@@ -5,8 +5,8 @@ import { v4 } from "uuid";
 import rArrow from "@images/RightArrow.svg";
 import lArrow from "@images/LeftArrow.svg";
 import { getHoneyDealList } from "@apis/feed";
-import Card, { CardType } from "../Card";
-import CardSkeleton from "../CardSkeleton";
+import Card, { CardType } from "@components/common/Card";
+import CardSkeleton from "@components/common/CardSkeleton";
 
 function CardCarousel() {
   const [cardList, setCardList] = useState<Array<CardType>>([]);
@@ -77,7 +77,9 @@ function CardCarousel() {
                 <Card type="deal" data={value} key={v4()} />
               ))
             ) : (
-              <p className="notoReg fs-24">카테고리를 설정해주세요</p>
+              <p className="empty-message notoReg fs-24">
+                카테고리를 설정해주세요
+              </p>
             )
           ) : (
             [0, 1, 2, 3, 4, 5].map(() => <CardSkeleton key={v4()} />)
