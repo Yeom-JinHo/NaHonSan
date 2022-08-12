@@ -41,7 +41,7 @@ public class FeedController {
         this.userFeedService = userFeedService;
     }
 
-    @PostMapping("/userFeed/follow/{nickname}")
+    @PostMapping("/userFeed/follow/{nickname}") // 팔로우 등록
     public ResponseEntity<?> registFollow(@PathVariable("nickname")String fromNickname, HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
@@ -54,7 +54,7 @@ public class FeedController {
 
         return new ResponseEntity<>(resultMap,status);
     }
-    @DeleteMapping("/userFeed/follow/{nickname}")
+    @DeleteMapping("/userFeed/follow/{nickname}") // 팔로우 취소
     public ResponseEntity<?> deleteFollow(@PathVariable("nickname")String fromNickname, HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
@@ -67,7 +67,7 @@ public class FeedController {
 
         return new ResponseEntity<>(resultMap,status);
     }
-    @GetMapping("/userFeed/follow/{nickname}")
+    @GetMapping("/userFeed/follow/{nickname}")  // 팔로우 목록 조회
     public ResponseEntity<?> listFollow(@PathVariable("nickname")String fromNickname){
         resultMap = new HashMap<>();
         try{
@@ -87,7 +87,7 @@ public class FeedController {
         }
         return new ResponseEntity<>(resultMap,status);
     }
-    @GetMapping("/userFeed/follower/{nickname}")
+    @GetMapping("/userFeed/follower/{nickname}") // 팔로워 목록 조회
     public ResponseEntity<?> listFollower(@PathVariable("nickname")String fromNickname){
         resultMap = new HashMap<>();
         try{
@@ -107,7 +107,7 @@ public class FeedController {
         }
         return new ResponseEntity<>(resultMap,status);
     }
-    @GetMapping("/userFeed/follow/search/{nickname}")
+    @GetMapping("/userFeed/follow/search/{nickname}") // 팔로우 검색
     public ResponseEntity<?> searchFollow(@PathVariable("nickname")String fromNickname, @RequestParam("keyword") String keyword){
         resultMap = new HashMap<>();
         try{
@@ -127,7 +127,7 @@ public class FeedController {
         }
         return new ResponseEntity<>(resultMap,status);
     }
-    @GetMapping("/userFeed/follower/search/{nickname}")
+    @GetMapping("/userFeed/follower/search/{nickname}") // 팔로워 검색
     public ResponseEntity<?> searchFollower(@PathVariable("nickname")String fromNickname, @RequestParam("keyword") String keyword){
         resultMap = new HashMap<>();
         try{
@@ -147,7 +147,7 @@ public class FeedController {
         }
         return new ResponseEntity<>(resultMap,status);
     }
-    @GetMapping("/userFeed/profile/{nickname}")
+    @GetMapping("/userFeed/profile/{nickname}") // 회원 피드 - 프로필 조회
     public ResponseEntity<?> feedProfile(@PathVariable("nickname")String fromNickname,HttpServletRequest request){
         resultMap = new HashMap<>();
         String accessToken = request.getHeader("Authorization"); // 로그인 했는지 체크?
@@ -175,7 +175,7 @@ public class FeedController {
         return new ResponseEntity<>(resultMap,status);
     }
 
-    @GetMapping("/userFeed/post/{nickname}")
+    @GetMapping("/userFeed/post/{nickname}") // 회원 피드 - 게시글 조회
     public ResponseEntity<?> feedPosts(@PathVariable("nickname")String fromNickname, @RequestParam("category") int category){
         resultMap = new HashMap<>();
         try{
@@ -192,7 +192,7 @@ public class FeedController {
         }
         return new ResponseEntity<>(resultMap,status);
     }
-    @GetMapping("/mainFeed/user")
+    @GetMapping("/mainFeed/user") // 인기있는 팔로워 추천
     public ResponseEntity<?> popularFollower(HttpServletRequest request){
         resultMap = new HashMap<>();
         try{
@@ -212,7 +212,7 @@ public class FeedController {
         }
         return new ResponseEntity<>(resultMap,status);
     }
-    @GetMapping("/mainFeed/honeyDeal")
+    @GetMapping("/mainFeed/honeyDeal") // 인기있는 꿀딜 추천
     public ResponseEntity<?> popularHoneyDeal(HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);

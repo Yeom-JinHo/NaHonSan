@@ -31,7 +31,7 @@ public class DMController {
         this.jwtService = jwtService;
         this.dmService = dmService;
     }
-    @PostMapping("/dm")
+    @PostMapping("/dm") // DM 메시지 전송
     public ResponseEntity<?> sendDM(@RequestBody DMSendDto dmSendDto, HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
@@ -51,7 +51,7 @@ public class DMController {
 
         return new ResponseEntity<>(resultMap, status);
     }
-    @GetMapping("/dm")
+    @GetMapping("/dm") // DM 리스트 조회
     public ResponseEntity<?> listDM(HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
@@ -70,7 +70,7 @@ public class DMController {
 
         return new ResponseEntity<>(resultMap, status);
     }
-    @GetMapping("/dm/{fromId}")
+    @GetMapping("/dm/{fromId}") // DM 세부조회
     public ResponseEntity<?> listDetailDM(@PathVariable("fromId")String fromId, @RequestParam("lastIdx") int lastIdx, @RequestParam("pageSize") int pageSize, HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
