@@ -103,14 +103,6 @@ public class UserController {
     @GetMapping("/user/login")
     public  ResponseEntity<?> updateAccessToken(HttpServletRequest request, @CookieValue("refresh-token") String refreshToken){
         resultMap = new HashMap<>();
-//        Cookie[] cookies = request.getCookies();
-//        String refreshToken = null;
-//        for(Cookie cookie : cookies){
-//            if(cookie.getName().equals("refresh-token")){
-//                refreshToken = cookie.getValue();
-//                break;
-//            }
-//        }
         String decodeId = jwtService.decodeToken(refreshToken);
         if(!decodeId.equals("timeout")){
             String accessToken = jwtService.createAccessToken("id", decodeId);

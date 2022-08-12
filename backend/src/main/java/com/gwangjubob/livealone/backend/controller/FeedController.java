@@ -51,11 +51,7 @@ public class FeedController {
             userFeedService.registFollow(decodeId,fromId);
             resultMap.put("result",okay);
             status = HttpStatus.OK;
-        }else {
-            resultMap.put("result",fail);
-            status = HttpStatus.UNAUTHORIZED;
         }
-
 
         return new ResponseEntity<>(resultMap,status);
     }
@@ -68,11 +64,7 @@ public class FeedController {
             userFeedService.deleteFollow(decodeId,fromId);
             resultMap.put("result",okay);
             status = HttpStatus.OK;
-        }else {
-            resultMap.put("result",fail);
-            status = HttpStatus.UNAUTHORIZED;
         }
-
 
         return new ResponseEntity<>(resultMap,status);
     }
@@ -169,13 +161,14 @@ public class FeedController {
                     status = HttpStatus.UNAUTHORIZED;
             }else{ //서비스 호출
                 result = userFeedService.feedProfile(fromId, decodeId);
+                status = HttpStatus.OK;
+
             }
 
             if(result != null) {
                 resultMap.put("data", result);
                 resultMap.put("result", okay);
             }
-            status = HttpStatus.OK;
         }catch (Exception e){
             resultMap.put("result",fail);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -228,10 +221,9 @@ public class FeedController {
             if(decodeId != null){
                 List<DealDto> result = userFeedService.popularHoneyDeal(decodeId);
                 resultMap.put("data",result);
-
+                resultMap.put("result",okay);
+                status = HttpStatus.OK;
             }
-            resultMap.put("result",okay);
-            status = HttpStatus.OK;
         }catch (Exception e){
             resultMap.put("result",fail);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -247,9 +239,9 @@ public class FeedController {
                 Map result = userFeedService.userFollowHoneyTip(decodeId,lastIdx, pageSize);
                 resultMap.put("data",result);
 
+                resultMap.put("result",okay);
+                status = HttpStatus.OK;
             }
-            resultMap.put("result",okay);
-            status = HttpStatus.OK;
         }catch (Exception e){
             resultMap.put("result",fail);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
