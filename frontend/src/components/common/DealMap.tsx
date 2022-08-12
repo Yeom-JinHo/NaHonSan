@@ -11,6 +11,7 @@ interface DealMapProps {
 function DealMap({ closeModal }: DealMapProps) {
   const { kakao } = window as any;
   const mapRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [mapInfo, setMapInfo] = useState({
     loginUserPosition: {
       positionY: 0,
@@ -50,6 +51,8 @@ function DealMap({ closeModal }: DealMapProps) {
     }
   });
   const makeMap = () => {
+    if (!mapInfo) return;
+    console.log(mapInfo);
     const container = mapRef.current;
     const options = {
       center: new kakao.maps.LatLng(
@@ -241,36 +244,40 @@ function DealMap({ closeModal }: DealMapProps) {
     map.setBounds(bounds);
   };
   useEffect(() => {
-    (async () => {
-      const res = await dealMap("ssafy");
-      if (res.data.message === "SUCCESS") {
-        setMapInfo(res.data);
-        console.log("hi");
-        makeMap();
-      }
-      console.log(res);
-    })();
-  }, []);
+    if (!isLoading) {
+      (async () => {
+        const res = await dealMap("test");
+        if (res.data.message === "SUCCESS") {
+          setMapInfo(res.data);
+          console.log("hi");
+        }
+        console.log(res);
+        setIsLoading(true);
+      })();
+    }
+    makeMap();
+  }, [mapInfo]);
 
   return (
     <div id="dealmap">
-      <button className="container" onClick={closeModal} type="button">
+      <div className="container">
         <div className="map">
           <div className="map-exit">
-            {/* <button type="button" onClick={closeModal}>
+            <button type="button" onClick={closeModal}>
               <img src={exit} alt="exit" />
-            </button> */}
+            </button>
           </div>
-          <div
+          <button
             className="map-sight flex"
             ref={mapRef}
-            // type="button"
-            // onClick={e => e.stopPropagation()}
+            type="button"
+            onClick={e => e.stopPropagation()}
           >
             <p>kakao</p>
-          </div>
+          </button>
         </div>
-      </button>
+      </div>
+      <button className="dimmer" type="button" onClick={closeModal} />
     </div>
   );
 }
