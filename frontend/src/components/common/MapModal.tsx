@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import kakaoMap from "@images/kakao_map.png";
 import DealMap from "@components/common/DealMap";
 
-
 function MapModal() {
   const [mapModal, setMapModal] = useState<boolean>(false);
   const showModal = () => {

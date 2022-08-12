@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./DealMap.scss";
 import mapMdMarker from "@images/mapmdmarker.gif";
 import exit from "@images/X.svg";
-import alarm from "@images/Alarm.svg";
+import { dealMap } from "@apis/honeyDeal";
 
 interface DealMapProps {
   closeModal: () => void;
@@ -11,21 +11,62 @@ interface DealMapProps {
 function DealMap({ closeModal }: DealMapProps) {
   const { kakao } = window as any;
   const mapRef = useRef(null);
-  useEffect(() => {
+  const [mapInfo, setMapInfo] = useState({
+    loginUserPosition: {
+      positionY: 0,
+      positionX: 0
+    },
+    targetUserPosition: {
+      positionY: 0,
+      positionX: 0
+    },
+    midPositionInfo: {
+      midYPosition: 0,
+      midXPosition: 0,
+      radius: 0,
+      result: {
+        finalBusPositionX: 0,
+        finalBusPositionY: 0,
+        loginUserTotalTime: 0,
+        targetUserTotalTime: 0
+      },
+      busStationList: {
+        BusStation1: [0, 0],
+        BusStation2: [0, 0],
+        BusStation3: [0, 0],
+        BusStation4: [0, 0],
+        BusStation5: [0, 0],
+        loginUserTime1: 0,
+        loginUserTime2: 0,
+        loginUserTime3: 0,
+        loginUserTime4: 0,
+        loginUserTime5: 0,
+        targetUserTime1: 0,
+        targetUserTime2: 0,
+        targetUserTime3: 0,
+        targetUserTime4: 0,
+        targetUserTime5: 0
+      }
+    }
+  });
+  const makeMap = () => {
     const container = mapRef.current;
     const options = {
-      center: new kakao.maps.LatLng(35.18480088833835, 126.8533768895765),
+      center: new kakao.maps.LatLng(
+        mapInfo.midPositionInfo.midYPosition,
+        mapInfo.midPositionInfo.midXPosition
+      ),
       level: 2
     };
 
     const map = new kakao.maps.Map(container, options);
     const markerPosition1 = new kakao.maps.LatLng(
-      35.1841322155411,
-      126.877498406332
+      mapInfo.loginUserPosition.positionY,
+      mapInfo.loginUserPosition.positionX
     );
     const markerPosition2 = new kakao.maps.LatLng(
-      35.1854695611356,
-      126.829255372821
+      mapInfo.targetUserPosition.positionY,
+      mapInfo.targetUserPosition.positionX
     );
 
     const imgSrc = "https://i.ibb.co/dPJKs7h/mapmdmarker.gif";
@@ -34,8 +75,8 @@ function DealMap({ closeModal }: DealMapProps) {
     const imgOption = { offset: new kakao.maps.Point(27, 69) };
     const mdMarkerImg = new kakao.maps.MarkerImage(imgSrc, imgSize, imgOption);
     const mdMarkerPosition = new kakao.maps.LatLng(
-      35.18480088833835,
-      126.8533768895765
+      mapInfo.midPositionInfo.midYPosition,
+      mapInfo.midPositionInfo.midXPosition
     );
 
     const marker1 = new kakao.maps.Marker({
@@ -56,8 +97,8 @@ function DealMap({ closeModal }: DealMapProps) {
     const iwContent1 =
       '<div style="padding:5px;">login-user <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">길찾기</a></div>';
     const iwPosition1 = new kakao.maps.LatLng(
-      35.1841322155411,
-      126.877498406332
+      mapInfo.loginUserPosition.positionY,
+      mapInfo.loginUserPosition.positionX
     );
 
     const infowindow1 = new kakao.maps.InfoWindow({
@@ -69,8 +110,8 @@ function DealMap({ closeModal }: DealMapProps) {
     const iwContent2 =
       '<div style="padding:5px;">target-user <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">길찾기</a></div>';
     const iwPosition2 = new kakao.maps.LatLng(
-      35.1854695611356,
-      126.829255372821
+      mapInfo.targetUserPosition.positionY,
+      mapInfo.targetUserPosition.positionX
     );
 
     const infowindow2 = new kakao.maps.InfoWindow({
@@ -83,41 +124,58 @@ function DealMap({ closeModal }: DealMapProps) {
     const positions = [
       {
         title: "버정1",
-        latlng: new kakao.maps.LatLng(35.18181088833835, 126.8503768895761)
+        latlng: new kakao.maps.LatLng(
+          mapInfo.midPositionInfo.busStationList.BusStation1[1],
+          mapInfo.midPositionInfo.busStationList.BusStation1[0]
+        )
       },
       {
         title: "버정2",
-        latlng: new kakao.maps.LatLng(35.18282088833835, 126.8523768895762)
+        latlng: new kakao.maps.LatLng(
+          mapInfo.midPositionInfo.busStationList.BusStation2[1],
+          mapInfo.midPositionInfo.busStationList.BusStation2[0]
+        )
       },
       {
         title: "버정3",
-        latlng: new kakao.maps.LatLng(35.18383088833835, 126.8513768895763)
+        latlng: new kakao.maps.LatLng(
+          mapInfo.midPositionInfo.busStationList.BusStation3[1],
+          mapInfo.midPositionInfo.busStationList.BusStation3[0]
+        )
       },
       {
         title: "버정4",
-        latlng: new kakao.maps.LatLng(35.18684088833835, 126.8543768895764)
+        latlng: new kakao.maps.LatLng(
+          mapInfo.midPositionInfo.busStationList.BusStation1[4],
+          mapInfo.midPositionInfo.busStationList.BusStation1[4]
+        )
       },
       {
         title: "버정5",
-        latlng: new kakao.maps.LatLng(35.18480088833835, 126.8533768895765)
+        latlng: new kakao.maps.LatLng(
+          mapInfo.midPositionInfo.busStationList.BusStation1[5],
+          mapInfo.midPositionInfo.busStationList.BusStation1[5]
+        )
       }
     ];
 
     const positions1 = positions.filter(function (position) {
       return (
-        position.latlng.La !== 126.8533768895765 &&
-        position.latlng.Ma !== 35.18480088833835
+        position.latlng.La !==
+          mapInfo.midPositionInfo.result.finalBusPositionX &&
+        position.latlng.Ma !== mapInfo.midPositionInfo.result.finalBusPositionY
       );
     });
-    console.log(positions1);
     const imageSrc =
       "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-    // "https://i.ibb.co/D8vPrJt/14553-marker-yellow-icon.png";
     const imageSize = new kakao.maps.Size(24, 35);
     const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
     const marker = new kakao.maps.Marker({
       map,
-      position: new kakao.maps.LatLng(35.18480088833835, 126.8533768895765),
+      position: new kakao.maps.LatLng(
+        mapInfo.midPositionInfo.result.finalBusPositionY,
+        mapInfo.midPositionInfo.result.finalBusPositionX
+      ),
       title: positions[4].title,
       image: markerImage
     });
@@ -132,13 +190,9 @@ function DealMap({ closeModal }: DealMapProps) {
     kakao.maps.event.addListener(marker, "click", function () {
       infowindow.open(map, marker);
     });
-    console.log(marker);
 
     positions1.forEach(position1 => {
-      console.log("hi");
-
       const imageSrcBus =
-        // "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
         "https://i.ibb.co/D8vPrJt/14553-marker-yellow-icon.png";
       const imageSizeBus = new kakao.maps.Size(24, 35);
       const markerImageBus = new kakao.maps.MarkerImage(
@@ -165,7 +219,10 @@ function DealMap({ closeModal }: DealMapProps) {
     });
 
     const circle = new kakao.maps.Circle({
-      center: new kakao.maps.LatLng(35.18480088833835, 126.8533768895765),
+      center: new kakao.maps.LatLng(
+        mapInfo.midPositionInfo.midYPosition,
+        mapInfo.midPositionInfo.midXPosition
+      ),
       radius: 1000, // 미터 단위의 원의 반지름입니다
       strokeWeight: 3, // 선의 두께입니다
       strokeColor: "#75B8FA", // 선의 색깔입니다
@@ -182,27 +239,38 @@ function DealMap({ closeModal }: DealMapProps) {
     bounds.extend(markerPosition2);
     bounds.extend(mdMarkerPosition);
     map.setBounds(bounds);
+  };
+  useEffect(() => {
+    (async () => {
+      const res = await dealMap("ssafy");
+      if (res.data.message === "SUCCESS") {
+        setMapInfo(res.data);
+        console.log("hi");
+        makeMap();
+      }
+      console.log(res);
+    })();
   }, []);
 
   return (
     <div id="dealmap">
-      <div className="container" onClick={closeModal}>
+      <button className="container" onClick={closeModal} type="button">
         <div className="map">
           <div className="map-exit">
-            <button type="button" onClick={closeModal}>
+            {/* <button type="button" onClick={closeModal}>
               <img src={exit} alt="exit" />
-            </button>
+            </button> */}
           </div>
           <div
-            role="section"
             className="map-sight flex"
             ref={mapRef}
-            onClick={e => e.stopPropagation()}
+            // type="button"
+            // onClick={e => e.stopPropagation()}
           >
             <p>kakao</p>
           </div>
         </div>
-      </div>
+      </button>
     </div>
   );
 }
