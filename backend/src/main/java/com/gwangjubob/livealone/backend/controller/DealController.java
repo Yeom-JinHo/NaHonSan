@@ -244,15 +244,28 @@ public class DealController {
         resultMap = new HashMap<>();
         try{
             Map<String, Object> data = dealService.viewDeal(dealRequestDto);
-
             if(data != null){
                 resultMap.put("data", data.get("list"));
                 resultMap.put("hasNext", data.get("hasNext"));
-                resultMap.put("areaCount", data.get("areaCount"));
                 resultMap.put("message", okay);
             } else{
                 resultMap.put("message", fail);
             }
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            resultMap.put("message", fail);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, status);
+    }
+
+    @GetMapping("/honeyDeal/count/{area}")//지역 거래 건수 조회
+    public ResponseEntity<?> countArea(@PathVariable String area){
+        resultMap = new HashMap<>();
+        try {
+            long cnt = dealService.countArea(area);
+            resultMap.put("countArea", cnt);
+            resultMap.put("message", okay);
             status = HttpStatus.OK;
         } catch (Exception e){
             resultMap.put("message", fail);
