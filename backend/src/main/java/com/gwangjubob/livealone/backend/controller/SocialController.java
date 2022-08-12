@@ -2,7 +2,6 @@ package com.gwangjubob.livealone.backend.controller;
 
 import com.gwangjubob.livealone.backend.service.JwtService;
 import com.gwangjubob.livealone.backend.service.SocialService;
-import com.gwangjubob.livealone.backend.service.impl.SocialServiceImpl;
 import com.gwangjubob.livealone.backend.service.impl.MailService;
 import com.gwangjubob.livealone.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,7 +6,6 @@ import com.gwangjubob.livealone.backend.dto.feed.FollowViewDto;
 import com.gwangjubob.livealone.backend.dto.feed.PopularFollowDto;
 import com.gwangjubob.livealone.backend.dto.feed.PostViewDto;
 import com.gwangjubob.livealone.backend.dto.feed.ProfileViewDto;
-import com.gwangjubob.livealone.backend.dto.tip.TipViewDto;
 import com.gwangjubob.livealone.backend.dto.user.UserInfoDto;
 import com.gwangjubob.livealone.backend.service.JwtService;
 import com.gwangjubob.livealone.backend.service.UserFeedService;

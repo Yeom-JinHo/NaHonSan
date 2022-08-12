@@ -2,19 +2,14 @@ package com.gwangjubob.livealone.backend.controller;
 
 import com.gwangjubob.livealone.backend.dto.dm.DMSendDto;
 import com.gwangjubob.livealone.backend.dto.dm.DMViewDto;
-import com.gwangjubob.livealone.backend.dto.dm.DMViewDto;
-import com.gwangjubob.livealone.backend.dto.user.UserLoginDto;
 import com.gwangjubob.livealone.backend.service.DMService;
 import com.gwangjubob.livealone.backend.service.JwtService;
 import com.gwangjubob.livealone.backend.service.UserService;
-import com.gwangjubob.livealone.backend.service.impl.MailService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
