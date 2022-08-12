@@ -90,53 +90,97 @@ public class DealController {
         String decodeId = null;
         if(request != null && request.getHeader("Authorization") != null){
             decodeId = checkToken(request);
+            if(decodeId != null){
+                try {
+                    resultMap.put("isLike", dealService.clickLikeButton(decodeId, idx));
+                    resultMap.put("isFollow", userFeedService.checkFollowDeal(decodeId, idx));
+                    DealDto dto = dealService.viewDetailDeal(idx);
+                    Cookie oldCookie = null;
+                    Cookie[] cookies = request.getCookies();
+                    if(cookies != null){
+                        for (Cookie cookie : cookies){
+                            if(cookie.getName().equals("postDeal")){
+                                oldCookie = cookie;
+                            }
+                        }
+                    }
+                    if(oldCookie != null){
+                        if(!oldCookie.getValue().contains("[" + idx + "]")){
+                            boolean upCheck = dealService.countUpView(idx);
+                            if (upCheck){
+                                oldCookie.setValue(oldCookie.getValue() + "[" + idx + "]");
+                                oldCookie.setPath("/");
+                                oldCookie.setMaxAge(60 * 60 * 24);
+                                response.addCookie(oldCookie);
+                            }
+                        }
+                    } else{
+                        dealService.countUpView(idx);
+                        Cookie newCookie = new Cookie("postDeal", "["+ idx + "]");
+                        newCookie.setPath("/");
+                        newCookie.setMaxAge(60 * 60 * 24);
+                        response.addCookie(newCookie);
+                    }
+                    if(dto != null){
+                        resultMap.put("deal", dto);
+                        List<DealCommentDto> list = dealService.viewDealComment(idx);
+                        resultMap.put("dealComments", list);
+                        resultMap.put("message", okay);
+                    } else{
+                        resultMap.put("message", fail);
+                    }
+                    status = HttpStatus.OK;
+                } catch (Exception e){
+                    resultMap.put("message", fail);
+                    status = HttpStatus.INTERNAL_SERVER_ERROR;
+                }
+
+            }
+        } else{
+            try {
+                DealDto dto = dealService.viewDetailDeal(idx);
+                Cookie oldCookie = null;
+                Cookie[] cookies = request.getCookies();
+                if(cookies != null){
+                    for (Cookie cookie : cookies){
+                        if(cookie.getName().equals("postDeal")){
+                            oldCookie = cookie;
+                        }
+                    }
+                }
+                if(oldCookie != null){
+                    if(!oldCookie.getValue().contains("[" + idx + "]")){
+                        boolean upCheck = dealService.countUpView(idx);
+                        if (upCheck){
+                            oldCookie.setValue(oldCookie.getValue() + "[" + idx + "]");
+                            oldCookie.setPath("/");
+                            oldCookie.setMaxAge(60 * 60 * 24);
+                            response.addCookie(oldCookie);
+                        }
+                    }
+                } else{
+                    dealService.countUpView(idx);
+                    Cookie newCookie = new Cookie("postDeal", "["+ idx + "]");
+                    newCookie.setPath("/");
+                    newCookie.setMaxAge(60 * 60 * 24);
+                    response.addCookie(newCookie);
+                }
+                if(dto != null){
+                    resultMap.put("deal", dto);
+                    List<DealCommentDto> list = dealService.viewDealComment(idx);
+                    resultMap.put("dealComments", list);
+                    resultMap.put("message", okay);
+                } else{
+                    resultMap.put("message", fail);
+                }
+                status = HttpStatus.OK;
+            } catch (Exception e){
+                resultMap.put("message", fail);
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
         }
 
-        try {
-            if(decodeId != null){
-                resultMap.put("isLike", dealService.clickLikeButton(decodeId, idx));
-                resultMap.put("isFollow", userFeedService.checkFollowDeal(decodeId, idx));
-            }
-            DealDto dto = dealService.viewDetailDeal(idx);
-            Cookie oldCookie = null;
-            Cookie[] cookies = request.getCookies();
-            if(cookies != null){
-                for (Cookie cookie : cookies){
-                    if(cookie.getName().equals("postDeal")){
-                        oldCookie = cookie;
-                    }
-                }
-            }
-            if(oldCookie != null){
-                if(!oldCookie.getValue().contains("[" + idx + "]")){
-                    boolean upCheck = dealService.countUpView(idx);
-                    if (upCheck){
-                        oldCookie.setValue(oldCookie.getValue() + "[" + idx + "]");
-                        oldCookie.setPath("/");
-                        oldCookie.setMaxAge(60 * 60 * 24);
-                        response.addCookie(oldCookie);
-                    }
-                }
-            } else{
-                dealService.countUpView(idx);
-                Cookie newCookie = new Cookie("postDeal", "["+ idx + "]");
-                newCookie.setPath("/");
-                newCookie.setMaxAge(60 * 60 * 24);
-                response.addCookie(newCookie);
-            }
-            if(dto != null){
-                resultMap.put("deal", dto);
-                List<DealCommentDto> list = dealService.viewDealComment(idx);
-                resultMap.put("dealComments", list);
-                resultMap.put("message", okay);
-            } else{
-                resultMap.put("message", fail);
-            }
-            status = HttpStatus.OK;
-        } catch (Exception e){
-            resultMap.put("message", fail);
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
+
         return new ResponseEntity<>(resultMap, status);
     }
 
@@ -221,16 +265,18 @@ public class DealController {
     public ResponseEntity<?> deleteDealComment(HttpServletRequest request, @PathVariable Integer idx){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
-        try {
-            if(dealService.deleteDealComment(idx, decodeId)){
-                resultMap.put("message", okay);
-            } else{
+        if(decodeId != null){
+            try {
+                if(dealService.deleteDealComment(idx, decodeId)){
+                    resultMap.put("message", okay);
+                } else{
+                    resultMap.put("message", fail);
+                }
+                status = HttpStatus.OK;
+            } catch (Exception e){
                 resultMap.put("message", fail);
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
             }
-            status = HttpStatus.OK;
-        } catch (Exception e){
-            resultMap.put("message", fail);
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity<>(resultMap, status);
     }
@@ -239,16 +285,18 @@ public class DealController {
     public ResponseEntity<?> likeDeal(@PathVariable Integer idx, HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
-        try {
-            if(dealService.likeDeal(idx, decodeId)){
-                resultMap.put("message", okay);
-            } else{
+        if(decodeId != null){
+            try {
+                if(dealService.likeDeal(idx, decodeId)){
+                    resultMap.put("message", okay);
+                } else{
+                    resultMap.put("message", fail);
+                }
+                status = HttpStatus.OK;
+            } catch (Exception e){
                 resultMap.put("message", fail);
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
             }
-             status = HttpStatus.OK;
-        } catch (Exception e){
-            resultMap.put("message", fail);
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity<>(resultMap, status);
     }
