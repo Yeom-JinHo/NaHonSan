@@ -12,6 +12,14 @@
       }
     }
   }
+  .loading-spinner {
+    margin-top: (50px);
+    height: (60px);
+    width: (60px);
+  }
+  #infinity-study-card-list {
+    margin-top: (40px);
+  }
 }
 @media screen and (max-width: $DESKTOP-VW) {
   #feed-page {
@@ -26,6 +34,14 @@
           margin: 0px vw(12px) 0px vw(12px);
         }
       }
+    }
+    .loading-spinner {
+      margin-top: vw(50px);
+      height: vw(60px);
+      width: vw(60px);
+    }
+    #infinity-study-card-list {
+      margin-top: vw(40px);
     }
   }
 }
@@ -43,6 +59,14 @@
         }
       }
     }
+    .loading-spinner {
+      margin-top: vw-t(50px);
+      height: vw-t(60px);
+      width: vw-t(60px);
+    }
+    #infinity-study-card-list {
+      margin-top: vw-t(40px);
+    }
   }
 }
 @media screen and (max-width: $PHONE-VW) {
@@ -58,6 +82,14 @@
           margin: 0px vw-p(4px) 0px vw-p(4px);
         }
       }
+    }
+    .loading-spinner {
+      margin-top: vw-p(50px);
+      height: vw-p(60px);
+      width: vw-p(60px);
+    }
+    #infinity-study-card-list {
+      margin-top: vw-p(40px);
     }
   }
 }
