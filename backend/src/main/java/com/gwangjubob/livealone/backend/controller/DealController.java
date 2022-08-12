@@ -44,7 +44,7 @@ public class DealController {
         this.userService = userService;
     }
 
-    @PostMapping("/honeyDeal")
+    @PostMapping("/honeyDeal") //꿀딜 게시글 등록
     public ResponseEntity<?> registDeal(@RequestBody DealDto dealDto, HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
@@ -66,25 +66,7 @@ public class DealController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
-    @GetMapping("/honeyDeal/{category}")
-    public ResponseEntity<?> viewDeal(@PathVariable String category){
-        resultMap = new HashMap<>();
-        try {
-            List<DealDto> data = dealService.viewDeal(category);
-            if (data != null){
-                resultMap.put("data", data);
-                resultMap.put("message", okay);
-            } else{
-                resultMap.put("message", fail);
-            }
-            status = HttpStatus.OK;
-        } catch (Exception e){
-            resultMap.put("message", fail);
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-        return new ResponseEntity<>(resultMap, status);
-    }
-    @GetMapping("/honeyDeal/detail/{idx}")
+    @GetMapping("/honeyDeal/detail/{idx}") //꿀딜 게시글 상세 조회
     public ResponseEntity<?> viewDetailDeal(@PathVariable Integer idx, HttpServletRequest request, HttpServletResponse response){
         resultMap = new HashMap<>();
         String decodeId = null;
@@ -184,7 +166,7 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @PutMapping("/honeyDeal/{idx}")
+    @PutMapping("/honeyDeal/{idx}") //꿀딜 게시글 수정
     public ResponseEntity<?> updateDeal(@PathVariable Integer idx, @RequestBody DealDto dealDto){
         resultMap = new HashMap<>();
         try {
@@ -203,7 +185,7 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @DeleteMapping("/honeyDeal/{idx}")
+    @DeleteMapping("/honeyDeal/{idx}") //꿀딜 게시글 삭제
     public ResponseEntity<?> deleteDeal(@PathVariable Integer idx){
         resultMap = new HashMap<>();
         try {
@@ -220,7 +202,7 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @PostMapping("/honeyDeal/comment")
+    @PostMapping("/honeyDeal/comment") //꿀딜 댓글 등록
     public ResponseEntity<?> registDealComment(@RequestBody DealCommentDto dealCommentDto, HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
@@ -243,7 +225,7 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @PutMapping("/honeyDeal/comment/{idx}")
+    @PutMapping("/honeyDeal/comment/{idx}") //꿀딜 댓글 수정
     public ResponseEntity<?> updateDealComment(@PathVariable Integer idx, @RequestBody DealCommentDto dealCommentDto){
         resultMap = new HashMap<>();
         try {
@@ -261,7 +243,7 @@ public class DealController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
-    @DeleteMapping("/honeyDeal/comment/{idx}")
+    @DeleteMapping("/honeyDeal/comment/{idx}") //꿀딜 댓글 삭제
     public ResponseEntity<?> deleteDealComment(HttpServletRequest request, @PathVariable Integer idx){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
@@ -281,7 +263,7 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @GetMapping("/honeyDeal/like/{idx}")
+    @GetMapping("/honeyDeal/like/{idx}") //꿀딜 게시글 좋아요, 좋아요 취소
     public ResponseEntity<?> likeDeal(@PathVariable Integer idx, HttpServletRequest request){
         resultMap = new HashMap<>();
         String decodeId = checkToken(request);
@@ -300,11 +282,11 @@ public class DealController {
         }
         return new ResponseEntity<>(resultMap, status);
     }
-    @PostMapping("/honeyDeal/view")
-    public ResponseEntity<?> viewDealView(@RequestBody DealRequestDto dealRequestDto){
+    @PostMapping("/honeyDeal/view") //꿀딜 게시글 조회
+    public ResponseEntity<?> viewDeal(@RequestBody DealRequestDto dealRequestDto){
         resultMap = new HashMap<>();
         try{
-            Map<String, Object> data = dealService.viewDealView(dealRequestDto);
+            Map<String, Object> data = dealService.viewDeal(dealRequestDto);
 
             if(data != null){
                 resultMap.put("data", data.get("list"));
@@ -322,7 +304,7 @@ public class DealController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @GetMapping("/honeyDeal/position/{nickname}")
+    @GetMapping("/honeyDeal/position/{nickname}") // 꿀딜 좌표 조회
     public ResponseEntity<?> getPosition(HttpServletRequest request, @PathVariable String nickname){
         resultMap = new HashMap<>();
         String loginUserId = checkToken(request);
