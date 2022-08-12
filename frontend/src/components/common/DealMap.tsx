@@ -146,15 +146,15 @@ function DealMap({ closeModal }: DealMapProps) {
       {
         title: "버정4",
         latlng: new kakao.maps.LatLng(
-          mapInfo.midPositionInfo.busStationList.BusStation1[4],
-          mapInfo.midPositionInfo.busStationList.BusStation1[4]
+          mapInfo.midPositionInfo.busStationList.BusStation4[1],
+          mapInfo.midPositionInfo.busStationList.BusStation4[0]
         )
       },
       {
         title: "버정5",
         latlng: new kakao.maps.LatLng(
-          mapInfo.midPositionInfo.busStationList.BusStation1[5],
-          mapInfo.midPositionInfo.busStationList.BusStation1[5]
+          mapInfo.midPositionInfo.busStationList.BusStation5[1],
+          mapInfo.midPositionInfo.busStationList.BusStation5[0]
         )
       }
     ];
