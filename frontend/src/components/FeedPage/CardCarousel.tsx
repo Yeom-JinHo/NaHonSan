@@ -70,21 +70,24 @@ function CardCarousel() {
   return (
     <div id="usercarousel">
       <div className="container">
-        <div className="slider flex justify-center" ref={slideRef}>
-          {isLoading ? (
-            cardList.length !== 0 ? (
-              cardList.map(value => (
-                <Card type="deal" data={value} key={v4()} />
-              ))
+        {cardList && (
+          <div className="slider flex justify-center" ref={slideRef}>
+            {isLoading ? (
+              cardList.length !== 0 ? (
+                cardList.map(value => (
+                  <Card type="deal" data={value} key={v4()} />
+                ))
+              ) : (
+                <p className="empty-message notoReg fs-28 flex align-center justify-center">
+                  카테고리를 설정해주세요
+                </p>
+              )
             ) : (
-              <p className="empty-message notoReg fs-24">
-                카테고리를 설정해주세요
-              </p>
-            )
-          ) : (
-            [0, 1, 2, 3, 4, 5].map(() => <CardSkeleton key={v4()} />)
-          )}
-        </div>
+              [0, 1, 2, 3, 4, 5].map(() => <CardSkeleton key={v4()} />)
+            )}
+          </div>
+        )}
+
         <button
           className="prevbtn fs-48 flex"
           type="button"
