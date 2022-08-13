@@ -142,7 +142,9 @@ function TipDetail() {
             </div>
             <button
               onClick={setFollow}
-              className={`header-info__btn notoReg ${isAuthor ? "hide" : null}`}
+              className={`header-info__btn notoReg ${
+                isAuthor ? "hide" : null
+              } ${userState.isFollow ? "grey" : "yellow"}`}
               type="button"
             >
               {userState.isFollow ? "언팔로우" : "팔로우"}
