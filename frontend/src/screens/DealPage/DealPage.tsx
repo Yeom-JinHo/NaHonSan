@@ -10,6 +10,7 @@ import InFinityScroll from "@components/common/InFinityScroll";
 import dealCategory from "@constants/dealCategory";
 import { useAppSelector } from "@store/hooks";
 import DealBanner from "@images/DealBanner.jpg";
+import MapModal from "@components/common/MapModal";
 
 function DealPage() {
   const navigate = useNavigate();
