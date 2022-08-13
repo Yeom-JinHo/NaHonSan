@@ -25,7 +25,6 @@ export interface dealArticle extends Article {
 
 export const dealMap = async (username: string) => {
   const accessToken = sessionStorage.getItem("access-token") as string;
-  console.log("요청");
   const res = await API.get(`/honeyDeal/position/${username}`, {
     headers: {
       Authorization: accessToken

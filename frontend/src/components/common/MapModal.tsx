@@ -4,6 +4,7 @@ import DealMap from "@components/common/DealMap";
 
 function MapModal() {
   const [mapModal, setMapModal] = useState<boolean>(false);
+  const targetUser = "ssafy";
   const showModal = () => {
     setMapModal(true);
   };
@@ -15,7 +16,9 @@ function MapModal() {
       <button type="button" onClick={showModal}>
         <img src={kakaoMap} alt="mapicon" className="mapmodal__icon" />
       </button>
-      {mapModal ? <DealMap closeModal={closeModal} /> : null}
+      {mapModal ? (
+        <DealMap targetUser={targetUser} closeModal={closeModal} />
+      ) : null}
     </div>
   );
 }
