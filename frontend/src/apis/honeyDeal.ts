@@ -30,7 +30,6 @@ export const dealMap = async (username: string) => {
       Authorization: accessToken
     }
   });
-  console.log(res);
   return res;
 };
 

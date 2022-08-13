@@ -53,7 +53,6 @@ function DealMap({ closeModal, targetUser }: DealMapProps) {
   });
   const makeMap = () => {
     if (!mapInfo) return;
-    console.log(mapInfo);
     const container = mapRef.current;
     const options = {
       center: new kakao.maps.LatLng(
@@ -332,7 +331,6 @@ function DealMap({ closeModal, targetUser }: DealMapProps) {
         if (res.data.message === "SUCCESS") {
           setMapInfo(res.data);
         }
-        console.log(res);
         setIsLoading(true);
       })();
     }
@@ -348,14 +346,6 @@ function DealMap({ closeModal, targetUser }: DealMapProps) {
               <img src={exit} alt="exit" />
             </button>
           </div>
-          {!isLoading ? (
-            <img
-              src={loadingSpinner}
-              title="로딩스피너"
-              alt="로딩스피너"
-              className="loading-spinner"
-            />
-          ) : null}
           <button
             className="map-sight flex"
             ref={mapRef}
