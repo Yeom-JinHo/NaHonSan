@@ -202,6 +202,7 @@ function TipDetail() {
           </div>
           {comment ? (
             <Comments
+              isArticleAuthor={false}
               postIdx={id as string}
               changed={changed}
               type="Tip"
