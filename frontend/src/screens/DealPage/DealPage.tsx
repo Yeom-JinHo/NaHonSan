@@ -229,6 +229,7 @@ function DealPage() {
             <option value="좋아요순">좋아요순</option>
           </select>
         </div>
+        <MapModal />
         <InFinityScroll
           searchType="deal"
           type={conditions.sort}
