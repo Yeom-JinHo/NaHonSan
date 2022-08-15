@@ -70,12 +70,12 @@ function DealMap({ closeModal, targetUser }: DealMapProps) {
 
     const imgSrc = "https://i.ibb.co/8NBcFrw/honeybee.png";
     const imgSize = new kakao.maps.Size(44, 44);
-    const imgOption = { offset: new kakao.maps.Point(0, 0) };
+    const imgOption = { offset: new kakao.maps.Point(22, 22) };
     const mdMarkerImg = new kakao.maps.MarkerImage(imgSrc, imgSize, imgOption);
 
     const loginMarkerImgSrc = "https://i.ibb.co/dgZDp51/user.png";
     const loginMarkerImgSize = new kakao.maps.Size(44, 44);
-    const loginMarkerImgOption = { offset: new kakao.maps.Point(0, 0) };
+    const loginMarkerImgOption = { offset: new kakao.maps.Point(22, 22) };
     const loginMarkerImg = new kakao.maps.MarkerImage(
       loginMarkerImgSrc,
       loginMarkerImgSize,
@@ -84,7 +84,7 @@ function DealMap({ closeModal, targetUser }: DealMapProps) {
 
     const targetMarkerImgSrc = "https://i.ibb.co/WxSxPQF/user-1.png";
     const targetMarkerImgSize = new kakao.maps.Size(44, 44);
-    const targetMarkerImgOption = { offset: new kakao.maps.Point(0, 0) };
+    const targetMarkerImgOption = { offset: new kakao.maps.Point(22, 22) };
     const targetMarkerImg = new kakao.maps.MarkerImage(
       targetMarkerImgSrc,
       targetMarkerImgSize,
@@ -186,11 +186,17 @@ function DealMap({ closeModal, targetUser }: DealMapProps) {
         marker.setImage(markerImage)
       );
 
+      console.log(
+        midPosition.result?.finalBusPositionX,
+        midPosition.result?.finalBusPositionY
+      );
+      console.log("before", midPosition.busStationList);
       const busStations = midPosition.busStationList.filter(
         position =>
           position[0] !== midPosition.result?.finalBusPositionX &&
           position[1] !== midPosition.result?.finalBusPositionY
       );
+      console.log(busStations);
       for (let i = 0; i < busStations.length; i += 1) {
         const imageSrcBus = "https://i.ibb.co/jLvfz5W/bus-stop-1.png";
         const imageSizeBus = new kakao.maps.Size(35, 35);
