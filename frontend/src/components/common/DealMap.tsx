@@ -69,7 +69,7 @@ function DealMap({ closeModal, targetUser }: DealMapProps) {
     );
 
     const imgSrc = "https://i.ibb.co/8NBcFrw/honeybee.png";
-    const imgSize = new kakao.maps.Size(64, 69);
+    const imgSize = new kakao.maps.Size(44, 44);
     const imgOption = { offset: new kakao.maps.Point(0, 0) };
     const mdMarkerImg = new kakao.maps.MarkerImage(imgSrc, imgSize, imgOption);
 
@@ -272,6 +272,8 @@ function DealMap({ closeModal, targetUser }: DealMapProps) {
         } else if (res.data.message === "loginUserPositionNotFound") {
           closeModal();
           alert("주소를 등록해주세요!!");
+        } else {
+          alert("오늘 요청 허가수를 초과했어요.");
         }
       })();
     } else {
