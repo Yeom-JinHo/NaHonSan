@@ -212,7 +212,7 @@ function DealMap({ closeModal, targetUser }: DealMapProps) {
           image: markerImageBus
         });
 
-        const contentMain = `<div style="padding:5px;">소요 시간 <br> 나의 기준 ${midPosition?.loginUserTimeList?.[i]} <br> 상대 기준${midPosition?.targetUserTimeList?.[i]} <br>여기까지 <a href="https://map.kakao.com/link/to/목적 정류장!,${midPosition.busStationList[i][1]},${midPosition.busStationList[i][0]}" style="color:blue" target="_blank">길찾기</a></div>`;
+        const contentMain = `<div style="padding:5px;">소요 시간 <br> 나의 기준 ${midPosition?.loginUserTimeList?.[i]}분 <br> 상대 기준${midPosition?.targetUserTimeList?.[i]}분 <br>여기까지 <a href="https://map.kakao.com/link/to/목적 정류장!,${midPosition.busStationList[i][1]},${midPosition.busStationList[i][0]}" style="color:blue" target="_blank">길찾기</a></div>`;
 
         const iwRemoveableBus = true;
 
