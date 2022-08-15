@@ -133,12 +133,12 @@ function DealMap({ closeModal, targetUser }: DealMapProps) {
     });
 
     if (midPosition.distance) {
+      const len =
+        Math.round(midPosition.distance) < 1000 ? "1KM 이내" : "2KM 이내";
       const mdIWContetn =
         '<div class="md-info">' +
         '  <div class="info__blank" target="_blank">' +
-        `    <span class="info__title">상대방과 나의 거리 ${Math.round(
-          midPosition.distance
-        )}!</span>` +
+        `    <span class="info__title">상대방과 나의 거리 ${len}!</span>` +
         "  </div>" +
         "</div>";
       const mdInfoWindow = new kakao.maps.CustomOverlay({
