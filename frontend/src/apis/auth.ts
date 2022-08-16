@@ -5,7 +5,7 @@ const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID;
 const naverClientId = process.env.REACT_APP_NAVER_CLIENT_ID;
 export const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID as string;
 
-const clientUrl = "http://i7c208.p.ssafy.io";
+const clientUrl = "https://i7c208.p.ssafy.io";
 export const kakaoRedirectUrl = `${clientUrl}/oauth/kakao`;
 export const naverRedirectUrl = `${clientUrl}/oauth/naver`;
 
@@ -104,4 +104,8 @@ export const refreshAccessToken = async () => {
   if (res.data.message === "SUCCESS") {
     sessionStorage.setItem("access-token", res.data["access-token"]);
   }
+};
+
+export const deleteRefreshToken = async () => {
+  const res = await API.get("/user/logout");
 };

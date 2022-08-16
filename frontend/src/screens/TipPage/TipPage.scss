@@ -382,6 +382,9 @@
 }
 @media screen and (max-width: $PHONE-VW) {
   #tip-page {
+    .p-none {
+      display: none;
+    }
     width: vw-p(375px);
     .tip-banner {
       width: 100%;

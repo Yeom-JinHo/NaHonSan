@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import "./UserFeedPage.scss";
 import UserDummyIcon from "@images/UserDummy.svg";
 import SetIcon from "@images/SetIcon.svg";
@@ -10,6 +10,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { addFollow, delFollow } from "@apis/userFeed";
 import { useAppSelector } from "@store/hooks";
 import { getProfile } from "@apis/setAccount";
+import images from "@images/bc/imgIndex";
 
 type UserProfile = {
   id: string | null;
@@ -22,6 +23,8 @@ type UserProfile = {
   dealCount: number;
   social: string;
   isFollow: boolean;
+  followOpen: boolean;
+  followerOpen: boolean;
 };
 
 function UserFeedPage() {
@@ -32,7 +35,7 @@ function UserFeedPage() {
   const [isLoading, setLoading] = useState(true);
   const [isChanged, setIsChanged] = useState(false);
   const [wait, setWait] = useState(false);
-
+  const userInfo = useAppSelector(state => state.auth.userInfo);
   const [userProfile, setUserProfile] = useState<UserProfile>({
     id: null,
     nickname: "",
@@ -43,9 +46,10 @@ function UserFeedPage() {
     tipCount: 0,
     dealCount: 0,
     social: "",
-    isFollow: false
+    isFollow: false,
+    followOpen: false,
+    followerOpen: false
   });
-  const userInfo = useAppSelector(state => state.auth.userInfo);
   const txtArea = useRef<HTMLTextAreaElement>(null);
 
   const { nickName } = useParams();
@@ -53,25 +57,14 @@ function UserFeedPage() {
   useEffect(() => {
     (async () => {
       const res = await getProfile(nickName as string);
-      if (res.result === "Fail") {
+      if (res.result === "FAIL") {
         navigate("/404");
       }
-      setUserProfile(res.data);
+      if (res.result === "SUCCESS") {
+        setUserProfile(res.data);
+      }
     })();
-    if (txtArea.current) {
-      txtArea.current.style.height = "1px";
-      txtArea.current.style.height = `${12 + txtArea.current.scrollHeight}px`;
-    }
   }, [nickName, isChanged]);
-
-  useEffect(() => {
-    setLoading(true);
-    fetch("https://picsum.photos/520/200")
-      .then(res => {
-        setRandomBack(res.url);
-      })
-      .then(() => setLoading(false));
-  }, []);
 
   const follow = (state: string) => {
     setFollowModal(state);
@@ -87,9 +80,9 @@ function UserFeedPage() {
     if (!userInfo) {
       return navigate("/login");
     }
-    return navigate("/letters");
+    return navigate(`/letters/detail?with=${nickName}`);
   };
-
+  //
   const setFollow = async () => {
     if (!userInfo) {
       return navigate("/login");
@@ -106,21 +99,20 @@ function UserFeedPage() {
     }
     return 0;
   };
+  const randomImg = useMemo(() => {
+    return Math.floor(Math.random() * 9);
+  }, [nickName]);
 
   return (
     <div id="userfeed-page">
       <div className="profile">
         <div className="profile-background flex column">
-          {isLoading ? (
-            <BackImgSkeleton />
-          ) : (
-            <img
-              src={randomBack}
-              alt="Thum"
-              className="profile-background__img"
-              title="background"
-            />
-          )}
+          <img
+            src={images[randomImg]}
+            alt="Thum"
+            className="profile-background__img"
+            title="background"
+          />
         </div>
         <div className="profile-user">
           <img
@@ -173,10 +165,14 @@ function UserFeedPage() {
         </div>
         {userProfile.nickname !== userInfo?.nickname && (
           <div className="info__btn flex">
-            <button type="button" onClick={setFollow}>
+            <button
+              type="button"
+              onClick={setFollow}
+              className={userProfile.isFollow ? "grey" : "yellow"}
+            >
               {userProfile.isFollow ? "언팔로우" : "팔로우"}
             </button>
-            <button onClick={goDM} type="button">
+            <button onClick={goDM} type="button" className="yellow">
               DM
             </button>
           </div>
@@ -184,7 +180,7 @@ function UserFeedPage() {
       </div>
       <div className="info__state notoReg flex ">
         <textarea
-          className="notoReg"
+          className="info__state__textarea notoReg"
           value={
             userProfile?.profileMsg ? (userProfile.profileMsg as string) : ""
           }
@@ -217,6 +213,8 @@ function UserFeedPage() {
       </div>
       {followClick ? (
         <FollowList
+          isMine={userProfile.nickname === userInfo?.nickname}
+          isOpen={[userProfile.followerOpen, userProfile.followOpen]}
           idx={nickName as string}
           signal={signal}
           followModal={followModal}
