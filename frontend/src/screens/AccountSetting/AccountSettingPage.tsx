@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import "./AccountSettingPage.scss";
-import { Link, useNavigate, useLocation, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserDummyIcon from "@images/UserDummy.svg";
 import { v4 } from "uuid";
 import ImgResizer from "@components/common/ImgUploader/ImgResizer";
@@ -21,12 +21,6 @@ function AccountSettingPage() {
   const nickNameInput = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const location = useLocation();
-
-  if (!location.state) {
-    alert("비정상적인 접근입니다.");
-    return <Navigate to="/" />;
-  }
 
   if (!tmpUserInfo) {
     navigate("/");
